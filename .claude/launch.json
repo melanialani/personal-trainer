@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "personal-trainer",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["vite", "--port", "4007", "--strictPort"],
+      "port": 4007
+    }
+  ]
+}
