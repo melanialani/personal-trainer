@@ -6,7 +6,7 @@ import { createId } from './id';
 import { roundTo1 } from './math';
 import { generateMealPlan } from './mealPlanGenerator';
 import { createEmptyData } from './storage';
-import { estimateSession, generateWorkoutPlan, resolveWorkoutPreferences } from './workoutGenerator';
+import { assessTrainingForProfile, estimateSession, generateWorkoutPlan } from './workoutGenerator';
 
 const SAMPLE_PROFILE: Profile = {
   name: 'Rina',
@@ -23,7 +23,7 @@ const SAMPLE_PROFILE: Profile = {
   isHalal: true,
   excludedKeywords: [],
   waterTargetMl: 2000,
-  workout: { level: 'beginner', equipment: ['dumbbell', 'resistance_band'], daysPerWeek: 3, minutesPerSession: 45, isCustomSchedule: false },
+  workout: { level: 'beginner', equipment: ['dumbbell', 'resistance_band'], daysPerWeek: 3, minutesPerSession: 45, isCustomSchedule: false, hasMat: true, hasFurniture: true, levelSince: '' },
 };
 
 /** Builds six weeks of realistic history so every screen has something to show. */
@@ -45,7 +45,8 @@ export const buildSampleData = (): AppData => {
   }
 
   const targets = calcDailyTargets(SAMPLE_PROFILE, weights);
-  const workoutPlan = generateWorkoutPlan(resolveWorkoutPreferences(SAMPLE_PROFILE, weights), SAMPLE_PROFILE.goal);
+  // History follows the plan the user would have had before these workouts were logged.
+  const historyWorkoutPlan = generateWorkoutPlan(assessTrainingForProfile(SAMPLE_PROFILE, weights, []), SAMPLE_PROFILE.goal);
   const historyPlan = generateMealPlan(SAMPLE_PROFILE, targets.kcal, addDays(today, -6), [], 7);
 
   const foodLog: FoodLogEntry[] = historyPlan.days.flatMap((day) =>
@@ -63,7 +64,7 @@ export const buildSampleData = (): AppData => {
   const workoutLog: WorkoutLogEntry[] = [];
   for (let day = 1; day <= 14; day += 1) {
     const date = addDays(today, -day);
-    const planDay = workoutPlan.days[weekdayIndex(date)];
+    const planDay = historyWorkoutPlan.days[weekdayIndex(date)];
     if (planDay.isRest) {
       if (day % 3 === 0) {
         workoutLog.push({ id: createId(), date, name: 'Walking, brisk (6 km/h)', durationMin: 30, kcalBurned: kcalFromMet(4.3, targets.weightKg, 30), exercises: [], note: 'Evening walk around the complex' });
@@ -78,6 +79,7 @@ export const buildSampleData = (): AppData => {
       durationMin: estimate.minutes,
       kcalBurned: estimate.kcal,
       exercises: planDay.exercises.map(({ exerciseId, sets, reps }) => ({ exerciseId, sets, reps, weightKg: exerciseId.startsWith('db-') || exerciseId === 'goblet-squat' ? 5 : undefined })),
+      effort: day % 5 === 0 ? 'easy' : 'ok',
     });
   }
 
@@ -95,6 +97,6 @@ export const buildSampleData = (): AppData => {
     water,
     favoriteFoodIds: ['oatmeal', 'chicken-breast', 'egg-boiled', 'banana', 'tempe-bacem'],
     mealPlan: generateMealPlan(SAMPLE_PROFILE, targets.kcal, today, []),
-    workoutPlan,
+    workoutPlan: generateWorkoutPlan(assessTrainingForProfile(SAMPLE_PROFILE, weights, workoutLog), SAMPLE_PROFILE.goal),
   };
 };

@@ -21,7 +21,7 @@ export const DEFAULT_DRAFT: ProfileDraft = {
   isHalal: true,
   excludedKeywords: '',
   waterTargetMl: 2000,
-  workout: { level: 'beginner', equipment: [], daysPerWeek: 3, minutesPerSession: 45, isCustomSchedule: false },
+  workout: { level: 'beginner', equipment: [], daysPerWeek: 3, minutesPerSession: 45, isCustomSchedule: false, hasMat: true, hasFurniture: true, levelSince: '' },
 };
 
 export const profileToDraft = (profile: Profile): ProfileDraft => ({

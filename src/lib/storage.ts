@@ -1,5 +1,5 @@
 import { ALL_EQUIPMENT } from '../data/exercises';
-import type { AppData, Equipment, Profile } from '../types';
+import type { AppData, Equipment, Profile, WorkoutPlan } from '../types';
 
 const STORAGE_KEY = 'fitplan:data';
 const EXPORT_APP_ID = 'fitplan';
@@ -40,8 +40,18 @@ const normalizeProfile = (raw: unknown): Profile | null => {
       daysPerWeek: workout.daysPerWeek ?? 3,
       minutesPerSession: workout.minutesPerSession ?? 45,
       isCustomSchedule: workout.isCustomSchedule ?? false,
+      // Older profiles had no such options; keep planning floor and furniture moves for them.
+      hasMat: workout.hasMat ?? true,
+      hasFurniture: workout.hasFurniture ?? true,
+      levelSince: workout.levelSince ?? '',
     },
   };
+};
+
+const normalizeWorkoutPlan = (raw: unknown): WorkoutPlan | null => {
+  if (!isRecord(raw)) return null;
+  const plan = raw as unknown as WorkoutPlan;
+  return { ...plan, stageId: plan.stageId ?? '', isLowImpact: plan.isLowImpact ?? false };
 };
 
 /** Fills missing fields with defaults so older or partial data keeps working. */
@@ -60,7 +70,7 @@ export const normalizeData = (raw: unknown): AppData => {
     customFoods: pickArray('customFoods'),
     favoriteFoodIds: pickArray('favoriteFoodIds'),
     mealPlan: isRecord(raw.mealPlan) ? (raw.mealPlan as unknown as AppData['mealPlan']) : null,
-    workoutPlan: isRecord(raw.workoutPlan) ? (raw.workoutPlan as unknown as AppData['workoutPlan']) : null,
+    workoutPlan: normalizeWorkoutPlan(raw.workoutPlan),
   };
 };
 

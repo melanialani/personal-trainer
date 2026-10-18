@@ -36,6 +36,10 @@ export const ExerciseDetails = ({ exercise, isAnimated = false }: { exercise: Ex
         exercise.equipment.map((item) => <Badge key={item}>{EQUIPMENT_LABELS[item]}</Badge>)
       )}
       <Badge tone="info">{exercise.type}</Badge>
+      {exercise.isFloorWork && <Badge>Needs mat</Badge>}
+      {exercise.usesFurniture && <Badge>Chair / table / stairs</Badge>}
+      {exercise.isHighImpact ? <Badge tone="warning">Jumping</Badge> : exercise.type === 'cardio' && <Badge tone="success">Low impact</Badge>}
+      {exercise.minLevel && <Badge tone="warning">{exercise.minLevel === 'advanced' ? 'Advanced' : 'Intermediate+'}</Badge>}
     </div>
     <ol className="list-decimal space-y-1.5 pl-5 text-sm text-slate-600">
       {exercise.steps.map((step) => (

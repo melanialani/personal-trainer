@@ -28,6 +28,12 @@ export interface WorkoutPreferences {
   minutesPerSession: number;
   /** false = days and minutes follow the recommendation calculated from the profile. */
   isCustomSchedule: boolean;
+  /** Has a mat, carpet or soft floor for lying / kneeling moves. */
+  hasMat: boolean;
+  /** Has a sturdy chair, table or stairs at home (dips, step-ups, incline push-ups). */
+  hasFurniture: boolean;
+  /** Date (YYYY-MM-DD) the current level was set; progression counts workouts from then. '' = all history. */
+  levelSince: string;
 }
 
 export interface Profile {
@@ -94,6 +100,9 @@ export interface LoggedExercise {
   weightKg?: number;
 }
 
+/** How a session felt; drives progression (too hard = hold, not ready to move on). */
+export type WorkoutEffort = 'easy' | 'ok' | 'hard';
+
 export interface WorkoutLogEntry {
   id: string;
   date: string;
@@ -102,6 +111,7 @@ export interface WorkoutLogEntry {
   kcalBurned: number;
   exercises: LoggedExercise[];
   note?: string;
+  effort?: WorkoutEffort;
 }
 
 export interface PlannedItem {
@@ -147,6 +157,10 @@ export interface WorkoutPlan {
   preferences: WorkoutPreferences;
   goal: GoalType;
   days: WorkoutPlanDay[];
+  /** Progression stage the plan was built for (e.g. "beginner-foundation"); '' for plans made before stages existed. */
+  stageId: string;
+  /** Built without jumping moves (beginners with a sedentary job, higher body weight or age 60+). */
+  isLowImpact: boolean;
 }
 
 export interface AppData {

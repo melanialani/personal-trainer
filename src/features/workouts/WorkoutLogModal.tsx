@@ -7,12 +7,12 @@ import { createId } from '../../lib/id';
 import { formatNumber } from '../../lib/format';
 import { estimateSession, scaleSessionKcal } from '../../lib/workoutGenerator';
 import { Button } from '../../shared/components/Button';
-import { Field, NumberInput, Select, TextInput } from '../../shared/components/FormFields';
+import { Field, NumberInput, Segmented, Select, TextInput } from '../../shared/components/FormFields';
 import { Modal } from '../../shared/components/Modal';
 import { useToast } from '../../shared/components/ToastProvider';
 import { useBodyWeightKg } from '../../shared/hooks/useBodyWeightKg';
 import { useAppData } from '../../store/AppDataContext';
-import type { LoggedExercise, WorkoutPlanDay } from '../../types';
+import type { LoggedExercise, WorkoutEffort, WorkoutPlanDay } from '../../types';
 
 interface WorkoutLogModalProps {
   isOpen: boolean;
@@ -22,6 +22,12 @@ interface WorkoutLogModalProps {
 }
 
 const DEFAULT_ACTIVITY_ID = 'walking-brisk';
+
+export const EFFORT_OPTIONS: { value: WorkoutEffort; label: string }[] = [
+  { value: 'easy', label: 'Easy' },
+  { value: 'ok', label: 'Just right' },
+  { value: 'hard', label: 'Too hard' },
+];
 
 export const WorkoutLogModal = ({ isOpen, onClose, planDay }: WorkoutLogModalProps) => {
   const { upsert } = useAppData();
@@ -33,12 +39,14 @@ export const WorkoutLogModal = ({ isOpen, onClose, planDay }: WorkoutLogModalPro
   const [durationMin, setDurationMin] = useState<number | ''>(30);
   const [kcalOverride, setKcalOverride] = useState<number | ''>('');
   const [note, setNote] = useState('');
+  const [effort, setEffort] = useState<WorkoutEffort>('ok');
   const [exercises, setExercises] = useState<LoggedExercise[]>([]);
 
   useEffect(() => {
     if (!isOpen) return;
     setDate(todayKey());
     setNote('');
+    setEffort('ok');
     setKcalOverride('');
     if (planDay) {
       const estimate = estimateSession(planDay.exercises, weightKg);
@@ -72,6 +80,7 @@ export const WorkoutLogModal = ({ isOpen, onClose, planDay }: WorkoutLogModalPro
       kcalBurned: kcal,
       exercises,
       note: note.trim() || undefined,
+      effort,
     });
     showToast('Workout logged — nice work!');
     onClose();
@@ -109,6 +118,9 @@ export const WorkoutLogModal = ({ isOpen, onClose, planDay }: WorkoutLogModalPro
           </Field>
           <Field label="Calories burned" hint={`Estimated ${estimatedKcal} kcal for ${formatNumber(weightKg, 1)} kg body weight. Override with your watch if you have one.`}>
             <NumberInput value={kcalOverride} placeholder={String(estimatedKcal)} min={0} onValueChange={setKcalOverride} suffix="kcal" />
+          </Field>
+          <Field label="How did it feel?" hint="Used to pace your progression: “Too hard” keeps you at the current stage.">
+            <Segmented value={effort} options={EFFORT_OPTIONS} onChange={setEffort} />
           </Field>
           <Field label="Note (optional)">
             <TextInput value={note} onChange={(e) => setNote(e.target.value)} placeholder="How did it feel?" />

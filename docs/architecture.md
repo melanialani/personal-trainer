@@ -26,13 +26,23 @@ serving and clamped 0.5×–2.5×. Diet filtering uses food `tags` (meat, pork, 
 plus the user's excluded keywords.
 
 ## Workout planner
-- Days/week and minutes/session come from `recommendSchedule` (level → 3/4/5 days × 30/45/60 min; weight loss +1 day
-  and +15 min; sedentary max 4 days; age 60+ or BMI 35+ max 3 days). Users can override via "Customize"
-  (`workout.isCustomSchedule`). `resolveWorkoutPreferences` returns the values actually used.
-- Split by days/week (full body → upper/lower → push/pull/legs). Exercise count by session length; sets/reps by goal
-  and level. Weight-loss plans add a finisher (treadmill / jump rope / brisk walk depending on equipment).
-- Equipment is a multi-select list; an exercise is used only if every item in its `equipment` is owned.
-  Beginners skip harder moves (`NOT_FOR_BEGINNERS`).
+- Progression (`lib/trainingProgress.ts`): each level has stages — beginner: Foundation → Building → Consolidating,
+  intermediate: Base → Progressing, advanced: Performance. The stage is derived from `workoutLog` (only entries since
+  `workout.levelSince`), week by week (Monday start): a week counts when it has ≥ 2 workouts (beginner) / ≥ 3 and fewer
+  than half rated "Too hard" (`effort`). Beginners move on after 3 / 3 / 4 counted weeks, intermediates after 6 / 8;
+  the last stage then suggests the next level (user confirms; `levelSince` resets). Two empty weeks step back one stage.
+- Deconditioned beginners (sedentary job, BMI 30+ or age 60+) start at Foundation, others at Building. Low impact
+  (no `isHighImpact` moves) for BMI 35+, age 60+, or deconditioned beginners before Consolidating.
+- Days/minutes come from `recommendSchedule` (per stage: 3×20, 3×30, 3×40, 4×45, 4×50, 5×60; weight loss adds a walk
+  finisher for beginners, +1 day and +15 min otherwise; sedentary max 4 days; age 60+ or BMI 35+ max 3 days). Users can
+  override via "Customize" (`workout.isCustomSchedule`). `assessTrainingForProfile` returns the values actually used.
+- Sets/reps/rest by stage and goal (Foundation: 2 × 8–10, 20s holds, 75s rest). Beginners get a standing warm-up and
+  cool-down; moves flagged `needsBaseFitness` (push-up, lunges, plank variations) wait until Consolidating.
+- Split by days/week (full body → upper/lower → push/pull/legs). Exercise count by session length.
+- Equipment is a multi-select list plus `hasMat` (floor work) and `hasFurniture` (chair/table/stairs); an exercise is
+  used only if everything it needs is available (`isExerciseAvailable`). "Nothing at all" = standing / wall moves only.
+  `minLevel` hides harder moves from lower levels.
+- Plans store `stageId` and `isLowImpact`; `planOutdatedReason` prompts an update when the stage changes.
 - Exercise photos (start/finish) are hot-linked from free-exercise-db (public domain, `imageId` in `data/exercises.ts`);
   the video button opens a YouTube search.
 

@@ -1,5 +1,6 @@
 import { Sparkles } from 'lucide-react';
 import { ALL_EQUIPMENT, EQUIPMENT_LABELS } from '../../data/exercises';
+import { todayKey } from '../../lib/date';
 import { pluralize } from '../../lib/format';
 import { FITNESS_LEVEL_OPTIONS, type ScheduleRecommendation } from '../../lib/workoutGenerator';
 import { Button } from '../../shared/components/Button';
@@ -8,10 +9,13 @@ import { Chip } from '../../shared/components/Chip';
 import { Checkbox, Field, Segmented, Select } from '../../shared/components/FormFields';
 import type { Equipment, WorkoutPreferences } from '../../types';
 
-const EQUIPMENT_PRESETS: { label: string; equipment: Equipment[] }[] = [
-  { label: 'Bodyweight only', equipment: [] },
-  { label: 'Home basics', equipment: ['dumbbell', 'resistance_band', 'jump_rope'] },
-  { label: 'Full gym', equipment: ALL_EQUIPMENT },
+type SetupPreset = Pick<WorkoutPreferences, 'equipment' | 'hasMat' | 'hasFurniture'> & { label: string };
+
+const SETUP_PRESETS: SetupPreset[] = [
+  { label: 'Nothing at all (no mat)', equipment: [], hasMat: false, hasFurniture: false },
+  { label: 'Bodyweight (mat & chair)', equipment: [], hasMat: true, hasFurniture: true },
+  { label: 'Home basics', equipment: ['dumbbell', 'resistance_band', 'jump_rope'], hasMat: true, hasFurniture: true },
+  { label: 'Full gym', equipment: ALL_EQUIPMENT, hasMat: true, hasFurniture: true },
 ];
 
 const DAYS_OPTIONS = [1, 2, 3, 4, 5, 6].map((n) => ({ value: String(n), label: `${pluralize(n, 'day')} / week` }));
@@ -25,11 +29,17 @@ interface TrainingPreferencesCardProps {
 
 const isSameSet = (a: Equipment[], b: Equipment[]) => a.length === b.length && a.every((item) => b.includes(item));
 
+const isPresetActive = (workout: WorkoutPreferences, preset: SetupPreset) =>
+  isSameSet(workout.equipment, preset.equipment) && workout.hasMat === preset.hasMat && workout.hasFurniture === preset.hasFurniture;
+
 export const TrainingPreferencesCard = ({ workout, recommendation, onChange }: TrainingPreferencesCardProps) => {
   const set = <K extends keyof WorkoutPreferences>(key: K, value: WorkoutPreferences[K]) => onChange({ ...workout, [key]: value });
 
   const toggleEquipment = (item: Equipment, isChecked: boolean) =>
     set('equipment', isChecked ? [...workout.equipment, item] : workout.equipment.filter((e) => e !== item));
+
+  const applyPreset = ({ equipment, hasMat, hasFurniture }: SetupPreset) =>
+    onChange({ ...workout, equipment: [...equipment], hasMat, hasFurniture });
 
   const handleCustomize = () =>
     onChange({
@@ -43,20 +53,23 @@ export const TrainingPreferencesCard = ({ workout, recommendation, onChange }: T
     <Card title="Training preferences" subtitle="Used by the workout planner">
       <div className="space-y-5">
         <Field label="Fitness level">
-          <Segmented value={workout.level} options={FITNESS_LEVEL_OPTIONS} onChange={(value) => set('level', value)} />
+          {/* Progression restarts from the new level, so only workouts from today count toward it. */}
+          <Segmented value={workout.level} options={FITNESS_LEVEL_OPTIONS} onChange={(level) => onChange({ ...workout, level, levelSince: todayKey() })} />
         </Field>
 
         <div>
           <p className="mb-1 text-xs font-medium text-slate-600">Equipment you have</p>
           <p className="mb-2 text-xs text-slate-400">Workouts only use exercises you can do with what is checked here.</p>
           <div className="mb-3 flex flex-wrap gap-2">
-            {EQUIPMENT_PRESETS.map((preset) => (
-              <Chip key={preset.label} isActive={isSameSet(workout.equipment, preset.equipment)} onClick={() => set('equipment', [...preset.equipment])}>
+            {SETUP_PRESETS.map((preset) => (
+              <Chip key={preset.label} isActive={isPresetActive(workout, preset)} onClick={() => applyPreset(preset)}>
                 {preset.label}
               </Chip>
             ))}
           </div>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <Checkbox label="Exercise mat or carpet (lying / kneeling moves)" checked={workout.hasMat} onChange={(isChecked) => set('hasMat', isChecked)} />
+            <Checkbox label="Sturdy chair, table or stairs" checked={workout.hasFurniture} onChange={(isChecked) => set('hasFurniture', isChecked)} />
             {ALL_EQUIPMENT.map((item) => (
               <Checkbox
                 key={item}

@@ -13,7 +13,7 @@ import { StatTile } from '../../shared/components/StatTile';
 import { CHART_AXIS, CHART_BAR, CHART_GRID, CHART_TOOLTIP, COLORS } from '../../shared/theme';
 import { useAppData } from '../../store/AppDataContext';
 import type { WorkoutLogEntry } from '../../types';
-import { WorkoutLogModal } from './WorkoutLogModal';
+import { EFFORT_OPTIONS, WorkoutLogModal } from './WorkoutLogModal';
 
 const WEEKS_IN_CHART = 8;
 
@@ -81,6 +81,7 @@ export const WorkoutHistoryTab = () => {
                   <p className="text-sm font-medium text-slate-800">{workout.name}</p>
                   <p className="text-xs text-slate-500">
                     {formatDate(workout.date)} · {workout.durationMin} min · {workout.kcalBurned} kcal
+                    {workout.effort && ` · ${EFFORT_OPTIONS.find((option) => option.value === workout.effort)?.label}`}
                   </p>
                   {workout.exercises.length > 0 && (
                     <p className="mt-1 line-clamp-2 text-xs text-slate-400">

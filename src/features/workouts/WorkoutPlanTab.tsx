@@ -3,7 +3,15 @@ import { useState } from 'react';
 import { equipmentSummary, type Exercise } from '../../data/exercises';
 import { GOAL_OPTIONS } from '../../lib/calc';
 import { addDays, startOfWeek, todayKey, WEEKDAY_NAMES, weekdayIndex } from '../../lib/date';
-import { estimateSession, FITNESS_LEVEL_OPTIONS, generateWorkoutPlan, resolveWorkoutPreferences } from '../../lib/workoutGenerator';
+import { stageIndexFromId } from '../../lib/trainingProgress';
+import {
+  assessTrainingForProfile,
+  estimateSession,
+  FITNESS_LEVEL_OPTIONS,
+  generateWorkoutPlan,
+  planOutdatedReason,
+  restDayTip,
+} from '../../lib/workoutGenerator';
 import { Badge } from '../../shared/components/Badge';
 import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
@@ -14,10 +22,11 @@ import { TextLink } from '../../shared/components/TextLink';
 import { useToast } from '../../shared/components/ToastProvider';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useAppData } from '../../store/AppDataContext';
-import type { WorkoutPlanDay } from '../../types';
+import type { FitnessLevel, WorkoutPlanDay } from '../../types';
 import { ExerciseInfoModal } from './ExerciseInfoModal';
 import { PlanDayExercises } from './PlanDayExercises';
 import { SessionEstimate } from './SessionEstimate';
+import { TrainingProgressCard } from './TrainingProgressCard';
 import { WorkoutLogModal } from './WorkoutLogModal';
 
 export const WorkoutPlanTab = () => {
@@ -32,7 +41,10 @@ export const WorkoutPlanTab = () => {
   const todayIndex = weekdayIndex(today);
   const weekStart = startOfWeek(today);
   const weightKg = targets?.weightKg ?? profile.startWeightKg;
-  const preferences = resolveWorkoutPreferences(profile, data.weights);
+  const training = assessTrainingForProfile(profile, data.weights, data.workoutLog);
+  const { preferences } = training;
+
+  const generatePlan = () => update((current) => ({ ...current, workoutPlan: generateWorkoutPlan(training, profile.goal) }));
 
   const handleGenerate = async () => {
     if (plan) {
@@ -43,8 +55,25 @@ export const WorkoutPlanTab = () => {
       });
       if (!isConfirmed) return;
     }
-    update((current) => ({ ...current, workoutPlan: generateWorkoutPlan(preferences, profile.goal) }));
+    generatePlan();
     showToast('New workout plan ready');
+  };
+
+  const handleChangeLevel = async (level: FitnessLevel) => {
+    const label = FITNESS_LEVEL_OPTIONS.find((option) => option.value === level)?.label ?? level;
+    const isConfirmed = await confirm({
+      title: `Switch to ${label}?`,
+      message: 'Your weekly plan will be rebuilt for the new level. Progression toward the next level starts counting from today.',
+      confirmLabel: 'Switch',
+    });
+    if (!isConfirmed) return;
+    update((current) => {
+      if (!current.profile) return current;
+      const nextProfile = { ...current.profile, workout: { ...current.profile.workout, level, levelSince: todayKey() } };
+      const nextTraining = assessTrainingForProfile(nextProfile, current.weights, current.workoutLog);
+      return { ...current, profile: nextProfile, workoutPlan: generateWorkoutPlan(nextTraining, nextProfile.goal) };
+    });
+    showToast(`Plan updated for ${label}`);
   };
 
   const isLoggedOn = (weekday: number) => {
@@ -56,7 +85,8 @@ export const WorkoutPlanTab = () => {
     <div className="flex flex-wrap gap-1.5">
       <Badge tone="brand">{GOAL_OPTIONS.find((g) => g.value === profile.goal)?.label}</Badge>
       <Badge>{FITNESS_LEVEL_OPTIONS.find((option) => option.value === profile.workout.level)?.label}</Badge>
-      <Badge>{equipmentSummary(preferences.equipment)}</Badge>
+      <Badge>{equipmentSummary(preferences)}</Badge>
+      {training.isLowImpact && <Badge tone="info">Low impact</Badge>}
       <Badge>
         {preferences.daysPerWeek} days/week · {preferences.minutesPerSession} min{preferences.isCustomSchedule ? '' : ' (recommended)'}
       </Badge>
@@ -76,6 +106,9 @@ export const WorkoutPlanTab = () => {
           }
           action={
             <div className="flex flex-col items-center gap-3">
+              <p className="text-xs text-slate-500">
+                Starting stage: <span className="font-medium text-slate-700">{training.stage.label}</span> — {training.stage.description}
+              </p>
               {preferencesSummary}
               <Button onClick={handleGenerate}>Generate my plan</Button>
             </div>
@@ -85,8 +118,7 @@ export const WorkoutPlanTab = () => {
     );
   }
 
-  const isOutdated =
-    plan.goal !== profile.goal || JSON.stringify(plan.preferences) !== JSON.stringify(preferences);
+  const outdatedReason = planOutdatedReason(plan, profile.goal, training);
 
   return (
     <>
@@ -96,7 +128,25 @@ export const WorkoutPlanTab = () => {
           Regenerate plan
         </Button>
       </div>
-      {isOutdated && (
+      <TrainingProgressCard progress={training.progress} onChangeLevel={handleChangeLevel} />
+      {outdatedReason === 'stage' && (
+        <Notice className="mb-4">
+          {training.progress.stage.index > stageIndexFromId(plan.stageId)
+            ? `Nice work — your workout log moved you up to the ${training.stage.label} stage.`
+            : `After a break, the plan eases back to the ${training.stage.label} stage.`}{' '}
+          <button
+            type="button"
+            className="font-medium underline"
+            onClick={() => {
+              generatePlan();
+              showToast('Plan updated');
+            }}
+          >
+            Update my plan
+          </button>
+        </Notice>
+      )}
+      {outdatedReason === 'settings' && (
         <Notice className="mb-4">Your goal or training preferences changed since this plan was created. Regenerate to match them.</Notice>
       )}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -122,7 +172,7 @@ export const WorkoutPlanTab = () => {
               subtitle={day.title}
             >
               {day.isRest ? (
-                <p className="text-sm text-slate-500">Rest day. A 20–30 minute walk or light stretching helps recovery.</p>
+                <p className="text-sm text-slate-500">{restDayTip(profile.workout.level)}</p>
               ) : (
                 <>
                   <SessionEstimate minutes={estimate.minutes} kcal={estimate.kcal} className="mb-2" />

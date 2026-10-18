@@ -6,7 +6,7 @@ import { ageFromBirthDate, todayKey } from '../../lib/date';
 import { DIET_OPTIONS } from '../../lib/foods';
 import { formatNumber } from '../../lib/format';
 import { createId } from '../../lib/id';
-import { recommendSchedule } from '../../lib/workoutGenerator';
+import { assessTraining } from '../../lib/workoutGenerator';
 import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
 import { Checkbox, Field, NumberInput, Segmented, Select, TextInput } from '../../shared/components/FormFields';
@@ -41,14 +41,16 @@ export const ProfilePage = () => {
   const recommendation = useMemo(() => {
     const weightKg = latestWeight(data.weights)?.weightKg ?? (draft.startWeightKg || 0);
     const bmi = weightKg && draft.heightCm ? calcBmi(weightKg, draft.heightCm) : 22;
-    return recommendSchedule({
+    return assessTraining({
       goal: draft.goal,
       level: draft.workout.level,
+      levelSince: draft.workout.levelSince,
       activityLevel: draft.activityLevel,
       age: draft.birthDate ? ageFromBirthDate(draft.birthDate) : 30,
       bmi,
-    });
-  }, [data.weights, draft.startWeightKg, draft.heightCm, draft.goal, draft.workout.level, draft.activityLevel, draft.birthDate]);
+      workoutLog: data.workoutLog,
+    }).schedule;
+  }, [data.weights, data.workoutLog, draft.startWeightKg, draft.heightCm, draft.goal, draft.workout.level, draft.workout.levelSince, draft.activityLevel, draft.birthDate]);
 
   const handleSave = () => {
     setHasSubmitted(true);

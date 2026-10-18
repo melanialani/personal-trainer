@@ -1,8 +1,21 @@
-import { EXERCISES, exerciseById, isEquipmentAvailable, type Exercise, type MuscleGroup } from '../data/exercises';
-import type { ActivityLevel, Equipment, FitnessLevel, GoalType, PlannedExercise, Profile, WeightEntry, WorkoutPlan, WorkoutPlanDay, WorkoutPreferences } from '../types';
+import { EXERCISES, exerciseById, isExerciseAvailable, type Exercise, type MuscleGroup } from '../data/exercises';
+import type {
+  ActivityLevel,
+  Equipment,
+  FitnessLevel,
+  GoalType,
+  PlannedExercise,
+  Profile,
+  WeightEntry,
+  WorkoutLogEntry,
+  WorkoutPlan,
+  WorkoutPlanDay,
+  WorkoutPreferences,
+} from '../types';
 import { calcBmi, currentWeightKg, kcalFromMet } from './calc';
 import { ageFromBirthDate } from './date';
 import { average } from './math';
+import { assessProgress, startStageIndex, type TrainingProgress, type TrainingStage } from './trainingProgress';
 
 export const FITNESS_LEVEL_OPTIONS: { value: FitnessLevel; label: string }[] = [
   { value: 'beginner', label: 'Beginner' },
@@ -52,8 +65,7 @@ const TRAINING_DAYS: Record<number, number[]> = {
   6: [0, 1, 2, 3, 4, 5],
 };
 
-/** Harder bodyweight/barbell moves that beginners skip until they progress. */
-const NOT_FOR_BEGINNERS = new Set(['decline-push-up', 'pike-push-up', 'pull-up', 'hanging-leg-raise', 'burpee', 'deadlift', 'back-squat', 'bench-press', 'jump-rope']);
+const LEVEL_RANK: Record<FitnessLevel, number> = { beginner: 0, intermediate: 1, advanced: 2 };
 
 const exerciseCount = (minutes: number): number => {
   if (minutes <= 20) return 3;
@@ -70,55 +82,94 @@ interface Prescription {
   restSec: number;
 }
 
-const prescription = (goal: GoalType, level: FitnessLevel): Prescription => {
-  const timed = level === 'beginner' ? '30s' : level === 'intermediate' ? '45s' : '60s';
-  const extraSet = level === 'advanced' ? 1 : 0;
-  const baseSets = level === 'beginner' ? 2 : 3;
-  if (goal === 'gain') return { sets: baseSets + 1 + extraSet, reps: '8–10', timed, restSec: 90 };
-  if (goal === 'lose') return { sets: baseSets + extraSet, reps: '12–15', timed, restSec: 45 };
-  return { sets: baseSets + extraSet, reps: '10–12', timed, restSec: 60 };
+const goalReps = (goal: GoalType): string => (goal === 'gain' ? '8–10' : goal === 'lose' ? '12–15' : '10–12');
+const goalRest = (goal: GoalType): number => (goal === 'gain' ? 90 : goal === 'lose' ? 45 : 60);
+
+const prescription = (goal: GoalType, stage: TrainingStage): Prescription => {
+  switch (stage.id) {
+    // Fewer, easier reps and longer rests while the body adapts.
+    case 'beginner-foundation':
+      return { sets: 2, reps: '8–10', timed: '20s', restSec: 75 };
+    case 'beginner-building':
+      return { sets: 2, reps: goal === 'gain' ? '8–10' : '10–12', timed: '30s', restSec: goal === 'lose' ? 45 : 60 };
+    case 'beginner-consolidating':
+      return { sets: 3, reps: goalReps(goal), timed: '40s', restSec: goalRest(goal) };
+    case 'intermediate-base':
+      return { sets: goal === 'gain' ? 4 : 3, reps: goalReps(goal), timed: '45s', restSec: goalRest(goal) };
+    case 'intermediate-progressing':
+      return { sets: goal === 'gain' ? 4 : 3, reps: goalReps(goal), timed: '50s', restSec: goalRest(goal) };
+    default:
+      return { sets: goal === 'gain' ? 5 : 4, reps: goalReps(goal), timed: '60s', restSec: goalRest(goal) };
+  }
 };
 
-const pickExercise = (muscle: MuscleGroup, preferences: WorkoutPreferences, exclude: Set<string>, variant: number): Exercise | undefined => {
+/** Everything the planner needs besides the goal. */
+export interface PlanSettings {
+  preferences: WorkoutPreferences;
+  stage: TrainingStage;
+  /** No jumping moves. */
+  isLowImpact: boolean;
+}
+
+const pickExercise = (muscle: MuscleGroup, settings: PlanSettings, exclude: Set<string>, variant: number): Exercise | undefined => {
+  const { preferences, isLowImpact } = settings;
   const isCardioSlot = muscle === 'cardio' || muscle === 'full_body';
+  const levelRank = LEVEL_RANK[preferences.level];
+  const isEarlyBeginner = settings.stage.level === 'beginner' && settings.stage.index < 2;
   const candidates = EXERCISES.filter(
     (exercise) =>
       exercise.muscle === muscle &&
       exercise.type !== 'mobility' &&
       (isCardioSlot || exercise.type !== 'cardio') &&
-      isEquipmentAvailable(exercise.equipment, preferences.equipment) &&
-      !(preferences.level === 'beginner' && NOT_FOR_BEGINNERS.has(exercise.id)) &&
+      isExerciseAvailable(exercise, preferences) &&
+      LEVEL_RANK[exercise.minLevel ?? 'beginner'] <= levelRank &&
+      !(isLowImpact && exercise.isHighImpact) &&
+      !(isEarlyBeginner && exercise.needsBaseFitness) &&
       !exclude.has(exercise.id),
-  ).sort((a, b) => b.equipment.length - a.equipment.length);
+  ).sort(
+    (a, b) =>
+      b.equipment.length - a.equipment.length ||
+      // Beginners keep the list order (easier variations first); others get the harder variations first.
+      (levelRank > 0 ? LEVEL_RANK[b.minLevel ?? 'beginner'] - LEVEL_RANK[a.minLevel ?? 'beginner'] : 0),
+  );
   if (candidates.length === 0) return undefined;
   // Prefer moves that use the user's equipment, but rotate between sessions for variety.
   const topCount = Math.min(candidates.length, 3);
   return candidates[variant % topCount];
 };
 
-const buildSession = (kind: SessionKind, preferences: WorkoutPreferences, goal: GoalType, variant: number): PlannedExercise[] => {
-  const rx = prescription(goal, preferences.level);
-  const count = exerciseCount(preferences.minutesPerSession);
+const finisherFor = (settings: PlanSettings): PlannedExercise => {
+  const { preferences, stage } = settings;
+  const has = (item: Equipment) => preferences.equipment.includes(item);
+  const exerciseId = has('cardio_machine') ? 'treadmill-incline' : has('jump_rope') && preferences.level !== 'beginner' && !settings.isLowImpact ? 'jump-rope' : 'brisk-walk';
+  const minutes = stage.id === 'beginner-foundation' ? 5 : preferences.level === 'beginner' || preferences.minutesPerSession < 45 ? 10 : 15;
+  return { exerciseId, sets: 1, reps: `${minutes} min`, restSec: 0 };
+};
+
+const buildSession = (kind: SessionKind, settings: PlanSettings, goal: GoalType, variant: number): PlannedExercise[] => {
+  const { preferences } = settings;
+  const isBeginner = preferences.level === 'beginner';
+  const rx = prescription(goal, settings.stage);
+  // Beginner sets are short, so after Foundation one more exercise fits in the same time.
+  const count = exerciseCount(preferences.minutesPerSession) + (isBeginner && settings.stage.index > 0 ? 1 : 0);
   const used = new Set<string>();
+  // Beginners warm up and cool down standing (no mat needed, easy on stiff hips).
   const exercises: PlannedExercise[] = [
-    { exerciseId: 'worlds-greatest', sets: 1, reps: '5 / side', restSec: 0 },
+    isBeginner ? { exerciseId: 'standing-warm-up', sets: 1, reps: '3 min', restSec: 0 } : { exerciseId: 'worlds-greatest', sets: 1, reps: '5 / side', restSec: 0 },
   ];
   for (const muscle of SESSION_SLOTS[kind].slice(0, count)) {
-    const exercise = pickExercise(muscle, preferences, used, variant + used.size);
+    const exercise = pickExercise(muscle, settings, used, variant + used.size);
     if (!exercise) continue;
     used.add(exercise.id);
     exercises.push({
       exerciseId: exercise.id,
       sets: exercise.type === 'cardio' && kind === 'cardio_core' ? rx.sets + 1 : rx.sets,
       reps: exercise.isTimed ? rx.timed : rx.reps,
-      restSec: exercise.type === 'cardio' ? 30 : rx.restSec,
+      restSec: exercise.type === 'cardio' ? Math.min(rx.restSec, 45) : rx.restSec,
     });
   }
-  if (goal === 'lose' && kind !== 'cardio_core') {
-    const has = (item: Equipment) => preferences.equipment.includes(item);
-    const finisherId = has('cardio_machine') ? 'treadmill-incline' : has('jump_rope') && preferences.level !== 'beginner' ? 'jump-rope' : 'brisk-walk';
-    exercises.push({ exerciseId: finisherId, sets: 1, reps: preferences.minutesPerSession >= 45 ? '15 min' : '10 min', restSec: 0 });
-  }
+  if (goal === 'lose' && kind !== 'cardio_core') exercises.push(finisherFor(settings));
+  if (isBeginner) exercises.push({ exerciseId: 'standing-cool-down', sets: 1, reps: '3 min', restSec: 0 });
   return exercises;
 };
 
@@ -129,64 +180,113 @@ export interface ScheduleRecommendation {
   reasons: string[];
 }
 
-interface RecommendationInput {
+const STAGE_SCHEDULE: Record<string, { days: number; minutes: number }> = {
+  'beginner-foundation': { days: 3, minutes: 20 },
+  'beginner-building': { days: 3, minutes: 30 },
+  'beginner-consolidating': { days: 3, minutes: 40 },
+  'intermediate-base': { days: 4, minutes: 45 },
+  'intermediate-progressing': { days: 4, minutes: 50 },
+  'advanced-performance': { days: 5, minutes: 60 },
+};
+
+interface ScheduleInput {
   goal: GoalType;
-  level: FitnessLevel;
+  stage: TrainingStage;
   activityLevel: ActivityLevel;
   age: number;
   bmi: number;
 }
 
-/** Training days and session length suggested from the profile (WHO: 150–300 active min/week). */
-export const recommendSchedule = ({ goal, level, activityLevel, age, bmi }: RecommendationInput): ScheduleRecommendation => {
+/** Training days and session length suggested from the profile and progression stage (WHO: 150–300 active min/week). */
+export const recommendSchedule = ({ goal, stage, activityLevel, age, bmi }: ScheduleInput): ScheduleRecommendation => {
   const reasons: string[] = [];
-  let days = { beginner: 3, intermediate: 4, advanced: 5 }[level];
-  let minutes = { beginner: 30, intermediate: 45, advanced: 60 }[level];
-  reasons.push(`${level[0].toUpperCase()}${level.slice(1)}: ${days} days × ${minutes} min is a sustainable starting point.`);
+  const level = stage.level;
+  let { days, minutes } = STAGE_SCHEDULE[stage.id] ?? STAGE_SCHEDULE['beginner-building'];
+  reasons.push(`${FITNESS_LEVEL_OPTIONS[LEVEL_RANK[level]].label} · ${stage.label}: ${stage.description}`);
 
   if (goal === 'lose') {
-    if (level !== 'beginner') days += 1;
-    minutes += 15;
-    reasons.push('Weight loss: extra cardio finisher to burn more calories.');
+    if (stage.id === 'beginner-foundation') {
+      reasons.push('Weight loss: daily walking matters more than longer workouts right now — the plan ends with a short walk.');
+    } else if (level === 'beginner') {
+      minutes += 10;
+      reasons.push('Weight loss: a 10-minute walk after each session to burn more calories.');
+    } else {
+      days += 1;
+      minutes += 15;
+      reasons.push('Weight loss: an extra day and a cardio finisher to burn more calories.');
+    }
   }
   if (goal === 'gain' && level === 'advanced') {
     minutes += 15;
     reasons.push('Muscle gain: longer sessions for more sets and rest between heavy sets.');
   }
-  if (activityLevel === 'sedentary' && days > 4) {
-    days = 4;
-    reasons.push('Sedentary day job: max 4 days so your body can adapt.');
+  if (activityLevel === 'sedentary') {
+    if (level === 'beginner') reasons.push('Sedentary day job: rest days between sessions and no jumping until your joints adapt.');
+    if (days > 4) {
+      days = 4;
+      reasons.push('Sedentary day job: max 4 days so your body can adapt.');
+    }
   }
   if (age >= 60 || bmi >= 35) {
     days = Math.min(days, 3);
     minutes = Math.min(minutes, level === 'beginner' ? 30 : 45);
-    reasons.push(age >= 60 ? 'Age 60+: fewer, shorter sessions to protect joints and allow recovery.' : 'Higher body weight: shorter, joint-friendly sessions first.');
+    reasons.push(age >= 60 ? 'Age 60+: fewer, shorter, low-impact sessions to protect joints and allow recovery.' : 'Higher body weight: shorter, low-impact sessions first.');
   }
 
   days = Math.min(5, days);
   minutes = Math.min(75, minutes);
-  if (days * minutes < 150) reasons.push('Add 20–30 min brisk walks on rest days to reach 150 active minutes per week.');
+  if (days * minutes < 150) reasons.push(`Add ${level === 'beginner' ? '10–30' : '20–30'} min easy walks on rest days to reach 150 active minutes per week.`);
   return { daysPerWeek: days, minutesPerSession: minutes, weeklyMinutes: days * minutes, reasons };
 };
 
-export const recommendScheduleForProfile = (profile: Profile, weights: WeightEntry[]): ScheduleRecommendation =>
-  recommendSchedule({
+export interface TrainingInput {
+  goal: GoalType;
+  level: FitnessLevel;
+  levelSince: string;
+  activityLevel: ActivityLevel;
+  age: number;
+  bmi: number;
+  workoutLog: WorkoutLogEntry[];
+}
+
+export interface TrainingAssessment {
+  progress: TrainingProgress;
+  isLowImpact: boolean;
+  schedule: ScheduleRecommendation;
+}
+
+/** Progression stage, impact level and recommended schedule from the profile and workout history. */
+export const assessTraining = ({ goal, level, levelSince, activityLevel, age, bmi, workoutLog }: TrainingInput): TrainingAssessment => {
+  const isDeconditioned = activityLevel === 'sedentary' || bmi >= 30 || age >= 60;
+  const progress = assessProgress({ level, levelSince, startIndex: startStageIndex(level, isDeconditioned), workoutLog });
+  // Jumping is hard on joints for heavier, older or brand-new exercisers; it unlocks at the Consolidating stage.
+  const isLowImpact = bmi >= 35 || age >= 60 || (level === 'beginner' && isDeconditioned && progress.stage.index < 2);
+  const schedule = recommendSchedule({ goal, stage: progress.stage, activityLevel, age, bmi });
+  return { progress, isLowImpact, schedule };
+};
+
+export interface ProfileTraining extends TrainingAssessment, PlanSettings {}
+
+/** Assessment for a saved profile, with days/minutes filled from the recommendation unless the user customized them. */
+export const assessTrainingForProfile = (profile: Profile, weights: WeightEntry[], workoutLog: WorkoutLogEntry[]): ProfileTraining => {
+  const assessment = assessTraining({
     goal: profile.goal,
     level: profile.workout.level,
+    levelSince: profile.workout.levelSince,
     activityLevel: profile.activityLevel,
     age: ageFromBirthDate(profile.birthDate),
     bmi: calcBmi(currentWeightKg(profile, weights), profile.heightCm),
+    workoutLog,
   });
-
-/** Workout preferences with days/minutes filled from the recommendation unless the user customized them. */
-export const resolveWorkoutPreferences = (profile: Profile, weights: WeightEntry[]): WorkoutPreferences => {
-  if (profile.workout.isCustomSchedule) return profile.workout;
-  const recommendation = recommendScheduleForProfile(profile, weights);
-  return { ...profile.workout, daysPerWeek: recommendation.daysPerWeek, minutesPerSession: recommendation.minutesPerSession };
+  const { schedule } = assessment;
+  const preferences = profile.workout.isCustomSchedule
+    ? profile.workout
+    : { ...profile.workout, daysPerWeek: schedule.daysPerWeek, minutesPerSession: schedule.minutesPerSession };
+  return { ...assessment, preferences, stage: assessment.progress.stage };
 };
 
-export const generateWorkoutPlan = (preferences: WorkoutPreferences, goal: GoalType): WorkoutPlan => {
-  const daysPerWeek = Math.min(6, Math.max(1, preferences.daysPerWeek));
+export const generateWorkoutPlan = (settings: PlanSettings, goal: GoalType): WorkoutPlan => {
+  const daysPerWeek = Math.min(6, Math.max(1, settings.preferences.daysPerWeek));
   const split = SPLITS[daysPerWeek];
   const trainingDays = TRAINING_DAYS[daysPerWeek];
   const days: WorkoutPlanDay[] = Array.from({ length: 7 }, (_, weekday) => {
@@ -195,10 +295,33 @@ export const generateWorkoutPlan = (preferences: WorkoutPreferences, goal: GoalT
       return { weekday, title: 'Rest / active recovery', isRest: true, exercises: [] };
     }
     const kind = split[sessionIndex];
-    return { weekday, title: SESSION_TITLES[kind], isRest: false, exercises: buildSession(kind, preferences, goal, sessionIndex) };
+    return { weekday, title: SESSION_TITLES[kind], isRest: false, exercises: buildSession(kind, settings, goal, sessionIndex) };
   });
-  return { createdAt: new Date().toISOString(), preferences, goal, days };
+  return {
+    createdAt: new Date().toISOString(),
+    preferences: settings.preferences,
+    goal,
+    days,
+    stageId: settings.stage.id,
+    isLowImpact: settings.isLowImpact,
+  };
 };
+
+/** Why a saved plan no longer matches the profile: the user moved to a new stage, or settings changed. */
+export const planOutdatedReason = (plan: WorkoutPlan, goal: GoalType, settings: PlanSettings): 'stage' | 'settings' | null => {
+  if (plan.goal !== goal || JSON.stringify(plan.preferences) !== JSON.stringify(settings.preferences) || plan.isLowImpact !== settings.isLowImpact) {
+    return 'settings';
+  }
+  // Plans made before stages existed have no stage id; don't nag about those.
+  if (plan.stageId && plan.stageId !== settings.stage.id) return 'stage';
+  return null;
+};
+
+/** Tip shown on rest days. */
+export const restDayTip = (level: FitnessLevel): string =>
+  level === 'beginner'
+    ? 'Rest day. A 10–20 minute easy walk (outside or around the house) helps recovery and builds the habit.'
+    : 'Rest day. A 20–30 minute walk or light stretching helps recovery.';
 
 /** Parses "12–15", "45s", "10 min" or "5 / side" into an approximate work duration in seconds per set. */
 const workSecondsPerSet = (reps: string): number => {
