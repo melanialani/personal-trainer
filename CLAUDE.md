@@ -2,6 +2,8 @@
 
 Static SPA deployed to GitHub Pages: https://melanialani.github.io/personal-trainer/
 
+Real website in active use (not a Figma prototype): logic must be correct and robust, and changes must not break users' saved data.
+
 ## Stack & commands
 - Vite 6 + React 18 + TypeScript (strict) + Tailwind v4 + Recharts + lucide-react.
 - `npm run dev` → http://localhost:4007/personal-trainer/ (port 4007 is fixed, `strictPort`).
