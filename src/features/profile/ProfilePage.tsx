@@ -6,7 +6,7 @@ import { ageFromBirthDate, todayKey } from '../../lib/date';
 import { DIET_OPTIONS } from '../../lib/foods';
 import { formatNumber } from '../../lib/format';
 import { createId } from '../../lib/id';
-import { assessTraining } from '../../lib/workoutGenerator';
+import { assessTraining, assessTrainingForProfile, generateWorkoutPlan, planOutdatedReason } from '../../lib/workoutGenerator';
 import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
 import { Checkbox, Field, NumberInput, Segmented, Select, TextInput } from '../../shared/components/FormFields';
@@ -56,12 +56,16 @@ export const ProfilePage = () => {
     setHasSubmitted(true);
     if (!isValid) return;
     const profile = draftToProfile(draft);
-    update((current) => ({
-      ...current,
-      profile,
+    update((current) => {
       // Seed the weight log with the starting weight on first setup.
-      weights: current.weights.length === 0 ? [{ id: createId(), date: todayKey(), weightKg: profile.startWeightKg }] : current.weights,
-    }));
+      const weights = current.weights.length === 0 ? [{ id: createId(), date: todayKey(), weightKg: profile.startWeightKg }] : current.weights;
+      // Rebuild the weekly workout plan right away when goal or training preferences changed, so it never
+      // keeps exercises for equipment the user no longer has.
+      const plan = current.workoutPlan;
+      const training = plan ? assessTrainingForProfile(profile, weights, current.workoutLog) : null;
+      const workoutPlan = plan && training && planOutdatedReason(plan, profile.goal, training) ? generateWorkoutPlan(training, profile.goal) : plan;
+      return { ...current, profile, weights, workoutPlan };
+    });
     showToast(isNew ? 'Profile created — your plan is ready' : 'Profile saved');
     if (isNew) navigate('/');
   };

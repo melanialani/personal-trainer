@@ -59,6 +59,11 @@ export const WorkoutPlanTab = () => {
     showToast('New workout plan ready');
   };
 
+  const handleUpdatePlan = () => {
+    generatePlan();
+    showToast('Plan updated');
+  };
+
   const handleChangeLevel = async (level: FitnessLevel) => {
     const label = FITNESS_LEVEL_OPTIONS.find((option) => option.value === level)?.label ?? level;
     const isConfirmed = await confirm({
@@ -137,17 +142,23 @@ export const WorkoutPlanTab = () => {
           <button
             type="button"
             className="font-medium underline"
-            onClick={() => {
-              generatePlan();
-              showToast('Plan updated');
-            }}
+            onClick={handleUpdatePlan}
           >
             Update my plan
           </button>
         </Notice>
       )}
       {outdatedReason === 'settings' && (
-        <Notice className="mb-4">Your goal or training preferences changed since this plan was created. Regenerate to match them.</Notice>
+        <Notice className="mb-4">
+          Your goal or training preferences changed since this plan was created.{' '}
+          <button
+            type="button"
+            className="font-medium underline"
+            onClick={handleUpdatePlan}
+          >
+            Update my plan
+          </button>
+        </Notice>
       )}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {plan.days.map((day) => {

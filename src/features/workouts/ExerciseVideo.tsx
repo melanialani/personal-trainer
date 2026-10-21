@@ -13,8 +13,12 @@ interface ExerciseVideoProps {
  */
 export const ExerciseVideo = ({ exercise, video }: ExerciseVideoProps) => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [hasThumbnail, setHasThumbnail] = useState(true);
 
-  useEffect(() => setIsPlaying(false), [video.id]);
+  useEffect(() => {
+    setIsPlaying(false);
+    setHasThumbnail(true);
+  }, [video.id]);
 
   const frameClass = video.isShort ? 'mx-auto aspect-[9/16] max-h-[420px]' : 'aspect-video w-full';
 
@@ -39,7 +43,15 @@ export const ExerciseVideo = ({ exercise, video }: ExerciseVideoProps) => {
       className={`group relative block overflow-hidden rounded-xl bg-slate-900 ${frameClass}`}
       aria-label={`Play video: ${exercise.name}`}
     >
-      <img src={exerciseVideoThumbnailUrl(video)} alt={`${exercise.name} — video demo`} loading="lazy" className="h-full w-full object-cover opacity-90 transition-opacity group-hover:opacity-100" />
+      {hasThumbnail && (
+        <img
+          src={exerciseVideoThumbnailUrl(video)}
+          alt={`${exercise.name} — video demo`}
+          loading="lazy"
+          onError={() => setHasThumbnail(false)}
+          className="h-full w-full object-cover opacity-90 transition-opacity group-hover:opacity-100"
+        />
+      )}
       <span className="absolute inset-0 flex items-center justify-center">
         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-red-600 text-white shadow-lg transition-transform group-hover:scale-105">
           <Play size={22} className="ml-0.5" fill="currentColor" />
