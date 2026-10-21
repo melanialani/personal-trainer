@@ -1,6 +1,7 @@
 import { Pause, Play, PlayCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { exerciseImageUrls, exerciseVideoUrl, type Exercise } from '../../data/exercises';
+import { exerciseImageUrls, exerciseVideo, exerciseVideoUrl, type Exercise } from '../../data/exercises';
+import { ExerciseVideo } from './ExerciseVideo';
 
 const FRAME_LABELS = ['1 · Start', '2 · Finish'];
 const FRAME_INTERVAL_MS = 1100;
@@ -11,16 +12,19 @@ interface ExerciseDemoProps {
   isAnimated?: boolean;
 }
 
-/** Start/finish photos from free-exercise-db (public domain) plus a video search link. */
+/** Start/finish photos from free-exercise-db (public domain) plus an embedded YouTube demo. */
 export const ExerciseDemo = ({ exercise, isAnimated = false }: ExerciseDemoProps) => {
   const urls = exerciseImageUrls(exercise);
+  const video = exerciseVideo(exercise);
   const [frame, setFrame] = useState(0);
+  const [isVideoShown, setIsVideoShown] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     setFrame(0);
     setHasError(false);
+    setIsVideoShown(false);
   }, [exercise.id]);
 
   useEffect(() => {
@@ -36,13 +40,33 @@ export const ExerciseDemo = ({ exercise, isAnimated = false }: ExerciseDemoProps
       rel="noopener noreferrer"
       className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-600 hover:underline"
     >
-      <PlayCircle size={14} /> Watch a video demo
+      <PlayCircle size={14} /> {video ? 'Open on YouTube' : 'Search videos on YouTube'}
     </a>
   );
+  const hasPhotos = urls.length > 0 && !hasError;
+  const videoPlayer = video && <ExerciseVideo exercise={exercise} video={video} />;
 
-  if (urls.length === 0 || hasError) {
-    return <div className="rounded-xl bg-slate-50 px-3 py-2.5">{videoLink}</div>;
+  if (!hasPhotos) {
+    return (
+      <div className="space-y-2">
+        {videoPlayer}
+        <div className={video ? '' : 'rounded-xl bg-slate-50 px-3 py-2.5'}>{videoLink}</div>
+      </div>
+    );
   }
+
+  // Lists show the photos; the video opens inline on request.
+  const listVideo = video ? (
+    isVideoShown ? (
+      videoPlayer
+    ) : (
+      <button type="button" onClick={() => setIsVideoShown(true)} className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-600 hover:underline">
+        <PlayCircle size={14} /> Play video demo
+      </button>
+    )
+  ) : (
+    videoLink
+  );
 
   if (!isAnimated) {
     return (
@@ -55,7 +79,7 @@ export const ExerciseDemo = ({ exercise, isAnimated = false }: ExerciseDemoProps
             </figure>
           ))}
         </div>
-        {videoLink}
+        {listVideo}
       </div>
     );
   }
@@ -82,6 +106,7 @@ export const ExerciseDemo = ({ exercise, isAnimated = false }: ExerciseDemoProps
           {isPlaying ? <Pause size={14} /> : <Play size={14} />}
         </span>
       </button>
+      {videoPlayer}
       <div className="flex items-center justify-between gap-2">
         <span className="text-[11px] text-slate-400">Photos: free-exercise-db (public domain)</span>
         {videoLink}

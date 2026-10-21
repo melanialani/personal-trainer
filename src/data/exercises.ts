@@ -1,4 +1,5 @@
 import type { Equipment, FitnessLevel } from '../types';
+import { EXERCISE_VIDEOS } from './exerciseVideos';
 
 export type MuscleGroup = 'chest' | 'back' | 'shoulders' | 'arms' | 'legs' | 'glutes' | 'core' | 'full_body' | 'cardio';
 export type ExerciseType = 'strength' | 'cardio' | 'core' | 'mobility';
@@ -61,8 +62,27 @@ const IMAGE_BASE_URL = 'https://raw.githubusercontent.com/yuhonas/free-exercise-
 export const exerciseImageUrls = (exercise: Exercise): string[] =>
   exercise.imageId ? [0, 1].map((frame) => `${IMAGE_BASE_URL}/${exercise.imageId}/${frame}.jpg`) : [];
 
-export const exerciseVideoUrl = (exercise: Exercise): string =>
-  `https://www.youtube.com/results?search_query=${encodeURIComponent(`${exercise.name} exercise proper form beginner`)}`;
+export interface ExerciseVideo {
+  /** YouTube video id. */
+  id: string;
+  /** Vertical YouTube Short. */
+  isShort?: boolean;
+}
+
+/** Curated YouTube demo for the exercise, if one was found. */
+export const exerciseVideo = (exercise: Exercise): ExerciseVideo | undefined => EXERCISE_VIDEOS[exercise.id];
+
+export const exerciseVideoEmbedUrl = (video: ExerciseVideo): string =>
+  `https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&rel=0&playsinline=1`;
+
+export const exerciseVideoThumbnailUrl = (video: ExerciseVideo): string => `https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`;
+
+/** Opens the curated video on YouTube, or a YouTube search when there is none. */
+export const exerciseVideoUrl = (exercise: Exercise): string => {
+  const video = exerciseVideo(exercise);
+  if (video) return `https://www.youtube.com/watch?v=${video.id}`;
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(`${exercise.name} exercise proper form beginner`)}`;
+};
 
 export const EXERCISES: Exercise[] = [
   // Chest
