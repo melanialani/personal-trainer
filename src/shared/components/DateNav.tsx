@@ -10,7 +10,7 @@ interface DateNavProps {
 export const DateNav = ({ date, onChange }: DateNavProps) => {
   const isToday = date === todayKey();
   return (
-    <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
+    <div className="flex items-center gap-1 rounded-xl border border-slate-200 bg-surface p-1 shadow-sm">
       <IconButton label="Previous day" onClick={() => onChange(addDays(date, -1))}>
         <ChevronLeft size={18} />
       </IconButton>

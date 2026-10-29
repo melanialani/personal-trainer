@@ -20,8 +20,9 @@ Real website in active use (not a Figma prototype): logic must be correct and ro
 - Reuse shared components in `src/shared/components` and food UI in `src/features/foods` (FoodPicker, FoodRow, ServingForm, AddFoodModal).
 - Generic helpers: `lib/math` (round, clamp, sum, average), `lib/format` (display strings, pluralize), `lib/date`; shared hooks in `src/shared/hooks` (`useProfile`, `useBodyWeightKg`, …); JS/chart colors in `src/shared/theme.ts`. Check these before writing a helper.
 - Calculations live in `src/lib` (calc, mealPlanGenerator, workoutGenerator) — keep UI files free of formulas.
-- Static datasets live in `src/data` (foods, meal templates, exercises, activities). Meal templates must only reference existing food ids.
+- Static datasets live in `src/data` (foods, meal templates, exercises, activities, medicines, care guides). Meal templates must only reference existing food ids.
 - Online food search uses Open Food Facts (`src/lib/openFoodFacts.ts`); search only on submit (rate limit ~10 req/min).
-- UI text and code in English, except food names and serving labels in `src/data/foods.ts` / meal template titles (Indonesian, by request).
+- UI text and code in English, except food names and serving labels in `src/data/foods.ts` / meal template titles and medicine/care-guide content in `src/data/medicines.ts` / `careGuides.ts` (Indonesian, by request).
+- Light + dark theme: use `bg-surface` (not `bg-white`) for cards/inputs, add a `dark:` shade to colored text, and keep text contrast ≥ 4.5:1 in both themes (see Theme in `docs/architecture.md`).
 
 More detail: `docs/architecture.md`.

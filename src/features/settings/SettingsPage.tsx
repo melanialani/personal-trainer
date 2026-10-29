@@ -7,6 +7,7 @@ import { Card } from '../../shared/components/Card';
 import { useConfirm } from '../../shared/components/ConfirmProvider';
 import { Modal } from '../../shared/components/Modal';
 import { PageHeader } from '../../shared/components/PageHeader';
+import { ThemeSegmented } from '../../shared/components/ThemeToggle';
 import { useToast } from '../../shared/components/ToastProvider';
 import { useAppData } from '../../store/AppDataContext';
 import type { AppData } from '../../types';
@@ -81,7 +82,7 @@ export const SettingsPage = () => {
 
   return (
     <>
-      <PageHeader title="Data & Backup" description="Everything is stored only in this browser. Export a backup to move it to another device." />
+      <PageHeader title="Data & Settings" description="Everything is stored only in this browser. Export a backup to move it to another device." />
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
         <Card title="Backup" subtitle="Export to a JSON file, import it on any device or browser">
           <div className="flex flex-wrap gap-2">
@@ -104,6 +105,12 @@ export const SettingsPage = () => {
           subtitle={`About ${formatNumber(sizeKb, 1)} KB`}
         >
           <SummaryList data={data} />
+        </Card>
+
+        <Card title="Appearance" subtitle="System follows your phone or computer setting. Saved on this device only.">
+          <div className="max-w-xs">
+            <ThemeSegmented />
+          </div>
         </Card>
 
         <Card title="Sample data" subtitle="Explore the app with six weeks of realistic example data">

@@ -39,14 +39,14 @@ export const Modal = ({ isOpen, title, description, size = 'md', onClose, footer
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-end justify-center bg-slate-900/40 backdrop-blur-[2px] sm:items-center sm:p-4"
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-[2px] sm:items-center sm:p-4"
       onClick={blockEvent}
       onMouseDown={blockEvent}
     >
       <div
         role="dialog"
         aria-modal="true"
-        className={`flex max-h-[92dvh] w-full flex-col rounded-t-2xl bg-white shadow-xl sm:rounded-2xl ${SIZE_CLASSES[size]}`}
+        className={`flex max-h-[92dvh] w-full flex-col rounded-t-2xl bg-surface shadow-xl sm:rounded-2xl ${SIZE_CLASSES[size]}`}
       >
         <header className="flex items-start justify-between gap-3 border-b border-slate-100 px-5 py-4">
           <div className="min-w-0">

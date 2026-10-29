@@ -29,8 +29,8 @@ export const DaySummaryCard = ({ title, totals, burned, targets, action }: DaySu
         <div className="w-full flex-1 space-y-5">
           <div className="grid grid-cols-3 gap-2 text-center @md:text-left">
             <Figure label="Target" value={targets.kcal} />
-            <Figure label="Eaten" value={totals.kcal} tone="text-brand-700" />
-            <Figure label="Exercise" value={burned} tone="text-orange-600" />
+            <Figure label="Eaten" value={totals.kcal} tone="text-brand-700 dark:text-brand-300" />
+            <Figure label="Exercise" value={burned} tone="text-orange-700 dark:text-orange-400" />
           </div>
           <MacroBars consumed={totals} target={targets} />
         </div>

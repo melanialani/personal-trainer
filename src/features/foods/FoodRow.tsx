@@ -28,7 +28,7 @@ export const FoodRow = ({ food, isFavorite, onToggleFavorite, onSelect, trailing
           type="button"
           onClick={onToggleFavorite}
           aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
-          className={`shrink-0 rounded p-1 ${isFavorite ? 'text-amber-400' : 'text-slate-300 hover:text-slate-400'}`}
+          className={`shrink-0 rounded p-1 ${isFavorite ? 'text-amber-400' : 'text-slate-400 hover:text-slate-500'}`}
         >
           <Star size={16} fill={isFavorite ? 'currentColor' : 'none'} />
         </button>

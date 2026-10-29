@@ -26,7 +26,7 @@ export const PlanDayExercises = ({ exercises, onShowExercise }: PlanDayExercises
                 {item.restSec > 0 && ` · rest ${item.restSec}s`}
               </span>
             </span>
-            <Info size={14} className="shrink-0 text-slate-300" />
+            <Info size={14} className="shrink-0 text-slate-400" />
           </button>
         </li>
       );

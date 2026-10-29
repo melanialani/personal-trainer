@@ -65,7 +65,7 @@ export const WorkoutHistoryTab = () => {
               formatter={(value) => [`${value} min`, 'Active']}
               {...CHART_TOOLTIP}
             />
-            <Bar dataKey="minutes" fill={COLORS.brandHex} {...CHART_BAR} />
+            <Bar dataKey="minutes" fill={COLORS.brand} {...CHART_BAR} />
           </BarChart>
         </ResponsiveContainer>
       </Card>

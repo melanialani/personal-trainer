@@ -140,7 +140,7 @@ const MealPlanContent = () => {
                   type="button"
                   onClick={() => setSelectedIndex(index)}
                   className={`flex min-w-16 shrink-0 flex-col items-center rounded-xl border px-3 py-2 transition-colors ${
-                    isSelected ? 'border-brand-500 bg-brand-600 text-white' : 'border-slate-200 bg-white text-slate-600 hover:border-brand-300'
+                    isSelected ? 'border-brand-600 bg-brand-700 text-white' : 'border-slate-200 bg-surface text-slate-600 hover:border-brand-300'
                   }`}
                 >
                   <span className="text-[11px] font-medium uppercase">{planDay.date === today ? 'Today' : WEEKDAY_SHORT[weekdayIndex(planDay.date)]}</span>
@@ -151,7 +151,7 @@ const MealPlanContent = () => {
           </div>
 
           {/* Phones: compact day total above the meals (the full card sits in the desktop sidebar). */}
-          <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-slate-200/80 bg-white px-4 py-3 shadow-sm lg:hidden">
+          <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-slate-200/80 bg-surface px-4 py-3 shadow-sm lg:hidden">
             <p className="text-sm text-slate-500">
               <span className="text-lg font-bold tabular-nums text-slate-900">{formatNumber(dayTotals.kcal)}</span> / {formatNumber(targets.kcal)} kcal
             </p>

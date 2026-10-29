@@ -27,7 +27,7 @@ export const TrainingProgressCard = ({ progress, onChangeLevel }: TrainingProgre
       className="mb-4"
       title={
         <span className="flex items-center gap-2">
-          <TrendingUp size={16} className="text-brand-600" /> Your progression
+          <TrendingUp size={16} className="text-brand-700 dark:text-brand-400" /> Your progression
         </span>
       }
       subtitle={`${levelLabel(stage.level)} · stage ${stage.index + 1} of ${stageCount}: ${stage.label}`}

@@ -1,4 +1,4 @@
-import { Dumbbell, LayoutDashboard, NotebookPen, Scale, Search, Settings, Target, UtensilsCrossed, type LucideIcon } from 'lucide-react';
+import { Dumbbell, LayoutDashboard, NotebookPen, Pill, Scale, Search, Settings, Target, UtensilsCrossed, type LucideIcon } from 'lucide-react';
 
 export interface NavItem {
   path: string;
@@ -15,6 +15,7 @@ export const NAV_ITEMS: NavItem[] = [
   { path: '/meal-plan', label: 'Meal Planner', shortLabel: 'Meals', icon: UtensilsCrossed },
   { path: '/workouts', label: 'Workouts', shortLabel: 'Workouts', icon: Dumbbell, isPrimaryOnMobile: true },
   { path: '/weight', label: 'Weight Log', shortLabel: 'Weight', icon: Scale, isPrimaryOnMobile: true },
+  { path: '/medicine', label: 'Medicine Guide', shortLabel: 'Medicine', icon: Pill },
   { path: '/profile', label: 'Profile & Goals', shortLabel: 'Goals', icon: Target },
-  { path: '/settings', label: 'Data & Backup', shortLabel: 'Data', icon: Settings },
+  { path: '/settings', label: 'Data & Settings', shortLabel: 'Data', icon: Settings },
 ];

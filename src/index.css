@@ -1,22 +1,74 @@
 @import 'tailwindcss';
 
+/* Dark mode follows the `dark` class on <html> (set by useTheme / the inline script in index.html). */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --color-brand-50: #ecfdf5;
   --color-brand-100: #d1fae5;
   --color-brand-200: #a7f3d0;
+  --color-brand-300: #6ee7b7;
+  --color-brand-400: #34d399;
   --color-brand-500: #10b981;
   --color-brand-600: #059669;
   --color-brand-700: #047857;
+  --color-brand-800: #065f46;
+  /* Semantic surfaces: page background, cards/inputs, selected segment inside a slate-100 track. */
+  --color-page: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-raised: #ffffff;
+  --color-brand-ink: #047857;
+  /* Slightly darker than Tailwind's defaults so hint/secondary text meets WCAG AA (4.5:1) on white and the page. */
+  --color-slate-400: #62707f;
+  --color-slate-500: #525f70;
   --color-protein: #6366f1;
   --color-carbs: #f59e0b;
   --color-fat: #ec4899;
+  --color-protein-ink: #4338ca;
+  --color-carbs-ink: #b45309;
+  --color-fat-ink: #be185d;
+}
+
+/*
+ * Dark theme: instead of adding `dark:` to every class, the neutral slate scale is flipped and light tints
+ * (the -50/-200 backgrounds used by badges, notices and active nav items) become deep tints. Colored text
+ * shades get explicit `dark:` variants where used, because the same shades also serve as button backgrounds.
+ * slate-950 is intentionally not remapped: it stays a near-black for toasts.
+ */
+.dark {
+  color-scheme: dark;
+  --color-page: #0b1120;
+  --color-surface: #131c2e;
+  --color-raised: #334155;
+  --color-brand-ink: #34d399;
+  --color-protein-ink: #a5b4fc;
+  --color-carbs-ink: #fcd34d;
+  --color-fat-ink: #f9a8d4;
+  --color-slate-50: #182336;
+  --color-slate-100: #1f2a3f;
+  --color-slate-200: #2c3a50;
+  --color-slate-300: #415069;
+  --color-slate-400: #8a98ad;
+  --color-slate-500: #a3afc1;
+  --color-slate-600: #b9c3d1;
+  --color-slate-700: #cdd5e0;
+  --color-slate-800: #e2e8f0;
+  --color-slate-900: #f1f5f9;
+  --color-brand-50: #0e2d25;
+  --color-brand-100: #134235;
+  --color-brand-200: #1b5c49;
+  --color-emerald-50: #0e2d25;
+  --color-amber-50: #33270e;
+  --color-rose-50: #3b1521;
+  --color-rose-200: #6b2537;
+  --color-sky-50: #0d2a3d;
 }
 
 html,
 body {
-  background: #f6f7f9;
-  color: #0f172a;
+  background: var(--color-page);
+  color: var(--color-slate-900);
   -webkit-font-smoothing: antialiased;
 }
 

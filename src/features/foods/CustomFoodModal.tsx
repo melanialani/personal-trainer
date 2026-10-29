@@ -133,7 +133,7 @@ export const CustomFoodModal = ({ isOpen, food, initialName, onClose, onSaved }:
           label="Calories"
           error={show(errors.kcal)}
           hint={macroKcal > 0 && draft.kcal === '' ? (
-            <button type="button" className="text-brand-600 hover:underline" onClick={() => set('kcal', macroKcal)}>
+            <button type="button" className="text-brand-700 dark:text-brand-400 hover:underline" onClick={() => set('kcal', macroKcal)}>
               Use {macroKcal} kcal (from macros)
             </button>
           ) : undefined}

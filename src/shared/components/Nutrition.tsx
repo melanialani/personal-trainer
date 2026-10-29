@@ -4,9 +4,10 @@ import { COLORS } from '../theme';
 import { ProgressBar } from './ProgressBar';
 
 export const MACROS = [
-  { key: 'protein', label: 'Protein', color: 'var(--color-protein)' },
-  { key: 'carbs', label: 'Carbs', color: 'var(--color-carbs)' },
-  { key: 'fat', label: 'Fat', color: 'var(--color-fat)' },
+  // `textColor` is a darker (light theme) / lighter (dark theme) shade that stays readable as text.
+  { key: 'protein', label: 'Protein', color: 'var(--color-protein)', textColor: 'var(--color-protein-ink)' },
+  { key: 'carbs', label: 'Carbs', color: 'var(--color-carbs)', textColor: 'var(--color-carbs-ink)' },
+  { key: 'fat', label: 'Fat', color: 'var(--color-fat)', textColor: 'var(--color-fat-ink)' },
 ] as const;
 
 /** Compact "P 20g · C 30g · F 10g" line. */
@@ -76,7 +77,7 @@ export const CalorieRing = ({ consumed, burned, target, size = 168 }: CalorieRin
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <span className={`text-3xl font-bold tabular-nums ${isOver ? 'text-rose-600' : 'text-slate-900'}`}>
+        <span className={`text-3xl font-bold tabular-nums ${isOver ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900'}`}>
           {formatNumber(Math.abs(Math.round(remaining)))}
         </span>
         <span className="text-xs text-slate-500">{isOver ? 'kcal over' : 'kcal left'}</span>

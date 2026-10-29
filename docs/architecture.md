@@ -9,8 +9,9 @@
 | `/meal-plan` | `features/meal-plan` | 7-day plan generated from `data/mealTemplates.ts`, swap meal, log to diary, shopping list |
 | `/workouts` | `features/workouts` | Weekly plan from `lib/workoutGenerator.ts`, activity log + chart, exercise library |
 | `/weight` | `features/weight` | Weigh-ins, 7-day moving average chart, trend, goal progress |
+| `/medicine` | `features/medicine` | Medicine guide: search + filters (symptom, group, ingredient, form, meal timing, availability, children, pregnancy), detail modal with dose/interactions, care guides |
 | `/profile` | `features/profile` | Body stats, goal, diet & training preferences, live targets preview |
-| `/settings` | `features/settings` | Export / import (merge or replace), sample data, delete all |
+| `/settings` | `features/settings` | Export / import (merge or replace), appearance (theme), sample data, delete all |
 
 ## Calculations (`src/lib/calc.ts`)
 - BMR: Mifflin-St Jeor. TDEE = BMR × activity factor (1.2 – 1.9).
@@ -45,6 +46,20 @@ plus the user's excluded keywords.
 - Plans store `stageId` and `isLowImpact`; `planOutdatedReason` prompts an update when the stage changes.
 - Exercise photos (start/finish) are hot-linked from free-exercise-db (public domain, `imageId` in `data/exercises.ts`);
   the video button opens a YouTube search.
+
+## Medicine guide
+- Data: `data/medicines.ts` (medicines, filter label maps, Indonesian symptom keywords for search) and `data/careGuides.ts`.
+  Content is Indonesian; UI labels are English. Filtering/search logic lives in `lib/medicines.ts`.
+- Each medicine has adult and child doses, meal timing, interactions, warnings and red flags. Static, read-only:
+  nothing is stored in `fitplan:data`.
+
+## Theme (light / dark)
+- `shared/hooks/useTheme.ts` stores `light | dark | system` in localStorage key `fitplan:theme` (per device, not in
+  backups) and toggles the `dark` class on `<html>`. An inline script in `index.html` applies it before first paint.
+- `index.css` defines semantic tokens (`page`, `surface`, `raised`, `brand-ink`, macro `*-ink`) and, under `.dark`,
+  remaps the slate scale and light tints. So `bg-surface` (not `bg-white`) for cards/inputs, and colored text needs a
+  `dark:` shade (e.g. `text-brand-700 dark:text-brand-400`). JS/chart colors use CSS variables from `shared/theme.ts`.
+- Text must meet WCAG AA (4.5:1) in both themes.
 
 ## Food data
 Food names and serving labels are Indonesian; ids are stable English slugs (searchable). Categories stay English (UI).

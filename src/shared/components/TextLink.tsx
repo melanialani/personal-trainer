@@ -9,7 +9,7 @@ interface TextLinkProps {
 
 /** In-app text link in the brand color. */
 export const TextLink = ({ to, className = '', children }: TextLinkProps) => (
-  <Link to={to} className={`font-medium text-brand-600 hover:underline ${className}`}>
+  <Link to={to} className={`font-medium text-brand-700 dark:text-brand-400 hover:underline ${className}`}>
     {children}
   </Link>
 );

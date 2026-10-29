@@ -12,7 +12,7 @@ export const Chip = ({ isActive, onClick, children }: ChipProps) => (
     type="button"
     onClick={onClick}
     className={`rounded-full border px-3 py-1 text-xs font-medium ${
-      isActive ? 'border-brand-500 bg-brand-50 text-brand-700' : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+      isActive ? 'border-brand-500 bg-brand-50 text-brand-700 dark:text-brand-300' : 'border-slate-200 text-slate-600 hover:bg-slate-50'
     }`}
   >
     {children}

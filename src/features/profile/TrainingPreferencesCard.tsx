@@ -84,7 +84,7 @@ export const TrainingPreferencesCard = ({ workout, recommendation, onChange }: T
         <div className="rounded-xl border border-brand-100 bg-brand-50/60 p-4">
           <div className="flex flex-wrap items-start justify-between gap-2">
             <div>
-              <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-brand-700">
+              <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-300">
                 <Sparkles size={14} /> Recommended for you
               </p>
               <p className="mt-1 text-lg font-bold text-slate-900">
@@ -117,7 +117,7 @@ export const TrainingPreferencesCard = ({ workout, recommendation, onChange }: T
                 <Select value={String(workout.minutesPerSession)} options={MINUTES_OPTIONS} onValueChange={(value) => set('minutesPerSession', Number(value))} />
               </Field>
             </div>
-            <button type="button" onClick={() => set('isCustomSchedule', false)} className="mt-2 text-xs font-medium text-brand-600 hover:underline">
+            <button type="button" onClick={() => set('isCustomSchedule', false)} className="mt-2 text-xs font-medium text-brand-700 dark:text-brand-400 hover:underline">
               Use the recommendation instead
             </button>
           </div>

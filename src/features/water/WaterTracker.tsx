@@ -41,7 +41,7 @@ export const WaterTracker = ({ date }: { date: string }) => {
               onClick={() => setWater(isFilled && (i + 1) * GLASS_ML === consumed ? i * GLASS_ML : (i + 1) * GLASS_ML)}
               aria-label={`Set to ${(i + 1) * GLASS_ML} ml`}
               className={`h-9 w-7 rounded-b-lg rounded-t-sm border-2 transition-colors ${
-                isFilled ? 'border-sky-400 bg-sky-400' : 'border-slate-200 bg-white hover:border-sky-300'
+                isFilled ? 'border-sky-400 bg-sky-400' : 'border-slate-200 bg-surface hover:border-sky-300'
               }`}
             />
           );

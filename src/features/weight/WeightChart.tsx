@@ -46,7 +46,7 @@ export const WeightChart = ({ weights, targetKg, rangeDays, height = 260 }: Weig
           contentStyle={CHART_TOOLTIP.contentStyle}
         />
         {targetKg && (
-          <ReferenceLine y={targetKg} stroke={COLORS.brandHex} strokeDasharray="4 4" label={{ value: `Target ${targetKg} kg`, position: 'insideTopRight', fontSize: 11, fill: COLORS.brandDark }} />
+          <ReferenceLine y={targetKg} stroke={COLORS.brand} strokeDasharray="4 4" label={{ value: `Target ${targetKg} kg`, position: 'insideTopRight', fontSize: 11, fill: COLORS.brandText }} />
         )}
         <Line type="monotone" dataKey="weight" stroke={COLORS.mutedDark} strokeWidth={1.5} dot={{ r: 2.5, fill: COLORS.axis, strokeWidth: 0 }} isAnimationActive={false} />
         <Line type="monotone" dataKey="average" stroke={COLORS.brandDark} strokeWidth={2.5} dot={false} isAnimationActive={false} />

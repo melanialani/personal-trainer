@@ -30,7 +30,7 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className="flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-sm text-white shadow-lg"
+            className="flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 ring-1 ring-white/10 text-sm text-white shadow-lg"
             role="status"
           >
             {toast.tone === 'success' ? <CheckCircle2 size={16} className="text-emerald-400" /> : <AlertCircle size={16} className="text-rose-400" />}

@@ -118,7 +118,7 @@ const Dashboard = () => {
         </div>
 
         <Card
-          icon={<Dumbbell size={16} className="text-brand-600" />}
+          icon={<Dumbbell size={16} className="text-brand-700 dark:text-brand-400" />}
           title="Today’s workout"
           subtitle={todayPlan?.title}
           action={
@@ -197,7 +197,7 @@ const Dashboard = () => {
         <div className="space-y-5">
           <WaterTracker date={today} />
           <Card
-            icon={<UtensilsCrossed size={16} className="text-brand-600" />}
+            icon={<UtensilsCrossed size={16} className="text-brand-700 dark:text-brand-400" />}
             title="Today’s menu"
             action={
               <TextLink to="/meal-plan" className="text-xs">
@@ -224,7 +224,7 @@ const Dashboard = () => {
                       <button
                         type="button"
                         onClick={() => logPlannedMeals(today, [meal])}
-                        className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-brand-600"
+                        className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-brand-700 dark:hover:text-brand-400"
                         aria-label={`Log ${MEAL_LABELS[meal.meal]} to diary`}
                         title="Log to diary"
                       >

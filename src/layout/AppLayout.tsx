@@ -2,6 +2,7 @@ import { AlertCircle, Dumbbell, Ellipsis } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import { Notice } from '../shared/components/Notice';
+import { ThemeToggleButton } from '../shared/components/ThemeToggle';
 import { useAppData } from '../store/AppDataContext';
 import { NAV_ITEMS } from './navItems';
 
@@ -27,9 +28,10 @@ export const AppLayout = () => {
   return (
     <div className="min-h-dvh md:flex">
       {/* Desktop sidebar */}
-      <aside className="no-print sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-slate-200 bg-white px-3 py-5 md:flex">
-        <div className="px-2">
+      <aside className="no-print sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-slate-200 bg-surface px-3 py-5 md:flex">
+        <div className="flex items-center justify-between gap-2 px-2">
           <Logo />
+          <ThemeToggleButton />
         </div>
         <nav className="mt-8 flex flex-1 flex-col gap-1">
           {NAV_ITEMS.map(({ path, label, icon: Icon }) => (
@@ -39,7 +41,7 @@ export const AppLayout = () => {
               end={path === '/'}
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                  isActive ? 'bg-brand-50 text-brand-700 dark:text-brand-300' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`
               }
             >
@@ -58,8 +60,9 @@ export const AppLayout = () => {
       </aside>
 
       {/* Mobile top bar */}
-      <header className="no-print sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 bg-white/90 px-4 py-3 backdrop-blur md:hidden">
+      <header className="no-print sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 bg-surface/90 px-4 py-3 backdrop-blur md:hidden">
         <Logo />
+        <ThemeToggleButton />
       </header>
 
       <main className="min-w-0 flex-1 px-4 pb-28 pt-5 sm:px-6 md:pb-10 lg:px-10 lg:pt-8">
@@ -74,16 +77,16 @@ export const AppLayout = () => {
       </main>
 
       {/* Mobile bottom navigation */}
-      <nav className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white pb-[env(safe-area-inset-bottom)] md:hidden">
+      <nav className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-surface pb-[env(safe-area-inset-bottom)] md:hidden">
         {isMoreOpen && (
-          <div className="absolute inset-x-3 bottom-full mb-2 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl">
+          <div className="absolute inset-x-3 bottom-full mb-2 rounded-2xl border border-slate-200 bg-surface p-2 shadow-xl">
             {secondaryItems.map(({ path, label, icon: Icon }) => (
               <NavLink
                 key={path}
                 to={path}
                 onClick={() => setIsMoreOpen(false)}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium ${isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-700'}`
+                  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium ${isActive ? 'bg-brand-50 text-brand-700 dark:text-brand-300' : 'text-slate-700'}`
                 }
               >
                 <Icon size={18} />
@@ -100,7 +103,7 @@ export const AppLayout = () => {
               end={path === '/'}
               onClick={() => setIsMoreOpen(false)}
               className={({ isActive }) =>
-                `flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium ${isActive ? 'text-brand-600' : 'text-slate-500'}`
+                `flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium ${isActive ? 'text-brand-700 dark:text-brand-400' : 'text-slate-500'}`
               }
             >
               <Icon size={20} />
@@ -110,7 +113,7 @@ export const AppLayout = () => {
           <button
             type="button"
             onClick={() => setIsMoreOpen((open) => !open)}
-            className={`flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium ${isMoreOpen || isSecondaryActive ? 'text-brand-600' : 'text-slate-500'}`}
+            className={`flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium ${isMoreOpen || isSecondaryActive ? 'text-brand-700 dark:text-brand-400' : 'text-slate-500'}`}
           >
             <Ellipsis size={20} />
             More

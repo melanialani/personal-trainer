@@ -10,8 +10,8 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
-  primary: 'bg-brand-600 text-white hover:bg-brand-700 shadow-sm',
-  secondary: 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm',
+  primary: 'bg-brand-700 text-white hover:bg-brand-800 shadow-sm',
+  secondary: 'bg-surface text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm',
   ghost: 'text-slate-600 hover:bg-slate-100',
   danger: 'bg-rose-600 text-white hover:bg-rose-700 shadow-sm',
 };
@@ -43,7 +43,7 @@ export const IconButton = ({ label, tone = 'default', className = '', children, 
     aria-label={label}
     title={label}
     className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors disabled:opacity-40 ${
-      tone === 'danger' ? 'text-slate-400 hover:bg-rose-50 hover:text-rose-600' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'
+      tone === 'danger' ? 'text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:text-rose-400' : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800'
     } ${className}`}
     {...rest}
   >

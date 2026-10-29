@@ -24,7 +24,7 @@ export const ExerciseVideo = ({ exercise, video }: ExerciseVideoProps) => {
 
   if (isPlaying) {
     return (
-      <div className={`overflow-hidden rounded-xl bg-slate-900 ${frameClass}`}>
+      <div className={`overflow-hidden rounded-xl bg-black ${frameClass}`}>
         <iframe
           src={exerciseVideoEmbedUrl(video)}
           title={`${exercise.name} — video demo`}
@@ -40,7 +40,7 @@ export const ExerciseVideo = ({ exercise, video }: ExerciseVideoProps) => {
     <button
       type="button"
       onClick={() => setIsPlaying(true)}
-      className={`group relative block overflow-hidden rounded-xl bg-slate-900 ${frameClass}`}
+      className={`group relative block overflow-hidden rounded-xl bg-black ${frameClass}`}
       aria-label={`Play video: ${exercise.name}`}
     >
       {hasThumbnail && (
@@ -57,7 +57,7 @@ export const ExerciseVideo = ({ exercise, video }: ExerciseVideoProps) => {
           <Play size={22} className="ml-0.5" fill="currentColor" />
         </span>
       </span>
-      <span className="absolute bottom-2 left-2 rounded-full bg-slate-900/70 px-2 py-0.5 text-[11px] font-medium text-white">Video demo</span>
+      <span className="absolute bottom-2 left-2 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-medium text-white">Video demo</span>
     </button>
   );
 };

@@ -8,6 +8,19 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <script>
+      // Apply the saved theme before first paint (see src/shared/hooks/useTheme.ts).
+      (function () {
+        try {
+          var pref = localStorage.getItem('fitplan:theme');
+          var isDark = pref === 'dark' || (pref !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0b1120');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <title>FitPlan — Personal Trainer & Meal Planner</title>
   </head>
   <body>

@@ -12,8 +12,8 @@ interface NoticeProps {
 }
 
 const TONE_CLASSES: Record<NoticeTone, string> = {
-  warning: 'bg-amber-50 text-amber-800',
-  danger: 'border border-rose-200 bg-rose-50 text-rose-700',
+  warning: 'bg-amber-50 text-amber-800 dark:text-amber-200',
+  danger: 'border border-rose-200 bg-rose-50 text-rose-700 dark:text-rose-300',
 };
 
 const SIZE_CLASSES: Record<NoticeSize, string> = {

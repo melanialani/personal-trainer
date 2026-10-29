@@ -18,9 +18,9 @@ export const WelcomeScreen = () => {
   return (
     <div className="space-y-6">
       <section className="overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 to-emerald-800 px-6 py-10 text-white shadow-sm sm:px-10">
-        <p className="text-sm font-medium text-emerald-100">Your personal trainer & meal planner</p>
+        <p className="text-sm font-medium text-white/80">Your personal trainer & meal planner</p>
         <h1 className="mt-2 max-w-xl text-3xl font-bold tracking-tight sm:text-4xl">Lose, maintain or build — with a plan that fits you.</h1>
-        <p className="mt-3 max-w-xl text-emerald-50/90">
+        <p className="mt-3 max-w-xl text-white/90">
           Set your goal once and get daily calorie targets, a meal plan and a workout program. Track progress in seconds every day.
         </p>
         <div className="mt-6 flex flex-wrap gap-3">
@@ -34,8 +34,8 @@ export const WelcomeScreen = () => {
       </section>
       <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {FEATURES.map(({ icon: Icon, title, text }) => (
-          <div key={title} className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+          <div key={title} className="rounded-2xl border border-slate-200/80 bg-surface p-5 shadow-sm">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700 dark:text-brand-400">
               <Icon size={20} />
             </span>
             <p className="mt-3 font-semibold text-slate-900">{title}</p>

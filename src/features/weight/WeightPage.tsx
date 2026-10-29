@@ -139,7 +139,7 @@ const WeightContent = () => {
                     <tr key={entry.id} className="hover:bg-slate-50">
                       <td className="whitespace-nowrap px-4 py-2.5 text-slate-700 sm:px-5">{formatDate(entry.date)}</td>
                       <td className="px-3 py-2.5 text-right font-semibold tabular-nums">{formatKg(entry.weightKg)}</td>
-                      <td className={`px-3 py-2.5 text-right tabular-nums ${delta === null ? 'text-slate-300' : delta < 0 ? 'text-emerald-600' : delta > 0 ? 'text-rose-600' : 'text-slate-500'}`}>
+                      <td className={`px-3 py-2.5 text-right tabular-nums ${delta === null ? 'text-slate-400' : delta < 0 ? 'text-emerald-700 dark:text-emerald-400' : delta > 0 ? 'text-rose-700 dark:text-rose-400' : 'text-slate-500'}`}>
                         {delta === null ? '—' : formatSigned(delta)}
                       </td>
                       <td className="hidden px-3 py-2.5 text-right tabular-nums text-slate-600 sm:table-cell">{entry.waistCm ? `${entry.waistCm} cm` : '—'}</td>

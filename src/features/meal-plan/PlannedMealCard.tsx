@@ -22,7 +22,7 @@ export const PlannedMealCard = ({ meal, customFoods, isLogged, onSwap, onLog }: 
     <Card
       title={
         <span className="flex flex-col">
-          <span className="text-xs font-medium uppercase tracking-wide text-brand-600">{MEAL_LABELS[meal.meal]}</span>
+          <span className="text-xs font-medium uppercase tracking-wide text-brand-700 dark:text-brand-400">{MEAL_LABELS[meal.meal]}</span>
           <span>{meal.title}</span>
         </span>
       }
@@ -37,7 +37,7 @@ export const PlannedMealCard = ({ meal, customFoods, isLogged, onSwap, onLog }: 
           <IconButton label="Swap for another meal" onClick={onSwap}>
             <RefreshCw size={15} />
           </IconButton>
-          <IconButton label={isLogged ? 'Already in diary — log again' : 'Log to diary'} onClick={onLog} className={isLogged ? 'text-brand-600' : ''}>
+          <IconButton label={isLogged ? 'Already in diary — log again' : 'Log to diary'} onClick={onLog} className={isLogged ? 'text-brand-700 dark:text-brand-400' : ''}>
             <NotebookPen size={15} />
           </IconButton>
         </>

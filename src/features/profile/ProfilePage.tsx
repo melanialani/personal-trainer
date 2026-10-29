@@ -170,7 +170,7 @@ export const ProfilePage = () => {
 
       {/* Phones: keep Save reachable above the bottom navigation while scrolling the long form. */}
       <div className="h-16 lg:hidden" />
-      <div className="no-print fixed inset-x-0 bottom-[calc(55px+env(safe-area-inset-bottom))] z-20 flex items-center justify-between gap-3 border-t border-slate-200 bg-white/95 px-4 py-2.5 backdrop-blur md:bottom-0 lg:hidden">
+      <div className="no-print fixed inset-x-0 bottom-[calc(55px+env(safe-area-inset-bottom))] z-20 flex items-center justify-between gap-3 border-t border-slate-200 bg-surface/95 px-4 py-2.5 backdrop-blur md:bottom-0 lg:hidden">
         <p className="text-xs text-slate-500">
           {isValid ? (
             <>

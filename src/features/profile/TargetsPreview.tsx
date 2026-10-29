@@ -38,14 +38,14 @@ export const TargetsPreview = ({ profile, weights }: TargetsPreviewProps) => {
   return (
     <Card title="Your daily targets" subtitle="Updates as you edit">
       <div className="rounded-xl bg-brand-50 p-4 text-center">
-        <p className="text-xs font-medium uppercase tracking-wide text-brand-700">Daily calories</p>
-        <p className="mt-1 text-4xl font-bold tabular-nums text-brand-700">{formatNumber(targets.kcal)}</p>
-        <p className="text-xs text-brand-700/80">kcal / day</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-brand-700 dark:text-brand-300">Daily calories</p>
+        <p className="mt-1 text-4xl font-bold tabular-nums text-brand-700 dark:text-brand-300">{formatNumber(targets.kcal)}</p>
+        <p className="text-xs text-brand-700 dark:text-brand-300">kcal / day</p>
       </div>
       <div className="mt-4 grid grid-cols-3 gap-2 text-center">
         {MACROS.map((macro) => (
           <div key={macro.key} className="rounded-xl border border-slate-100 py-2">
-            <p className="text-lg font-bold tabular-nums" style={{ color: macro.color }}>
+            <p className="text-lg font-bold tabular-nums" style={{ color: macro.textColor }}>
               {targets[macro.key]}g
             </p>
             <p className="text-xs text-slate-500">{macro.label}</p>

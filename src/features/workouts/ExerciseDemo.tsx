@@ -38,7 +38,7 @@ export const ExerciseDemo = ({ exercise, isAnimated = false }: ExerciseDemoProps
       href={exerciseVideoUrl(exercise)}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-600 hover:underline"
+      className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-700 dark:text-brand-400 hover:underline"
     >
       <PlayCircle size={14} /> {video ? 'Open on YouTube' : 'Search videos on YouTube'}
     </a>
@@ -60,7 +60,7 @@ export const ExerciseDemo = ({ exercise, isAnimated = false }: ExerciseDemoProps
     isVideoShown ? (
       videoPlayer
     ) : (
-      <button type="button" onClick={() => setIsVideoShown(true)} className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-600 hover:underline">
+      <button type="button" onClick={() => setIsVideoShown(true)} className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-700 dark:text-brand-400 hover:underline">
         <PlayCircle size={14} /> Play video demo
       </button>
     )
@@ -101,8 +101,8 @@ export const ExerciseDemo = ({ exercise, isAnimated = false }: ExerciseDemoProps
             className={`aspect-[4/3] w-full object-cover transition-opacity duration-300 ${index === 0 ? '' : 'absolute inset-0'} ${frame === index ? 'opacity-100' : 'opacity-0'}`}
           />
         ))}
-        <span className="absolute left-2 top-2 rounded-full bg-slate-900/70 px-2 py-0.5 text-[11px] font-medium text-white">{FRAME_LABELS[frame]}</span>
-        <span className="absolute bottom-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-slate-900/70 text-white">
+        <span className="absolute left-2 top-2 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-medium text-white">{FRAME_LABELS[frame]}</span>
+        <span className="absolute bottom-2 right-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/70 text-white">
           {isPlaying ? <Pause size={14} /> : <Play size={14} />}
         </span>
       </button>

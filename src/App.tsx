@@ -2,6 +2,7 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { DashboardPage } from './features/dashboard/DashboardPage';
 import { DiaryPage } from './features/diary/DiaryPage';
 import { LookupPage } from './features/lookup/LookupPage';
+import { MedicinePage } from './features/medicine/MedicinePage';
 import { MealPlanPage } from './features/meal-plan/MealPlanPage';
 import { ProfilePage } from './features/profile/ProfilePage';
 import { SettingsPage } from './features/settings/SettingsPage';
@@ -26,6 +27,7 @@ export const App = () => (
               <Route path="meal-plan" element={<MealPlanPage />} />
               <Route path="workouts" element={<WorkoutsPage />} />
               <Route path="weight" element={<WeightPage />} />
+              <Route path="medicine" element={<MedicinePage />} />
               <Route path="profile" element={<ProfilePage />} />
               <Route path="settings" element={<SettingsPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
