@@ -92,5 +92,5 @@ Food names and serving labels are Indonesian; ids are stable English slugs (sear
 - Highlight colors are CSS tokens `--color-hl-*` (light tints under dark text; deep shades under light text in dark
   mode), so highlights stay readable after switching theme.
 - Prayers (`data/prayers.ts`) and rosary (`data/rosary.ts`) are Indonesian; search ignores case/accents
-  (`lib/prayers.ts`). Rosary paintings are public-domain works from Wikimedia Commons, stored in `public/rosary/`.
+  (`lib/prayers.ts`). Rosary paintings are public-domain works (via Wikimedia Commons or the Web Gallery of Art), stored as WebP in `public/rosary/<mystery id>.webp`; credits live in `data/rosary.ts`.
 - Not included on purpose: Puji Syukur / Madah Bakti hymn lyrics (copyrighted).
