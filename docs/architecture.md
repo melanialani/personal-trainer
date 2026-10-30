@@ -10,8 +10,18 @@
 | `/workouts` | `features/workouts` | Weekly plan from `lib/workoutGenerator.ts`, activity log + chart, exercise library |
 | `/weight` | `features/weight` | Weigh-ins, 7-day moving average chart, trend, goal progress |
 | `/medicine` | `features/medicine` | Medicine guide: search + filters (symptom, group, ingredient, form, meal timing, availability, children, pregnancy), detail modal with dose/interactions, care guides |
+| `/bible` | `features/bible` | Bible reader (AYT · WEB-C · BSB), version switch keeps the verse, highlights in 5 colors, comments, notes list |
+| `/prayers` | `features/prayers` | Catholic prayers in Indonesian, searchable, by category |
+| `/rosary` | `features/rosary` | Rosary: today's mysteries by weekday, how to pray, painting + Bible link per mystery |
 | `/profile` | `features/profile` | Body stats, goal, diet & training preferences, live targets preview |
 | `/settings` | `features/settings` | Export / import (merge or replace), appearance (theme), sample data, delete all |
+
+## Navigation
+- `layout/navItems.ts` groups pages: Fitness, Food & Health, Spiritual Guide (≤ 4 pages each). Settings is outside
+  the groups (gear icon in the phone header, last link in the sidebar).
+- Phone: the header holds the group switcher; the bottom bar shows only the active group's pages (no "More" menu).
+  `layout/useNavGroup.ts` remembers the last page per group in localStorage `fitplan:nav` (per device, not in
+  backups); tapping the current group goes back to its first page. Desktop: the sidebar lists every group.
 
 ## Calculations (`src/lib/calc.ts`)
 - BMR: Mifflin-St Jeor. TDEE = BMR × activity factor (1.2 – 1.9).
@@ -66,3 +76,21 @@ Food names and serving labels are Indonesian; ids are stable English slugs (sear
 
 ## Backup format
 `{ "app": "fitplan", "exportedAt": ISO, "data": AppData }`
+
+## Spiritual guide (Catholic)
+- Bible texts: `public/bible/<version>/<BOOK>.json` (`{ "chapter": [[verse, text], ...] }`), fetched per book on demand
+  by `lib/bible.ts` (`loadBook`, cached). Built from eBible.org VPL files by `scripts/build-bible.mjs`, which also
+  writes `data/bibleChapters.ts`. Versions (`data/bibleBooks.ts`): AYT (Indonesian, CC BY-NC-SA, 66 books),
+  WEB-C (English, public domain, 73 books, Catholic order), BSB (English, public domain, 66 books).
+- The official Catholic Indonesian text (TB + Deuterokanonika, LAI) is copyrighted, so it is not bundled; the reader
+  links each chapter to imankatolik.or.id instead (`tbChapterUrl`). Greek Esther / Daniel use the ids EST / DAN, so a
+  position survives a version switch (verse numbers can differ in those books).
+- Book ids are eBible codes (`JOH`, `1CO`, …). Highlights/comments live in `AppData.bible.notes`, keyed
+  `BOOK.chapter.verse` — the same key in every version. A comment sits on the first verse of the selection
+  (`commentEndVerse` = last verse). Reading position (`versionId`, `bookId`, `chapter`, `verse`) is saved after
+  scrolling stops; `#/bible?ref=LUK.1.26` opens a passage.
+- Highlight colors are CSS tokens `--color-hl-*` (light tints under dark text; deep shades under light text in dark
+  mode), so highlights stay readable after switching theme.
+- Prayers (`data/prayers.ts`) and rosary (`data/rosary.ts`) are Indonesian; search ignores case/accents
+  (`lib/prayers.ts`). Rosary paintings are public-domain works from Wikimedia Commons, stored in `public/rosary/`.
+- Not included on purpose: Puji Syukur / Madah Bakti hymn lyrics (copyrighted).

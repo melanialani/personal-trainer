@@ -163,6 +163,27 @@ export interface WorkoutPlan {
   isLowImpact: boolean;
 }
 
+export type HighlightColor = 'yellow' | 'green' | 'blue' | 'pink' | 'purple';
+
+/** A highlight and/or comment on one Bible verse. */
+export interface VerseNote {
+  color?: HighlightColor;
+  comment?: string;
+  /** The comment covers verses up to this one (same chapter); unset = only this verse. */
+  commentEndVerse?: number;
+  updatedAt: string;
+}
+
+export interface BibleState {
+  versionId: string;
+  bookId: string;
+  chapter: number;
+  /** Verse at the top of the screen when last read, so reading resumes (and switching version keeps) the spot. */
+  verse: number;
+  /** Keyed by "BOOK.chapter.verse" (e.g. "JOH.9.5"): the same key in every version. */
+  notes: Record<string, VerseNote>;
+}
+
 export interface AppData {
   version: 1;
   profile: Profile | null;
@@ -175,4 +196,5 @@ export interface AppData {
   favoriteFoodIds: string[];
   mealPlan: MealPlan | null;
   workoutPlan: WorkoutPlan | null;
+  bible: BibleState;
 }

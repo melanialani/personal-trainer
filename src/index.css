@@ -28,6 +28,12 @@
   --color-protein-ink: #4338ca;
   --color-carbs-ink: #b45309;
   --color-fat-ink: #be185d;
+  /* Bible verse highlights: light tints under dark text; remapped to deep shades under light text in .dark. */
+  --color-hl-yellow: #fef08a;
+  --color-hl-green: #bbf7d0;
+  --color-hl-blue: #bfdbfe;
+  --color-hl-pink: #fbcfe8;
+  --color-hl-purple: #e9d5ff;
 }
 
 /*
@@ -45,6 +51,11 @@
   --color-protein-ink: #a5b4fc;
   --color-carbs-ink: #fcd34d;
   --color-fat-ink: #f9a8d4;
+  --color-hl-yellow: #66500d;
+  --color-hl-green: #17553a;
+  --color-hl-blue: #1e3f8a;
+  --color-hl-pink: #7d1f4f;
+  --color-hl-purple: #5b2a8c;
   --color-slate-50: #182336;
   --color-slate-100: #1f2a3f;
   --color-slate-200: #2c3a50;

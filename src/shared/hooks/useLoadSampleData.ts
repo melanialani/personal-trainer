@@ -14,13 +14,14 @@ export const useLoadSampleData = () => {
     if (hasData) {
       const isConfirmed = await confirm({
         title: 'Replace with sample data?',
-        message: 'All current data in this browser will be replaced by sample data. Export a backup first if you want to keep it.',
+        message: 'Your fitness and food data in this browser will be replaced by sample data (Bible highlights and notes are kept). Export a backup first if you want to keep it.',
         confirmLabel: 'Replace data',
         isDestructive: true,
       });
       if (!isConfirmed) return;
     }
-    update(() => buildSampleData());
+    // Sample data covers fitness and food only; keep the user's Bible highlights and notes.
+    update((current) => ({ ...buildSampleData(), bible: current.bible }));
     showToast('Sample data loaded');
   }, [data, update, confirm, showToast]);
 };
