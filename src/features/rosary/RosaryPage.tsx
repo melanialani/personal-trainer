@@ -88,7 +88,7 @@ export const RosaryPage = () => {
                 src={`${import.meta.env.BASE_URL}rosary/${mystery.id}.webp`}
                 alt={`${mystery.image.title} — ${mystery.image.artist}`}
                 loading="lazy"
-                className="aspect-[4/3] w-full bg-slate-100 object-cover"
+                className="aspect-[4/3] w-full bg-slate-100 object-contain"
               />
             )}
             <div className="p-4">
