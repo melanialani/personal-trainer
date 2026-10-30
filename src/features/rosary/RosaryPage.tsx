@@ -50,28 +50,27 @@ export const RosaryPage = () => {
         </button>
         {isStepsOpen && (
           <ol className="list-decimal space-y-2 border-t border-slate-100 px-4 py-3 pl-9 text-sm text-slate-700 sm:px-5 sm:pl-10">
-            {ROSARY_STEPS.map((step) => (
-              <li key={step.text}>
-                {step.text}
-                {step.prayerIds && (
-                  <span className="mt-1 flex flex-wrap gap-1.5">
-                    {step.prayerIds.map((id) => {
-                      const prayer = prayerById(id);
-                      return (
-                        prayer && (
-                          <button
-                            key={id}
-                            type="button"
-                            onClick={() => setSelected(prayer)}
-                            className="rounded-full border border-brand-200 px-2.5 py-0.5 text-xs font-medium text-brand-700 hover:bg-brand-50 dark:text-brand-300"
-                          >
-                            {prayer.title}
-                          </button>
-                        )
-                      );
-                    })}
-                  </span>
-                )}
+            {ROSARY_STEPS.map((step, index) => (
+              <li key={index}>
+                <span className="font-medium text-slate-800">{step.title}</span>
+                {step.detail && <span className="mt-0.5 block whitespace-pre-line text-xs text-slate-500">{step.detail}</span>}
+                <span className="mt-1 flex flex-wrap gap-1.5">
+                  {step.prayerIds.map((id) => {
+                    const prayer = prayerById(id);
+                    return (
+                      prayer && (
+                        <button
+                          key={id}
+                          type="button"
+                          onClick={() => setSelected(prayer)}
+                          className="rounded-full border border-brand-200 px-2.5 py-0.5 text-xs font-medium text-brand-700 hover:bg-brand-50 dark:text-brand-300"
+                        >
+                          {prayer.title}
+                        </button>
+                      )
+                    );
+                  })}
+                </span>
               </li>
             ))}
           </ol>
@@ -84,12 +83,14 @@ export const RosaryPage = () => {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {mysteries.map((mystery) => (
           <Card key={mystery.id} bodyClassName="p-0" className="overflow-hidden">
-            <img
-              src={`${import.meta.env.BASE_URL}rosary/${mystery.id}.webp`}
-              alt={`${mystery.image.title} — ${mystery.image.artist}`}
-              loading="lazy"
-              className="aspect-[4/3] w-full bg-slate-100 object-cover"
-            />
+            {mystery.image && (
+              <img
+                src={`${import.meta.env.BASE_URL}rosary/${mystery.id}.webp`}
+                alt={`${mystery.image.title} — ${mystery.image.artist}`}
+                loading="lazy"
+                className="aspect-[4/3] w-full bg-slate-100 object-cover"
+              />
+            )}
             <div className="p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-400">
                 {set.title} {mystery.number}
@@ -101,11 +102,13 @@ export const RosaryPage = () => {
               >
                 <BookOpenText size={15} /> Read {mystery.ref.label}
               </Link>
-              <p className="mt-3 text-[11px] leading-4 text-slate-500">
-                <a href={mystery.image.commonsUrl} target="_blank" rel="noreferrer" className="hover:underline">
-                  {mystery.image.artist}, <i>{mystery.image.title}</i> ({mystery.image.year}) · public domain
-                </a>
-              </p>
+              {mystery.image && (
+                <p className="mt-3 text-[11px] leading-4 text-slate-500">
+                  <a href={mystery.image.commonsUrl} target="_blank" rel="noreferrer" className="hover:underline">
+                    {mystery.image.artist}, <i>{mystery.image.title}</i> ({mystery.image.year}) · public domain
+                  </a>
+                </p>
+              )}
             </div>
           </Card>
         ))}
