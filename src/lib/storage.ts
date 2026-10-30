@@ -1,8 +1,11 @@
 import { ALL_EQUIPMENT } from '../data/exercises';
-import type { AppData, Equipment, Profile, WorkoutPlan } from '../types';
+import { BIBLE_VERSIONS } from '../data/bibleBooks';
+import type { AppData, BibleState, Equipment, Profile, VerseNote, WorkoutPlan } from '../types';
 
 const STORAGE_KEY = 'fitplan:data';
 const EXPORT_APP_ID = 'fitplan';
+
+const createDefaultBible = (): BibleState => ({ versionId: BIBLE_VERSIONS[0].id, bookId: 'MAT', chapter: 1, verse: 1, notes: {} });
 
 export const createEmptyData = (): AppData => ({
   version: 1,
@@ -15,6 +18,7 @@ export const createEmptyData = (): AppData => ({
   favoriteFoodIds: [],
   mealPlan: null,
   workoutPlan: null,
+  bible: createDefaultBible(),
 });
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -54,6 +58,26 @@ const normalizeWorkoutPlan = (raw: unknown): WorkoutPlan | null => {
   return { ...plan, stageId: plan.stageId ?? '', isLowImpact: plan.isLowImpact ?? false };
 };
 
+const isPositiveInt = (value: unknown): value is number => typeof value === 'number' && Number.isInteger(value) && value > 0;
+
+const normalizeBible = (raw: unknown): BibleState => {
+  const fallback = createDefaultBible();
+  if (!isRecord(raw)) return fallback;
+  const notes: Record<string, VerseNote> = {};
+  if (isRecord(raw.notes)) {
+    Object.entries(raw.notes).forEach(([key, note]) => {
+      if (isRecord(note) && (typeof note.color === 'string' || typeof note.comment === 'string')) notes[key] = note as unknown as VerseNote;
+    });
+  }
+  return {
+    versionId: BIBLE_VERSIONS.some((version) => version.id === raw.versionId) ? (raw.versionId as string) : fallback.versionId,
+    bookId: typeof raw.bookId === 'string' ? raw.bookId : fallback.bookId,
+    chapter: isPositiveInt(raw.chapter) ? raw.chapter : fallback.chapter,
+    verse: isPositiveInt(raw.verse) ? raw.verse : fallback.verse,
+    notes,
+  };
+};
+
 /** Fills missing fields with defaults so older or partial data keeps working. */
 export const normalizeData = (raw: unknown): AppData => {
   const empty = createEmptyData();
@@ -71,6 +95,7 @@ export const normalizeData = (raw: unknown): AppData => {
     favoriteFoodIds: pickArray('favoriteFoodIds'),
     mealPlan: isRecord(raw.mealPlan) ? (raw.mealPlan as unknown as AppData['mealPlan']) : null,
     workoutPlan: normalizeWorkoutPlan(raw.workoutPlan),
+    bible: normalizeBible(raw.bible),
   };
 };
 
@@ -135,4 +160,5 @@ export const mergeData = (current: AppData, incoming: AppData): AppData => ({
   favoriteFoodIds: Array.from(new Set([...current.favoriteFoodIds, ...incoming.favoriteFoodIds])),
   mealPlan: incoming.mealPlan ?? current.mealPlan,
   workoutPlan: incoming.workoutPlan ?? current.workoutPlan,
+  bible: { ...current.bible, notes: { ...current.bible.notes, ...incoming.bible.notes } },
 });

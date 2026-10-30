@@ -71,7 +71,7 @@ export const SettingsPage = () => {
   const handleReset = async () => {
     const isConfirmed = await confirm({
       title: 'Delete all data?',
-      message: 'Your profile, logs and plans will be permanently removed from this browser. Export a backup first if you might need them.',
+      message: 'Your profile, logs, plans and Bible highlights/notes will be permanently removed from this browser. Export a backup first if you might need them.',
       confirmLabel: 'Delete everything',
       isDestructive: true,
     });
