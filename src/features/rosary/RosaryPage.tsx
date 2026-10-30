@@ -104,7 +104,7 @@ export const RosaryPage = () => {
               </Link>
               {mystery.image && (
                 <p className="mt-3 text-[11px] leading-4 text-slate-500">
-                  <a href={mystery.image.commonsUrl} target="_blank" rel="noreferrer" className="hover:underline">
+                  <a href={mystery.image.sourceUrl} target="_blank" rel="noreferrer" className="hover:underline">
                     {mystery.image.artist}, <i>{mystery.image.title}</i> ({mystery.image.year}) · public domain
                   </a>
                 </p>
