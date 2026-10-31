@@ -1,5 +1,6 @@
-import { Pencil, Plus, Scale, Trash2, TrendingDown, TrendingUp } from 'lucide-react';
+import { Calculator, Pencil, Plus, Scale, Trash2, TrendingDown, TrendingUp } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { bmiCategory, calcBmi, currentWeightKg, goalProgress, weeklyTrendKg } from '../../lib/calc';
 import { formatDate, sortByDateDesc } from '../../lib/date';
 import { formatKg, formatNumber, formatSigned } from '../../lib/format';
@@ -61,9 +62,18 @@ const WeightContent = () => {
         title="Weight Log"
         description="Daily weight fluctuates — the 7-day average shows your real trend."
         actions={
-          <Button icon={<Plus size={16} />} onClick={() => setModalEntry(null)}>
-            Log weight
-          </Button>
+          <>
+            <Link
+              to="/bmi"
+              className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-200 bg-surface px-4 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+            >
+              <Calculator size={16} />
+              BMI calculator
+            </Link>
+            <Button icon={<Plus size={16} />} onClick={() => setModalEntry(null)}>
+              Log weight
+            </Button>
+          </>
         }
       />
 

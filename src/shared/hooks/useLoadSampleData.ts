@@ -21,7 +21,7 @@ export const useLoadSampleData = () => {
       if (!isConfirmed) return;
     }
     // Sample data covers fitness and food only; keep the user's Bible highlights and notes.
-    update((current) => ({ ...buildSampleData(), bible: current.bible }));
+    update((current) => ({ ...buildSampleData(), bible: current.bible, parenting: current.parenting }));
     showToast('Sample data loaded');
   }, [data, update, confirm, showToast]);
 };

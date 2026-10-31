@@ -1,6 +1,8 @@
 import {
   Apple,
+  Baby,
   BookOpenText,
+  Calculator,
   Church,
   Dumbbell,
   Flower2,
@@ -9,6 +11,10 @@ import {
   LayoutDashboard,
   NotebookPen,
   Pill,
+  Ruler,
+  Smile,
+  Sparkles,
+  Syringe,
   Scale,
   Search,
   Settings,
@@ -22,16 +28,18 @@ export interface NavItem {
   label: string;
   shortLabel: string;
   icon: LucideIcon;
+  /** Listed in the desktop sidebar only (the phone bottom bar keeps ≤ 4 items); reach it via in-page links on phones. */
+  isSidebarOnly?: boolean;
 }
 
-export type NavGroupId = 'fitness' | 'health' | 'spiritual';
+export type NavGroupId = 'fitness' | 'health' | 'parenting' | 'spiritual';
 
 export interface NavGroup {
   id: NavGroupId;
   label: string;
   shortLabel: string;
   icon: LucideIcon;
-  /** Shown in the phone bottom bar when the group is active (keep ≤ 4). */
+  /** Shown in the phone bottom bar when the group is active (keep ≤ 4 without `isSidebarOnly`). */
   items: NavItem[];
 }
 
@@ -46,6 +54,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/workouts', label: 'Workouts', shortLabel: 'Workouts', icon: Dumbbell },
       { path: '/weight', label: 'Weight Log', shortLabel: 'Weight', icon: Scale },
       { path: '/profile', label: 'Profile & Goals', shortLabel: 'Goals', icon: Target },
+      { path: '/bmi', label: 'BMI Calculator', shortLabel: 'BMI', icon: Calculator, isSidebarOnly: true },
     ],
   },
   {
@@ -58,6 +67,18 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/lookup', label: 'Calorie Lookup', shortLabel: 'Lookup', icon: Search },
       { path: '/meal-plan', label: 'Meal Planner', shortLabel: 'Meals', icon: UtensilsCrossed },
       { path: '/medicine', label: 'Medicine Guide', shortLabel: 'Medicine', icon: Pill },
+    ],
+  },
+  {
+    id: 'parenting',
+    label: 'Parenting',
+    shortLabel: 'Parenting',
+    icon: Baby,
+    items: [
+      { path: '/children', label: 'My Children', shortLabel: 'Children', icon: Smile },
+      { path: '/development', label: 'Development', shortLabel: 'Growing', icon: Sparkles },
+      { path: '/immunization', label: 'Vaccines & Meds', shortLabel: 'Vaccines', icon: Syringe },
+      { path: '/growth', label: 'Growth', shortLabel: 'Growth', icon: Ruler },
     ],
   },
   {

@@ -47,6 +47,27 @@ export const bmiCategory = (bmi: number): { label: string; tone: 'info' | 'succe
   return { label: 'Obese', tone: 'danger' };
 };
 
+/** WHO international adult cut-offs (shown next to the Asia-Pacific ones for comparison). */
+export const bmiCategoryWho = (bmi: number): string => {
+  if (bmi < 18.5) return 'Underweight';
+  if (bmi < 25) return 'Normal';
+  if (bmi < 30) return 'Overweight (pre-obese)';
+  if (bmi < 35) return 'Obese class I';
+  if (bmi < 40) return 'Obese class II';
+  return 'Obese class III';
+};
+
+/** Asia-Pacific bands for the BMI scale bar (upper bound exclusive; the last band is open-ended). */
+export const BMI_ASIA_BANDS = [
+  { label: 'Underweight', from: 0, to: 18.5, tone: 'info' },
+  { label: 'Normal', from: 18.5, to: 23, tone: 'success' },
+  { label: 'Overweight', from: 23, to: 25, tone: 'warning' },
+  { label: 'Obese', from: 25, to: Infinity, tone: 'danger' },
+] as const;
+
+/** Weight that gives a BMI at a given height. */
+export const weightForBmi = (bmi: number, heightCm: number): number => bmi * (heightCm / 100) ** 2;
+
 export const healthyWeightRange = (heightCm: number): [number, number] => {
   const h2 = (heightCm / 100) ** 2;
   return [18.5 * h2, 22.9 * h2];

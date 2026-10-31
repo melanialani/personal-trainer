@@ -1,6 +1,6 @@
 import { ALL_EQUIPMENT } from '../data/exercises';
 import { BIBLE_VERSIONS } from '../data/bibleBooks';
-import type { AppData, BibleState, Equipment, Profile, VerseNote, WorkoutPlan } from '../types';
+import type { AppData, BibleState, Child, Equipment, ParentingState, Profile, VerseNote, WorkoutPlan } from '../types';
 
 const STORAGE_KEY = 'fitplan:data';
 const EXPORT_APP_ID = 'fitplan';
@@ -19,6 +19,7 @@ export const createEmptyData = (): AppData => ({
   mealPlan: null,
   workoutPlan: null,
   bible: createDefaultBible(),
+  parenting: { children: [], activeChildId: '' },
 });
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -78,6 +79,42 @@ const normalizeBible = (raw: unknown): BibleState => {
   };
 };
 
+const isDateKey = (value: unknown): value is string => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value);
+
+const pickDateMap = (raw: unknown): Record<string, string> => {
+  const map: Record<string, string> = {};
+  if (isRecord(raw)) Object.entries(raw).forEach(([key, value]) => isDateKey(value) && (map[key] = value));
+  return map;
+};
+
+const pickRecordsWithDate = <T extends { id: string; date: string }>(raw: unknown): T[] =>
+  Array.isArray(raw)
+    ? raw.filter((item): item is T => isRecord(item) && typeof item.id === 'string' && isDateKey(item.date))
+    : [];
+
+const normalizeChild = (raw: unknown): Child | null => {
+  if (!isRecord(raw) || typeof raw.id !== 'string' || !isDateKey(raw.birthDate)) return null;
+  return {
+    id: raw.id,
+    name: typeof raw.name === 'string' ? raw.name : '',
+    sex: raw.sex === 'male' ? 'male' : 'female',
+    birthDate: raw.birthDate,
+    measurements: pickRecordsWithDate(raw.measurements),
+    vaccines: pickDateMap(raw.vaccines),
+    supplements: pickRecordsWithDate(raw.supplements),
+    milestones: pickDateMap(raw.milestones),
+  };
+};
+
+const normalizeParenting = (raw: unknown): ParentingState => {
+  if (!isRecord(raw)) return { children: [], activeChildId: '' };
+  const children = Array.isArray(raw.children)
+    ? raw.children.map(normalizeChild).filter((child): child is Child => child !== null)
+    : [];
+  const activeChildId = typeof raw.activeChildId === 'string' && children.some((c) => c.id === raw.activeChildId) ? raw.activeChildId : '';
+  return { children, activeChildId };
+};
+
 /** Fills missing fields with defaults so older or partial data keeps working. */
 export const normalizeData = (raw: unknown): AppData => {
   const empty = createEmptyData();
@@ -96,6 +133,7 @@ export const normalizeData = (raw: unknown): AppData => {
     mealPlan: isRecord(raw.mealPlan) ? (raw.mealPlan as unknown as AppData['mealPlan']) : null,
     workoutPlan: normalizeWorkoutPlan(raw.workoutPlan),
     bible: normalizeBible(raw.bible),
+    parenting: normalizeParenting(raw.parenting),
   };
 };
 
@@ -161,4 +199,8 @@ export const mergeData = (current: AppData, incoming: AppData): AppData => ({
   mealPlan: incoming.mealPlan ?? current.mealPlan,
   workoutPlan: incoming.workoutPlan ?? current.workoutPlan,
   bible: { ...current.bible, notes: { ...current.bible.notes, ...incoming.bible.notes } },
+  parenting: {
+    children: mergeById(current.parenting.children, incoming.parenting.children),
+    activeChildId: current.parenting.activeChildId || incoming.parenting.activeChildId,
+  },
 });

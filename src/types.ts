@@ -184,6 +184,42 @@ export interface BibleState {
   notes: Record<string, VerseNote>;
 }
 
+export interface ChildMeasurement {
+  id: string;
+  date: string;
+  weightKg?: number;
+  heightCm?: number;
+  headCm?: number;
+  note?: string;
+}
+
+/** Routine medicines / supplements given to a child (ids from `data/childSupplements.ts`). */
+export interface ChildSupplementEntry {
+  id: string;
+  supplementId: string;
+  date: string;
+  note?: string;
+}
+
+export interface Child {
+  id: string;
+  name: string;
+  sex: Sex;
+  birthDate: string;
+  measurements: ChildMeasurement[];
+  /** Vaccine dose id (from `data/vaccines.ts`) → date given (YYYY-MM-DD). */
+  vaccines: Record<string, string>;
+  supplements: ChildSupplementEntry[];
+  /** Milestone id (from `data/milestones.ts`) → date it was ticked. */
+  milestones: Record<string, string>;
+}
+
+export interface ParentingState {
+  children: Child[];
+  /** Child shown on the parenting pages; '' = first child. */
+  activeChildId: string;
+}
+
 export interface AppData {
   version: 1;
   profile: Profile | null;
@@ -197,4 +233,5 @@ export interface AppData {
   mealPlan: MealPlan | null;
   workoutPlan: WorkoutPlan | null;
   bible: BibleState;
+  parenting: ParentingState;
 }

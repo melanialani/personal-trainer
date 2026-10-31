@@ -42,6 +42,7 @@ const SettingsIcon = SETTINGS_ITEM.icon;
 export const AppLayout = () => {
   const { data, hasStorageError } = useAppData();
   const { activeGroup, pathFor } = useNavGroup();
+  const barItems = activeGroup.items.filter((item) => !item.isSidebarOnly);
 
   return (
     <div className="min-h-dvh md:flex">
@@ -84,12 +85,15 @@ export const AppLayout = () => {
                 key={group.id}
                 to={pathFor(group)}
                 aria-current={isActive ? 'true' : undefined}
-                className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-lg px-1.5 py-1.5 text-xs font-semibold transition-colors ${
-                  isActive ? 'bg-raised text-brand-700 shadow-sm dark:text-brand-300' : 'text-slate-500'
+                aria-label={group.label}
+                title={group.label}
+                className={`flex min-w-0 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-semibold transition-colors ${
+                  isActive ? 'flex-[2.5] bg-raised text-brand-700 shadow-sm dark:text-brand-300' : 'flex-1 text-slate-500'
                 }`}
               >
                 <Icon size={16} className="shrink-0" />
-                <span className="truncate">{group.shortLabel}</span>
+                {/* Only the active group shows its name, so four groups fit on a 360px phone. */}
+                {isActive && <span className="truncate">{group.shortLabel}</span>}
               </Link>
             );
           })}
@@ -125,8 +129,8 @@ export const AppLayout = () => {
         aria-label={activeGroup.label}
         className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-surface pb-[env(safe-area-inset-bottom)] md:hidden"
       >
-        <div className="grid" style={{ gridTemplateColumns: `repeat(${activeGroup.items.length}, minmax(0, 1fr))` }}>
-          {activeGroup.items.map(({ path, shortLabel, icon: Icon }) => (
+        <div className="grid" style={{ gridTemplateColumns: `repeat(${barItems.length}, minmax(0, 1fr))` }}>
+          {barItems.map(({ path, shortLabel, icon: Icon }) => (
             <NavLink
               key={path}
               to={path}
