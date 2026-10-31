@@ -93,11 +93,12 @@ const ChildOverview = ({ child }: { child: Child }) => {
       <SummaryCard icon={<Syringe size={16} />} title="Vaccines" link="/immunization" linkLabel="Full schedule">
         {pending.length ? (
           <div className="flex flex-wrap gap-1.5">
-            {pending.map((d) => (
+            {pending.slice(0, 8).map((d) => (
               <Badge key={d.dose.id} tone={d.status === 'late' ? 'danger' : 'warning'}>
                 {d.dose.label}
               </Badge>
             ))}
+            {pending.length > 8 && <Badge tone="neutral">+{pending.length - 8} more</Badge>}
           </div>
         ) : (
           <p className="text-sm text-slate-700">Nothing due right now.</p>

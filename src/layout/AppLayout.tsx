@@ -84,12 +84,15 @@ export const AppLayout = () => {
                 key={group.id}
                 to={pathFor(group)}
                 aria-current={isActive ? 'true' : undefined}
-                className={`flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-lg px-1.5 py-1.5 text-xs font-semibold transition-colors ${
-                  isActive ? 'bg-raised text-brand-700 shadow-sm dark:text-brand-300' : 'text-slate-500'
+                aria-label={group.label}
+                title={group.label}
+                className={`flex min-w-0 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-semibold transition-colors ${
+                  isActive ? 'flex-[2.5] bg-raised text-brand-700 shadow-sm dark:text-brand-300' : 'flex-1 text-slate-500'
                 }`}
               >
                 <Icon size={16} className="shrink-0" />
-                <span className="truncate">{group.shortLabel}</span>
+                {/* Only the active group shows its name, so four groups fit on a 360px phone. */}
+                {isActive && <span className="truncate">{group.shortLabel}</span>}
               </Link>
             );
           })}
