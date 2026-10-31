@@ -1,5 +1,6 @@
 import {
   Apple,
+  Baby,
   BookOpenText,
   Church,
   Dumbbell,
@@ -9,6 +10,10 @@ import {
   LayoutDashboard,
   NotebookPen,
   Pill,
+  Ruler,
+  Smile,
+  Sparkles,
+  Syringe,
   Scale,
   Search,
   Settings,
@@ -24,7 +29,7 @@ export interface NavItem {
   icon: LucideIcon;
 }
 
-export type NavGroupId = 'fitness' | 'health' | 'spiritual';
+export type NavGroupId = 'fitness' | 'health' | 'parenting' | 'spiritual';
 
 export interface NavGroup {
   id: NavGroupId;
@@ -58,6 +63,18 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/lookup', label: 'Calorie Lookup', shortLabel: 'Lookup', icon: Search },
       { path: '/meal-plan', label: 'Meal Planner', shortLabel: 'Meals', icon: UtensilsCrossed },
       { path: '/medicine', label: 'Medicine Guide', shortLabel: 'Medicine', icon: Pill },
+    ],
+  },
+  {
+    id: 'parenting',
+    label: 'Parenting',
+    shortLabel: 'Parenting',
+    icon: Baby,
+    items: [
+      { path: '/children', label: 'My Children', shortLabel: 'Children', icon: Smile },
+      { path: '/development', label: 'Development', shortLabel: 'Growing', icon: Sparkles },
+      { path: '/immunization', label: 'Vaccines & Meds', shortLabel: 'Vaccines', icon: Syringe },
+      { path: '/growth', label: 'Growth', shortLabel: 'Growth', icon: Ruler },
     ],
   },
   {

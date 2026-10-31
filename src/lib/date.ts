@@ -49,3 +49,23 @@ export const ageFromBirthDate = (birthDate: string, onDate = todayKey()): number
   if (!hasHadBirthday) age -= 1;
   return age;
 };
+
+/** Adds whole calendar months; the day is clamped to the month's length (31 Jan + 1 month = 28/29 Feb). */
+export const addMonths = (key: string, months: number): string => {
+  const date = parseDateKey(key);
+  const day = date.getDate();
+  date.setDate(1);
+  date.setMonth(date.getMonth() + months);
+  const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  date.setDate(Math.min(day, lastDay));
+  return toDateKey(date);
+};
+
+/** Completed calendar months between two dates (0 on the day of birth, 1 from the same day next month). */
+export const completedMonths = (fromKey: string, toKey: string): number => {
+  const from = parseDateKey(fromKey);
+  const to = parseDateKey(toKey);
+  let months = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth());
+  if (to.getDate() < from.getDate() && addMonths(fromKey, months) > toKey) months -= 1;
+  return months;
+};
