@@ -42,6 +42,7 @@ const SettingsIcon = SETTINGS_ITEM.icon;
 export const AppLayout = () => {
   const { data, hasStorageError } = useAppData();
   const { activeGroup, pathFor } = useNavGroup();
+  const barItems = activeGroup.items.filter((item) => !item.isSidebarOnly);
 
   return (
     <div className="min-h-dvh md:flex">
@@ -128,8 +129,8 @@ export const AppLayout = () => {
         aria-label={activeGroup.label}
         className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-surface pb-[env(safe-area-inset-bottom)] md:hidden"
       >
-        <div className="grid" style={{ gridTemplateColumns: `repeat(${activeGroup.items.length}, minmax(0, 1fr))` }}>
-          {activeGroup.items.map(({ path, shortLabel, icon: Icon }) => (
+        <div className="grid" style={{ gridTemplateColumns: `repeat(${barItems.length}, minmax(0, 1fr))` }}>
+          {barItems.map(({ path, shortLabel, icon: Icon }) => (
             <NavLink
               key={path}
               to={path}

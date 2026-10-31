@@ -80,6 +80,8 @@ export interface RepeatState {
   lastGiven: string | null;
   nextDue: string | null;
   isDue: boolean;
+  /** Key of the newest logged repeat dose (so it can be undone); null when only the base doses exist. */
+  lastRepeatKey: string | null;
 }
 
 /** Yearly influenza / 3-yearly typhoid after the base doses. Logged under the vaccine id with a date suffix. */
@@ -89,13 +91,17 @@ export const listRepeatStates = (child: Child, onDate = todayKey()): RepeatState
   VACCINES.filter((vaccine) => vaccine.repeat).map((vaccine) => {
     const repeat = vaccine.repeat!;
     const prefix = `${vaccine.id}-repeat-`;
-    const repeatDates = Object.keys(child.vaccines).filter((key) => key.startsWith(prefix)).map((key) => child.vaccines[key]);
+    const repeatKeys = Object.keys(child.vaccines)
+      .filter((key) => key.startsWith(prefix))
+      .sort((a, b) => child.vaccines[a].localeCompare(child.vaccines[b]));
+    const repeatDates = repeatKeys.map((key) => child.vaccines[key]);
     const base = child.vaccines[repeat.afterDoseId];
     const all = [base, ...repeatDates].filter(Boolean).sort();
+    const lastRepeatKey = repeatKeys.length ? repeatKeys[repeatKeys.length - 1] : null;
     const lastGiven = all.length ? all[all.length - 1] : null;
     const nextDue = lastGiven ? addMonths(lastGiven, repeat.everyMonths) : null;
     const isWithinAge = childAgeMonths(child, onDate) <= repeat.untilMonths;
-    return { vaccine, label: repeat.label, lastGiven, nextDue, isDue: Boolean(nextDue && isWithinAge && nextDue <= onDate) };
+    return { vaccine, label: repeat.label, lastGiven, nextDue, isDue: Boolean(nextDue && isWithinAge && nextDue <= onDate), lastRepeatKey };
   });
 
 export const countDue = (states: DoseState[]) => states.filter((s) => s.status === 'due' || s.status === 'late').length;

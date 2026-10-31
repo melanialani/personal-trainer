@@ -174,3 +174,24 @@ export const assessMeasurement = (
   if (z === null) return null;
   return { indicator, value, months, z, status: classifyZ(indicator, months, z), range: referenceRow(indicator, sex, months) };
 };
+
+export interface ChildBmiResult {
+  bmi: number;
+  z: number;
+  status: GrowthStatus;
+  /** BMI −2 SD … +1 SD at this age (the "gizi baik" band of Permenkes 2/2020). */
+  normalBmi: { min: number; max: number };
+  /** The same band as body weight for the child's height. */
+  normalWeight: { min: number; max: number };
+}
+
+/** BMI-for-age for a child (0–19 years); null outside the WHO tables. */
+export const assessChildBmi = (sex: Sex, months: number, weightKg: number, heightCm: number): ChildBmiResult | null => {
+  const bmi = bmiOf(weightKg, heightCm);
+  const z = zScore('bmi', sex, months, bmi);
+  const min = valueAtZ('bmi', sex, months, -2);
+  const max = valueAtZ('bmi', sex, months, 1);
+  if (z === null || min === null || max === null) return null;
+  const m2 = (heightCm / 100) ** 2;
+  return { bmi, z, status: classifyZ('bmi', months, z), normalBmi: { min, max }, normalWeight: { min: min * m2, max: max * m2 } };
+};

@@ -62,7 +62,8 @@ const SupplementCard = ({ supplement, child }: { supplement: ChildSupplement; ch
   const age = child ? childAgeMonths(child) : null;
   const isForAge = age !== null && isSupplementForAge(supplement, age);
   const isPast = age !== null && age > supplement.untilMonths;
-  const doses = age === null ? supplement.doses : dosesForAge(supplement, age);
+  // A one-time item (vitamin K at birth) always shows its dose so parents can check the Buku KIA.
+  const doses = age === null || supplement.schedule.kind === 'once' ? supplement.doses : dosesForAge(supplement, age);
   const weight = child ? latestMeasurement(child, 'weightKg')?.weightKg : undefined;
   const entries = child ? supplementEntries(child, supplement.id) : [];
   const canLog = Boolean(child) && supplement.schedule.kind !== 'ongoing';

@@ -7,6 +7,7 @@ import { pluralize } from '../../lib/format';
 import { Badge } from '../../shared/components/Badge';
 import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
+import { useConfirmDelete } from '../../shared/components/ConfirmProvider';
 import { Checkbox } from '../../shared/components/FormFields';
 import { Notice } from '../../shared/components/Notice';
 import { useToast } from '../../shared/components/ToastProvider';
@@ -28,12 +29,16 @@ interface Editing {
 export const VaccinesTab = ({ child }: { child: Child | null }) => {
   const { updateChild } = useChildren();
   const showToast = useToast();
+  const confirmDelete = useConfirmDelete();
   const [editing, setEditing] = useState<Editing | null>(null);
   const [showDone, setShowDone] = useState(true);
 
   const states = child ? listDoseStates(child) : [];
   const stateOf = (doseId: string) => states.find((s) => s.dose.id === doseId);
-  const pending = states.filter((s) => s.status === 'due' || s.status === 'late');
+  const pendingAll = states.filter((s) => s.status === 'due' || s.status === 'late');
+  // Program doses (free, part of "imunisasi lengkap") come first; optional IDAI doses are listed separately.
+  const pending = pendingAll.filter((s) => s.dose.isProgram);
+  const pendingOptional = pendingAll.filter((s) => !s.dose.isProgram);
   const repeats = child ? listRepeatStates(child) : [];
 
   const groups = new Map<number, { vaccine: Vaccine; dose: VaccineDose }[]>();
@@ -55,6 +60,15 @@ export const VaccinesTab = ({ child }: { child: Child | null }) => {
     setEditing(null);
   };
 
+  const undoRepeat = async (key: string, label: string) => {
+    if (!child || !(await confirmDelete(`${label} on ${formatDate(child.vaccines[key])}`))) return;
+    updateChild(child.id, (c) => {
+      const vaccines = { ...c.vaccines };
+      delete vaccines[key];
+      return { ...c, vaccines };
+    });
+  };
+
   const removeDate = () => {
     if (!child || !editing) return;
     updateChild(child.id, (c) => {
@@ -69,10 +83,12 @@ export const VaccinesTab = ({ child }: { child: Child | null }) => {
     <div className="space-y-5">
       {child && (
         <Card>
-          {pending.length ? (
+          {pendingAll.length ? (
             <div>
               <p className="text-sm font-semibold text-slate-900">
-                {pluralize(pending.length, 'vaccine dose')} to get now for {child.name}
+                {pending.length
+                  ? `${pluralize(pending.length, 'program dose')} to get now for ${child.name}`
+                  : `All program doses are up to date for ${child.name}`}
               </p>
               <ul className="mt-2 flex flex-wrap gap-2">
                 {pending.map((s) => (
@@ -81,6 +97,11 @@ export const VaccinesTab = ({ child }: { child: Child | null }) => {
                   </li>
                 ))}
               </ul>
+              {pendingOptional.length > 0 && (
+                <p className="mt-2 text-xs text-slate-600">
+                  Optional (IDAI, paid) not given yet: {pendingOptional.map((s) => s.dose.label).join(', ')}.
+                </p>
+              )}
               <p className="mt-2 text-xs text-slate-500">
                 Already vaccinated? Tap each dose below and copy the date from the Buku KIA. Late doses can usually still be given ("imunisasi kejar"). Ask the doctor or Puskesmas — you don't need to start over.
               </p>
@@ -136,13 +157,20 @@ export const VaccinesTab = ({ child }: { child: Child | null }) => {
                   </p>
                 </div>
                 {r.lastGiven && (
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    onClick={() => setEditing({ key: r.vaccine.id, isRepeat: true, title: r.label, initialDate: '', canRemove: false })}
-                  >
-                    Log dose
-                  </Button>
+                  <div className="flex gap-2">
+                    {r.lastRepeatKey && (
+                      <Button size="sm" variant="ghost" onClick={() => undoRepeat(r.lastRepeatKey!, r.label)}>
+                        Undo last
+                      </Button>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => setEditing({ key: r.vaccine.id, isRepeat: true, title: r.label, initialDate: '', canRemove: false })}
+                    >
+                      Log dose
+                    </Button>
+                  </div>
                 )}
               </li>
             ))}
@@ -201,7 +229,7 @@ const DoseRow = ({ vaccine, dose, state, onClick }: DoseRowProps) => {
         </p>
       </div>
       <div className="flex shrink-0 flex-wrap justify-end gap-1">
-        {state ? <DoseStatusBadge status={state.status} givenOn={state.givenOn} dueFrom={state.dueFrom} /> : <ProgramBadge isProgram={dose.isProgram} />}
+        {state ? <DoseStatusBadge status={state.status} givenOn={state.givenOn} dueFrom={state.dueFrom} isProgram={dose.isProgram} /> : <ProgramBadge isProgram={dose.isProgram} />}
         {state && dose.isProgram && state.status !== 'done' && <Badge tone="brand">Free</Badge>}
       </div>
     </>

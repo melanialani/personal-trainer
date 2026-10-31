@@ -17,11 +17,13 @@
 | `/bible` | `features/bible` | Bible reader (AYT · WEB-C · BSB), version switch keeps the verse, highlights in 5 colors, comments, notes list |
 | `/prayers` | `features/prayers` | Catholic prayers in Indonesian, searchable, by category |
 | `/rosary` | `features/rosary` | Rosary: today's mysteries by weekday, how to pray, painting + Bible link per mystery |
+| `/bmi` | `features/bmi` | Stand-alone BMI calculator (no profile needed): adult Asia-Pacific + WHO class, healthy weight range; child mode uses WHO BMI-for-age (`lib/growth.ts`) |
 | `/profile` | `features/profile` | Body stats, goal, diet & training preferences, live targets preview |
 | `/settings` | `features/settings` | Export / import (merge or replace), appearance (theme), sample data, delete all |
 
 ## Navigation
-- `layout/navItems.ts` groups pages: Fitness, Food & Health, Parenting, Spiritual Guide (≤ 4 pages each). Settings is outside
+- `layout/navItems.ts` groups pages: Fitness, Food & Health, Parenting, Spiritual Guide (≤ 4 pages each). Items with `isSidebarOnly` (BMI Calculator) show in
+  the desktop sidebar but not in the phone bottom bar; phones reach them via in-page links. Settings is outside
   the groups (gear icon in the phone header, last link in the sidebar).
 - Phone: the header holds the group switcher; the bottom bar shows only the active group's pages (no "More" menu).
   `layout/useNavGroup.ts` remembers the last page per group in localStorage `fitplan:nav` (per device, not in

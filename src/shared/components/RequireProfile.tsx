@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLoadSampleData } from '../hooks/useLoadSampleData';
 import { useAppData } from '../../store/AppDataContext';
 import { Button } from './Button';
+import { TextLink } from './TextLink';
 import { Card } from './Card';
 import { EmptyState } from './EmptyState';
 
@@ -18,7 +19,12 @@ export const RequireProfile = ({ children }: { children: ReactNode }) => {
       <EmptyState
         icon={<Target size={22} />}
         title="Set up your profile first"
-        description="Your calorie target, meal plan and workout program are calculated from your body stats and goal."
+        description={
+          <>
+            Your calorie target, meal plan and workout program are calculated from your body stats and goal. Just want your
+            BMI? Use the <TextLink to="/bmi">BMI calculator</TextLink>.
+          </>
+        }
         action={
           <div className="flex flex-wrap justify-center gap-2">
             <Button onClick={() => navigate('/profile')}>Set up profile</Button>

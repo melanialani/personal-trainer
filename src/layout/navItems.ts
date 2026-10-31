@@ -2,6 +2,7 @@ import {
   Apple,
   Baby,
   BookOpenText,
+  Calculator,
   Church,
   Dumbbell,
   Flower2,
@@ -27,6 +28,8 @@ export interface NavItem {
   label: string;
   shortLabel: string;
   icon: LucideIcon;
+  /** Listed in the desktop sidebar only (the phone bottom bar keeps ≤ 4 items); reach it via in-page links on phones. */
+  isSidebarOnly?: boolean;
 }
 
 export type NavGroupId = 'fitness' | 'health' | 'parenting' | 'spiritual';
@@ -36,7 +39,7 @@ export interface NavGroup {
   label: string;
   shortLabel: string;
   icon: LucideIcon;
-  /** Shown in the phone bottom bar when the group is active (keep ≤ 4). */
+  /** Shown in the phone bottom bar when the group is active (keep ≤ 4 without `isSidebarOnly`). */
   items: NavItem[];
 }
 
@@ -51,6 +54,7 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/workouts', label: 'Workouts', shortLabel: 'Workouts', icon: Dumbbell },
       { path: '/weight', label: 'Weight Log', shortLabel: 'Weight', icon: Scale },
       { path: '/profile', label: 'Profile & Goals', shortLabel: 'Goals', icon: Target },
+      { path: '/bmi', label: 'BMI Calculator', shortLabel: 'BMI', icon: Calculator, isSidebarOnly: true },
     ],
   },
   {

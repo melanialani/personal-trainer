@@ -35,6 +35,14 @@ export const GrowthChart = ({ child, indicator, ageMonths, height = 300 }: Growt
   const lastAge = Math.max(ageMonths, ...points.map((p) => p.months));
   const end = Math.min(tableMax, Math.max(tableMin + 12, Math.ceil(lastAge) + 6));
   const start = Math.max(tableMin, end - (end <= 60 ? 60 : 72));
+  if (ageMonths > tableMax) {
+    return (
+      <p className="py-10 text-center text-sm text-slate-500">
+        WHO has no {indicator === 'head' ? 'head circumference' : 'weight-for-age'} standard after {formatAgeShort(tableMax)}. Choose BMI
+        or height instead.
+      </p>
+    );
+  }
   if (ageMonths < tableMin || start >= end) return null;
 
   const step = end - start > 36 ? 2 : 1;

@@ -1,5 +1,5 @@
 import { AlertTriangle, Check, ExternalLink, Moon, MonitorSmartphone, Soup, X } from 'lucide-react';
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { GENERAL_RED_FLAGS, MILESTONE_CHECKPOINTS, MILESTONE_DOMAIN_LABELS, type MilestoneCheckpoint, type MilestoneDomain } from '../../data/milestones';
 import { PARENTING_STAGES, type ParentingStage } from '../../data/parentingStages';
 import { childAgeMonths, milestoneProgress, pickForAge } from '../../lib/child';
@@ -23,6 +23,9 @@ export const DevelopmentPage = () => {
   const currentStage = age === null ? null : pickForAge(PARENTING_STAGES, age, (s) => s.fromMonths);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [tab, setTab] = useState<DevelopmentTab>('milestones');
+
+  // Switching child jumps back to that child's current stage.
+  useEffect(() => setSelectedId(null), [activeChild?.id]);
   const stage = PARENTING_STAGES.find((s) => s.id === selectedId) ?? currentStage ?? PARENTING_STAGES[0];
   const checkpoint = MILESTONE_CHECKPOINTS.find((c) => c.ageMonths === stage.fromMonths) ?? null;
   const nextCheckpoint = MILESTONE_CHECKPOINTS.find((c) => c.ageMonths > stage.fromMonths) ?? null;

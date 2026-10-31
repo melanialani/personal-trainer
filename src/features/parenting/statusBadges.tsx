@@ -2,14 +2,22 @@ import { formatDate } from '../../lib/date';
 import type { DoseStatus, RoundStatus } from '../../lib/child';
 import { Badge } from '../../shared/components/Badge';
 
-export const DoseStatusBadge = ({ status, givenOn, dueFrom }: { status: DoseStatus; givenOn?: string; dueFrom: string }) => {
+interface DoseStatusBadgeProps {
+  status: DoseStatus;
+  givenOn?: string;
+  dueFrom: string;
+  /** Late program doses are urgent; late optional (paid) doses are only a reminder. */
+  isProgram: boolean;
+}
+
+export const DoseStatusBadge = ({ status, givenOn, dueFrom, isProgram }: DoseStatusBadgeProps) => {
   switch (status) {
     case 'done':
       return <Badge tone="success">Given {givenOn ? formatDate(givenOn) : ''}</Badge>;
     case 'due':
       return <Badge tone="warning">Due now</Badge>;
     case 'late':
-      return <Badge tone="danger">Late — catch up</Badge>;
+      return isProgram ? <Badge tone="danger">Late — catch up</Badge> : <Badge tone="warning">Not given yet</Badge>;
     case 'missed':
       return <Badge tone="neutral">Age limit passed</Badge>;
     case 'optional':

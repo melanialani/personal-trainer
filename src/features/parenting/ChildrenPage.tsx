@@ -57,7 +57,9 @@ const ChildOverview = ({ child }: { child: Child }) => {
   const progress = checkpoint ? milestoneProgress(child, checkpoint.items.map((i) => i.id)) : null;
 
   const doses = listDoseStates(child);
-  const pending = doses.filter((d) => d.status === 'due' || d.status === 'late');
+  const pendingAll = doses.filter((d) => d.status === 'due' || d.status === 'late');
+  const pending = pendingAll.filter((d) => d.dose.isProgram);
+  const optionalCount = pendingAll.length - pending.length;
   const nextDose = doses.filter((d) => d.status === 'upcoming').sort((a, b) => a.dueFrom.localeCompare(b.dueFrom))[0];
 
   const supplementLines = CHILD_SUPPLEMENTS.filter((s) => isSupplementForAge(s, age) && s.schedule.kind !== 'ongoing' && s.schedule.kind !== 'once').map(
@@ -101,8 +103,9 @@ const ChildOverview = ({ child }: { child: Child }) => {
             {pending.length > 8 && <Badge tone="neutral">+{pending.length - 8} more</Badge>}
           </div>
         ) : (
-          <p className="text-sm text-slate-700">Nothing due right now.</p>
+          <p className="text-sm text-slate-700">Program vaccines are up to date.</p>
         )}
+        {optionalCount > 0 && <p className="mt-2 text-xs text-slate-500">{optionalCount} optional (IDAI) doses not given yet.</p>}
         {nextDose && (
           <p className="mt-2 text-xs text-slate-500">
             Next: {nextDose.dose.label} from {formatDate(nextDose.dueFrom)}
