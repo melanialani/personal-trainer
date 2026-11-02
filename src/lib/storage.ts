@@ -2,6 +2,7 @@ import { ALL_EQUIPMENT } from '../data/exercises';
 import { BIBLE_VERSIONS } from '../data/bibleBooks';
 import type { AppData, BibleState, Child, Equipment, ParentingState, Profile, VerseNote, WorkoutPlan } from '../types';
 
+// Keys and app id keep the old "fitplan" name so saved data and existing backups keep working.
 const STORAGE_KEY = 'fitplan:data';
 const EXPORT_APP_ID = 'fitplan';
 
@@ -161,7 +162,7 @@ export const exportData = (data: AppData): void => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `fitplan-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  link.download = `lifeplan-backup-${new Date().toISOString().slice(0, 10)}.json`;
   link.click();
   URL.revokeObjectURL(url);
 };
@@ -175,7 +176,7 @@ export const parseImportFile = (text: string): AppData => {
     throw new Error('The file is not valid JSON.');
   }
   if (!isRecord(parsed) || parsed.app !== EXPORT_APP_ID || !isRecord(parsed.data)) {
-    throw new Error('This file is not a FitPlan backup.');
+    throw new Error('This file is not a LifePlan backup.');
   }
   return normalizeData(parsed.data);
 };

@@ -1,10 +1,11 @@
-# FitPlan — Personal Trainer & Meal Planner
+# LifePlan — Fitness, Health & Faith
 
 Live: https://melanialani.github.io/personal-trainer/
 
 Set a goal (lose, maintain or gain weight) and get daily calorie & macro targets, a 7-day meal plan, a weekly
-workout program, a food diary with calorie lookup, and weight tracking. Everything is stored in your browser —
-export/import a JSON backup from **Data & Backup**.
+workout program, a food diary with calorie lookup, and weight tracking. Also includes a medicine guide, a Bible
+reader with highlights and comments, Catholic prayers and a rosary guide. Everything is stored in your browser —
+export/import a JSON backup from **Data & Settings**.
 
 ```bash
 npm install

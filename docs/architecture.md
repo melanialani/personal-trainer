@@ -15,7 +15,7 @@
 | `/immunization` | `features/parenting` | IDAI 2024 vaccine schedule 0–18 years with per-dose status and dates; vitamin K, vitamin A rounds, deworming, iron, vitamin D, routine checks |
 | `/growth` | `features/parenting` | Measurements log, WHO chart with SD curves, z-score + Permenkes 2/2020 category, normal ranges table by age/sex |
 | `/bible` | `features/bible` | Bible reader (AYT · WEB-C · BSB), version switch keeps the verse, highlights in 5 colors, comments, notes list |
-| `/prayers` | `features/prayers` | Catholic prayers in Indonesian, searchable, by category |
+| `/prayers` | `features/prayers` | Catholic prayers in Indonesian, searchable, by category (rosary-only prayers have no chip; they are opened from the Rosary page) |
 | `/rosary` | `features/rosary` | Rosary: today's mysteries by weekday, how to pray, painting + Bible link per mystery |
 | `/bmi` | `features/bmi` | Stand-alone BMI calculator (no profile needed): adult Asia-Pacific + WHO class, healthy weight range; child mode uses WHO BMI-for-age (`lib/growth.ts`) |
 | `/profile` | `features/profile` | Body stats, goal, diet & training preferences, live targets preview |

@@ -1,5 +1,5 @@
 import type { Prayer, PrayerCategory } from '../data/prayers';
-import { MYSTERY_SETS, ROSARY_MYSTERIES, type MysterySetId, type RosaryMystery } from '../data/rosary';
+import { MYSTERY_SETS, type MysterySetId } from '../data/rosary';
 import { weekdayIndex } from './date';
 
 /** Lower-case and strip accents / punctuation so "salam maria" matches "Salam, Maria". */
@@ -26,16 +26,6 @@ export const searchPrayers = (prayers: Prayer[], query: string, category: Prayer
     })
     .filter((item): item is { prayer: Prayer; score: number } => item !== null);
   return scored.sort((a, b) => b.score - a.score).map((item) => item.prayer);
-};
-
-export const searchMysteries = (query: string): RosaryMystery[] => {
-  const words = normalizeSearch(query).split(' ').filter(Boolean);
-  if (words.length === 0) return [];
-  return ROSARY_MYSTERIES.filter((mystery) => {
-    const set = MYSTERY_SETS.find((item) => item.id === mystery.set);
-    const haystack = normalizeSearch(`${mystery.title} ${set?.title ?? ''} ${mystery.ref.label}`);
-    return words.every((word) => haystack.includes(word));
-  });
 };
 
 /** Traditional weekday schedule (Mon = 0 … Sun = 6), as set by St. John Paul II in Rosarium Virginis Mariae. */

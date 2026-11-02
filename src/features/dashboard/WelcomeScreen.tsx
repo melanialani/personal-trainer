@@ -44,7 +44,7 @@ export const WelcomeScreen = () => {
         ))}
       </section>
       <p className="text-center text-xs text-slate-400">
-        FitPlan gives general guidance, not medical advice. Check with a doctor before big changes to diet or exercise.
+        LifePlan gives general guidance, not medical advice. Check with a doctor before big changes to diet or exercise.
       </p>
     </div>
   );

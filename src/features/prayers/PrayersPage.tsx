@@ -1,10 +1,8 @@
-import { ChevronRight, Flower2, HandHeart } from 'lucide-react';
+import { HandHeart } from 'lucide-react';
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { PRAYER_CATEGORY_LABELS, PRAYERS, type Prayer, type PrayerCategory } from '../../data/prayers';
-import { MYSTERY_SETS } from '../../data/rosary';
 import { pluralize } from '../../lib/format';
-import { searchMysteries, searchPrayers } from '../../lib/prayers';
+import { searchPrayers } from '../../lib/prayers';
 import { Card } from '../../shared/components/Card';
 import { Chip } from '../../shared/components/Chip';
 import { EmptyState } from '../../shared/components/EmptyState';
@@ -12,7 +10,8 @@ import { SearchInput } from '../../shared/components/FormFields';
 import { PageHeader } from '../../shared/components/PageHeader';
 import { PrayerModal } from './PrayerModal';
 
-const CATEGORIES = Object.keys(PRAYER_CATEGORY_LABELS) as PrayerCategory[];
+// Rosary prayers are browsed from the Rosary page, so they get no filter chip here.
+const CATEGORIES = (Object.keys(PRAYER_CATEGORY_LABELS) as PrayerCategory[]).filter((value) => value !== 'rosary');
 
 /** First line of the prayer without leader / response markers, as a preview. */
 const previewLine = (text: string) => text.split('\n').find((line) => line.trim())?.replace(/^\s*[A-Z]\s*[:/.]\s*/, '') ?? '';
@@ -23,7 +22,6 @@ export const PrayersPage = () => {
   const [selected, setSelected] = useState<Prayer | null>(null);
 
   const prayers = useMemo(() => searchPrayers(PRAYERS, query, category), [query, category]);
-  const mysteries = useMemo(() => (category === 'all' || category === 'rosary' ? searchMysteries(query) : []), [query, category]);
 
   return (
     <>
@@ -52,27 +50,7 @@ export const PrayersPage = () => {
 
       <p className="mb-3 text-sm text-slate-500">{pluralize(prayers.length, 'prayer')}</p>
 
-      {mysteries.length > 0 && (
-        <Card title="Rosary mysteries" icon={<Flower2 size={16} />} className="mb-4" bodyClassName="p-2">
-          {mysteries.map((mystery) => (
-            <Link
-              key={mystery.id}
-              to={`/rosary?set=${mystery.set}`}
-              className="flex items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm hover:bg-slate-50"
-            >
-              <span className="min-w-0">
-                <span className="block font-medium text-slate-800">{mystery.title}</span>
-                <span className="text-xs text-slate-500">
-                  {MYSTERY_SETS.find((set) => set.id === mystery.set)?.title} {mystery.number}
-                </span>
-              </span>
-              <ChevronRight size={16} className="shrink-0 text-slate-400" />
-            </Link>
-          ))}
-        </Card>
-      )}
-
-      {prayers.length === 0 && mysteries.length === 0 ? (
+      {prayers.length === 0 ? (
         <Card>
           <EmptyState icon={<HandHeart size={20} />} title="No prayers match" description="Try another word or category." />
         </Card>

@@ -61,13 +61,13 @@ export interface RosaryStep {
 export const ROSARY_STEPS: RosaryStep[] = [
   { title: "Tanda Salib", prayerIds: ["tanda-salib"] },
   { title: "Aku Percaya", prayerIds: ["aku-percaya"] },
-  { title: "Kemuliaan dan Terpujilah", prayerIds: ["kemuliaan", "terpujilah-nama-yesus"], detail: "Some parishes say only the Kemuliaan here." },
+  { title: "Kemuliaan dan Terpujilah", prayerIds: ["kemuliaan", "terpujilah-nama-yesus"], detail: "Beberapa paroki hanya mendoakan Kemuliaan di sini." },
   { title: "Bapa Kami", prayerIds: ["bapa-kami"] },
   { title: "Tiga Salam Maria", prayerIds: ["salam-maria"], detail: "Salam, Putri Allah Bapa. – Salam Maria ...\nSalam, Bunda Allah Putra. – Salam Maria ...\nSalam, Mempelai Allah Roh Kudus. – Salam Maria ..." },
   { title: "Kemuliaan dan Terpujilah", prayerIds: ["kemuliaan", "terpujilah-nama-yesus"] },
   { title: "Lima peristiwa (diulang 5 kali)", prayerIds: ["bapa-kami", "salam-maria", "kemuliaan", "terpujilah-nama-yesus", "doa-fatima"], detail: "Pemimpin menyebutkan peristiwa (boleh disertai bacaan Kitab Suci singkat), lalu: Bapa Kami, 10 x Salam Maria, Kemuliaan, Terpujilah, Doa Fatima." },
-  { title: "Salam, ya Ratu", prayerIds: ["salam-ya-ratu"], detail: "Said after the Doa Fatima of the fifth decade." },
+  { title: "Salam, ya Ratu", prayerIds: ["salam-ya-ratu"], detail: "Didoakan sesudah Doa Fatima pada peristiwa kelima." },
   { title: "Doa Penutup", prayerIds: ["doa-penutup-rosario"] },
-  { title: "Litani Santa Perawan Maria (pilihan)", prayerIds: ["litani-santa-perawan-maria"], detail: "Customary especially in May and October." },
+  { title: "Litani Santa Perawan Maria (pilihan)", prayerIds: ["litani-santa-perawan-maria"], detail: "Lazim didoakan terutama pada bulan Mei dan Oktober." },
   { title: "Tanda Salib", prayerIds: ["tanda-salib"] },
 ];

@@ -1,4 +1,4 @@
-# FitPlan — Personal Trainer & Meal Planner
+# LifePlan — Fitness, Health & Faith (formerly FitPlan)
 
 Static SPA deployed to GitHub Pages: https://melanialani.github.io/personal-trainer/
 
@@ -13,6 +13,8 @@ Real website in active use (not a Figma prototype): logic must be correct and ro
 ## Rules
 - No backend. All data lives in `localStorage` key `fitplan:data` as one `AppData` object (`src/types.ts`).
   Any new field must get a default in `normalizeData` (`src/lib/storage.ts`) so old backups/imports keep working.
+  Per-device UI state uses `fitplan:theme` and `fitplan:nav` (not in backups). Never rename the `fitplan:*` keys or
+  the backup app id `fitplan` (would lose saved data); the old name stays internal.
 - Routing uses `HashRouter` (Pages has no SPA fallback). Vite `base` is `/personal-trainer/`.
 - Read/write data only through `useAppData()` (`update`, `upsert`, `remove`) in `src/store/AppDataContext.tsx`.
 - Deletes and destructive actions go through `useConfirmDelete()` / `useConfirm()`; never `window.confirm()`.
