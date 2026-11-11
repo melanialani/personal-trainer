@@ -188,6 +188,7 @@ export const CARE_GUIDES: CareGuide[] = [
           'Makan porsi kecil tapi sering; makan malam lebih awal.',
           'Kurangi pemicu: kopi, gorengan/berlemak, cokelat, mint, pedas, asam, alkohol, rokok, minuman bersoda.',
           'Turunkan berat badan bila berlebih; hindari celana/ikat pinggang terlalu ketat.',
+          'Kunyah permen karet tanpa mint setelah makan; hindari permen mint/menthol (melemahkan katup lambung).',
         ],
       },
       {
@@ -238,6 +239,50 @@ export const CARE_GUIDES: CareGuide[] = [
       },
     ],
     relatedMedicineIds: ['antacid', 'alginate', 'famotidine', 'lansoprazole', 'omeprazole', 'sucralfate', 'ondansetron'],
+  },
+  {
+    id: 'reflux-sore-throat',
+    title: 'Radang tenggorokan karena asam lambung (LPR)',
+    summary: 'Asam naik sampai tenggorokan: cara membedakan dari infeksi, obat yang tepat, dan pilihan hemat.',
+    symptoms: ['heartburn'],
+    sections: [
+      {
+        heading: 'Ciri karena asam, bukan infeksi',
+        points: [
+          'Karena asam (refluks laringofaring / LPR): tidak demam, rasa asam/pahit di mulut, sering berdeham, rasa mengganjal di tenggorokan, suara serak, biasanya lebih parah pagi hari.',
+          'Lebih mungkin infeksi: demam, nyeri menelan hebat, amandel bengkak atau ada bercak putih, pilek, kelenjar leher bengkak.',
+          'Radang 2–3 hari masih wajar untuk infeksi virus biasa — jangan langsung yakin karena asam.',
+        ],
+      },
+      {
+        heading: 'Pilihan obat',
+        points: [
+          'Pilihan utama: alginat (mis. Gaviscon cair/sachet) setelah makan dan sebelum tidur. "Rakit" gelnya menahan asam agar tidak naik; bentuk cair sekalian melapisi tenggorokan.',
+          'Antasida: meredakan perih dengan cepat tapi hanya 1–2 jam, tidak menahan asam naik. Paling hemat: Antasida DOEN generik (tablet dikunyah halus).',
+          'Sukralfat: bukan pilihan utama — sasarannya luka di lambung/usus 12 jari, bukan tenggorokan, dan aturan minumnya merepotkan.',
+          'Belum membaik 1–2 minggu atau sering kambuh: ke dokter/puskesmas untuk PPI (mis. omeprazol generik, murah; lewat BPJS bisa gratis). Untuk tenggorokan biasanya perlu beberapa minggu.',
+          'Jangan pakai ranitidin (ditarik BPOM 2019).',
+        ],
+      },
+      {
+        heading: 'Hemat tanpa obat',
+        points: [
+          'Kunyah permen karet tanpa mint setelah makan — air liur membantu menetralkan dan membilas asam.',
+          'Tinggikan kepala tempat tidur (ganjal kaki ranjang/bantal baji), jangan makan 3 jam sebelum tidur, porsi kecil.',
+          'Madu + air hangat untuk meredakan perih tenggorokan.',
+          'Hindari permen mint/menthol untuk tenggorokan — mint melemahkan katup lambung sehingga asam lebih mudah naik.',
+        ],
+      },
+      {
+        heading: 'Segera ke dokter bila',
+        points: [
+          'Demam tinggi, sulit menelan atau bernapas, ngiler karena tidak bisa menelan.',
+          'Muntah darah, BAB hitam, berat badan turun tanpa sebab.',
+          'Suara serak lebih dari 2–3 minggu, atau ada benjolan di leher.',
+        ],
+      },
+    ],
+    relatedMedicineIds: ['alginate', 'antacid', 'omeprazole', 'sucralfate'],
   },
   {
     id: 'child-diarrhea',

@@ -131,7 +131,7 @@ export const SYMPTOM_KEYWORDS: Record<Symptom, string[]> = {
   'dry-skin': ['kulit kering', 'pecah-pecah', 'pelembap'],
   'sun-protection': ['matahari', 'sinar uv', 'tabir surya', 'sunblock', 'menghitam'],
   'itch-rash': ['gatal', 'ruam', 'biang keringat', 'gigitan serangga', 'cacar'],
-  heartburn: ['asam lambung', 'gerd', 'refluks', 'panas di dada', 'sendawa asam', 'heartburn'],
+  heartburn: ['asam lambung', 'gerd', 'refluks', 'panas di dada', 'sendawa asam', 'heartburn', 'lpr', 'tenggorokan asam'],
   'stomach-pain': ['maag', 'perih', 'ulu hati', 'sakit perut', 'dispepsia', 'lambung'],
   bloating: ['kembung', 'begah', 'gas', 'penuh'],
   ulcer: ['tukak', 'luka lambung', 'ulkus', 'usus 12 jari'],
@@ -682,7 +682,11 @@ export const MEDICINES: Medicine[] = [
       'Basa lemah (aluminium/magnesium hidroksida, hidrotalsit, atau kalsium karbonat) langsung menetralkan asam yang sudah ada di lambung. Simetikon (di beberapa merek) memecah gelembung gas sehingga kembung berkurang. Efek cepat (menit) tapi pendek (1–3 jam). Komposisi tiap merek berbeda — cek kemasan.',
     analogy: 'Seperti menyiram air ke asam: cepat, tapi hanya untuk asam yang sudah ada, bukan menghentikan pabriknya.',
     bestTime: ['Saat gejala muncul.', 'Atau 1–3 jam setelah makan dan sebelum tidur, saat asam paling banyak.'],
-    howToUse: ['Tablet: kunyah sampai halus, baru ditelan. Boleh diikuti air.', 'Suspensi: kocok dulu, ukur dengan sendok takar.'],
+    howToUse: [
+      'Tablet: kunyah sampai halus, baru ditelan. Boleh diikuti air.',
+      'Suspensi: kocok dulu, ukur dengan sendok takar.',
+      'Pilihan paling hemat: Antasida DOEN generik.',
+    ],
     dose: {
       adult: ['1–2 tablet kunyah atau 5–10 ml, 3–4x sehari.', 'Ikuti batas maksimal di kemasan.'],
       child: ['6–12 tahun: ½–1 tablet atau 5 ml, 3–4x sehari.', '< 6 tahun: hanya dengan anjuran dokter.'],
@@ -704,7 +708,7 @@ export const MEDICINES: Medicine[] = [
   {
     id: 'alginate',
     name: 'Alginate (raft-forming)',
-    brands: ['Gaviscon'],
+    brands: ['Gaviscon', 'Gaviscon Double Action'],
     ingredients: ['Sodium alginate', 'Sodium bicarbonate', 'Calcium carbonate'],
     group: 'antacid',
     symptoms: ['heartburn'],
@@ -717,10 +721,11 @@ export const MEDICINES: Medicine[] = [
     howItWorks:
       'Saat bertemu asam, alginat membentuk lapisan gel yang mengapung di atas isi lambung, seperti tutup. Asam dan makanan jadi tidak mudah naik ke kerongkongan. Sedikit antasida di dalamnya ikut menetralkan asam.',
     analogy: 'Seperti rakit yang mengapung menutup permukaan air dalam ember.',
-    bestTime: ['Setelah makan dan sebelum tidur — saat paling sering terjadi refluks.'],
+    bestTime: ['Setelah makan dan sebelum tidur — saat paling sering terjadi refluks. Dosis sebelum tidur paling penting karena asam paling mudah naik saat berbaring.'],
     howToUse: [
       'Kocok dulu, ukur dengan sendok takar. Tablet kunyah dikunyah sampai halus.',
-      'Setelah minum, jangan langsung minum air banyak agar "rakit" tidak rusak.',
+      'Setelah minum, jangan makan atau minum ± 30 menit agar "rakit" tidak rusak.',
+      'Radang tenggorokan karena asam (LPR): pilih bentuk cair/sachet — sekalian melapisi tenggorokan saat ditelan.',
     ],
     dose: {
       adult: ['Dewasa dan anak > 12 tahun: 10–20 ml (atau 2–4 tablet kunyah) setelah makan dan sebelum tidur, hingga 4x sehari.'],
@@ -1007,7 +1012,11 @@ export const MEDICINES: Medicine[] = [
       'PPI/H2 blocker: minum PPI dulu, sukralfat minimal 30 menit kemudian.',
     ],
     sideEffects: ['Sembelit (paling sering), mulut kering, mual.'],
-    warnings: ['Mengandung aluminium: hati-hati pada gangguan ginjal atau cuci darah.', 'Diabetes: beberapa suspensi mengandung gula — cek label.'],
+    warnings: [
+      'Bukan pilihan utama untuk radang tenggorokan karena asam (LPR) — pilih alginat.',
+      'Mengandung aluminium: hati-hati pada gangguan ginjal atau cuci darah.',
+      'Diabetes: beberapa suspensi mengandung gula — cek label.',
+    ],
     seeDoctor: STOMACH_RED_FLAGS,
     relatedIds: ['lansoprazole', 'antacid'],
   },
