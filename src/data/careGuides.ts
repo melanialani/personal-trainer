@@ -231,6 +231,16 @@ export const CARE_GUIDES: CareGuide[] = [
         ],
       },
       {
+        heading: 'Omeprazol vs lansoprazol (dan PPI lain)',
+        points: [
+          'Sama-sama PPI dengan cara kerja dan efektivitas hampir sama pada dosis setara: omeprazol 20 mg ≈ lansoprazol 30 mg.',
+          'Sulit menelan kapsul: lansoprazol tersedia tablet larut di mulut (mis. Prosogan FD), tanpa air.',
+          'Minum klopidogrel (pengencer darah jantung/stroke): hindari omeprazol/esomeprazol — dokter biasanya memilih pantoprazol.',
+          'Selain itu, pilih yang paling murah atau tersedia — keduanya ada versi generik. Efek samping mirip.',
+          'Aturan minum sama: 30–60 menit sebelum sarapan, ditelan utuh, efek penuh setelah 2–5 hari.',
+        ],
+      },
+      {
         heading: 'Berhenti minum PPI',
         points: [
           'Pemakaian < 2–4 minggu: umumnya boleh langsung berhenti.',
@@ -238,7 +248,7 @@ export const CARE_GUIDES: CareGuide[] = [
         ],
       },
     ],
-    relatedMedicineIds: ['antacid', 'alginate', 'famotidine', 'lansoprazole', 'omeprazole', 'sucralfate', 'ondansetron'],
+    relatedMedicineIds: ['antacid', 'alginate', 'famotidine', 'lansoprazole', 'omeprazole', 'pantoprazole', 'sucralfate', 'ondansetron'],
   },
   {
     id: 'reflux-sore-throat',
