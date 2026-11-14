@@ -14,6 +14,7 @@ export type MedicineGroup =
   | 'anti-nausea'
   | 'pain-fever'
   | 'diarrhea'
+  | 'fiber-supplement'
   | 'allergy';
 
 export type Symptom =
@@ -32,6 +33,8 @@ export type Symptom =
   | 'fever'
   | 'pain'
   | 'diarrhea'
+  | 'constipation'
+  | 'high-cholesterol'
   | 'allergy';
 
 export type MedicineForm =
@@ -101,6 +104,7 @@ export const GROUP_LABELS: Record<MedicineGroup, string> = {
   'anti-nausea': 'Anti-nausea',
   'pain-fever': 'Pain & fever',
   diarrhea: 'Diarrhea',
+  'fiber-supplement': 'Fiber supplement',
   allergy: 'Allergy & itch',
 };
 
@@ -120,6 +124,8 @@ export const SYMPTOM_LABELS: Record<Symptom, string> = {
   fever: 'Fever',
   pain: 'Pain',
   diarrhea: 'Diarrhea',
+  constipation: 'Constipation',
+  'high-cholesterol': 'High cholesterol',
   allergy: 'Allergy',
 };
 
@@ -140,6 +146,8 @@ export const SYMPTOM_KEYWORDS: Record<Symptom, string[]> = {
   fever: ['demam', 'panas', 'meriang'],
   pain: ['nyeri', 'sakit', 'pusing', 'sakit kepala', 'sakit gigi', 'nyeri haid'],
   diarrhea: ['diare', 'mencret', 'bab cair', 'dehidrasi'],
+  constipation: ['sembelit', 'konstipasi', 'susah bab', 'sulit bab', 'bab keras', 'serat'],
+  'high-cholesterol': ['kolesterol', 'ldl', 'lemak darah'],
   allergy: ['alergi', 'bersin', 'pilek alergi', 'biduran', 'kaligata', 'bentol'],
 };
 
@@ -227,6 +235,13 @@ const FEVER_RED_FLAGS = [
   'Bayi < 3 bulan dengan suhu ≥ 38 °C.',
   'Demam > 3 hari, kejang, sesak, kaku leher, atau ruam yang tidak memudar saat ditekan gelas.',
   'Sangat lemas, sulit dibangunkan, atau tanda dehidrasi.',
+];
+
+const BOWEL_RED_FLAGS = [
+  'Sembelit > 7 hari walau sudah minum serat, atau BAB berdarah.',
+  'Perubahan pola BAB yang menetap > 2 minggu, terutama di usia > 50 tahun.',
+  'Perut sangat sakit, kembung keras, muntah, dan tidak bisa kentut (curiga sumbatan usus) — segera ke IGD.',
+  'Nyeri dada, tersedak, atau sulit menelan setelah minum psyllium — segera ke IGD.',
 ];
 
 const ALLERGY_RED_FLAGS = [
@@ -1336,6 +1351,57 @@ export const MEDICINES: Medicine[] = [
     warnings: ['Jangan bila diare berdarah, demam tinggi, atau diare setelah minum antibiotik — kuman jadi tertahan di usus.'],
     seeDoctor: DIARRHEA_RED_FLAGS,
     relatedIds: ['oral-rehydration-salts'],
+  },
+
+  // ---------- Fiber supplement ----------
+  {
+    id: 'psyllium-husk',
+    name: 'Psyllium husk',
+    brands: ['Metamucil (impor)', 'Psyllium husk bubuk / serpihan (generik, curah)'],
+    ingredients: ['Psyllium husk (Plantago ovata)'],
+    group: 'fiber-supplement',
+    symptoms: ['constipation', 'diarrhea', 'high-cholesterol'],
+    forms: ['sachet', 'capsule'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'generally-ok',
+    summary:
+      'Serat larut dari kulit biji Plantago ovata. Melancarkan BAB, membantu diare ringan, menurunkan kolesterol LDL, dan meredam lonjakan gula darah. Kalori sangat kecil, protein praktis nol.',
+    howItWorks:
+      'Psyllium = tanamannya; psyllium husk = kulit bijinya, bagian yang dijual sebagai suplemen. Isinya hampir semua serat larut yang menyerap air dan menjadi gel. Gel ini melunakkan dan menambah volume feses (sembelit), menyerap kelebihan air (diare ringan), mengikat asam empedu sehingga hati memakai kolesterol untuk membuat yang baru (LDL turun ± 5–10%; klaim kesehatan diakui FDA), dan memperlambat penyerapan gula. Juga dianjurkan untuk IBS. Efek ke berat badan kecil — bantu kenyang, bukan alat utama diet.',
+    analogy: 'Seperti chia seed yang direndam, tapi daya serap airnya jauh lebih kuat.',
+    bestTime: [
+      'Sembelit / BAB: kapan saja, 1–3x sehari. Efek BAB biasanya 12–72 jam.',
+      'Kolesterol / gula darah: sebelum atau bersama makan.',
+      'Minimal 2 jam sebelum atau sesudah obat lain.',
+    ],
+    howToUse: [
+      'Cek bentuknya: serpihan utuh ringan (1 sdm ≈ 5 g); bubuk lebih padat (1 sdt ≈ 3–5 g, 1 sdm ≈ 10–15 g — terlalu banyak untuk awal). Berat per sendok beda tiap merek: ikuti label.',
+      'Aduk ke ± 250 ml air atau minuman, lalu langsung diminum sebelum mengental jadi gel.',
+      'Susul dengan 1 gelas air lagi, dan cukupi minum sepanjang hari.',
+      'Mulai 1x sehari ± 1 minggu, naikkan bertahap bila perut aman (mengurangi kembung).',
+    ],
+    dose: {
+      adult: [
+        'Awal ± 3–5 g (1 sdm serpihan atau 1 sdt bubuk) + 250 ml air, 1x sehari.',
+        'Umum 5–10 g/hari, dibagi 1–3x (label Metamucil: ± 3,4 g dengan 240 ml cairan, maks 3x sehari).',
+        'Untuk kolesterol (patokan FDA): ± 10 g husk/hari (= 7 g serat larut), dibagi 2–3x bersama makan.',
+      ],
+      child: ['6–11 tahun: setengah dosis dewasa dengan 240 ml cairan.', '< 6 tahun: hanya dengan anjuran dokter.'],
+    },
+    duration: 'Boleh rutin jangka panjang. Untuk sembelit, bila > 7 hari tidak membaik, periksa ke dokter.',
+    interactions: [
+      'Beri jarak minimal 2 jam dengan semua obat minum lain — psyllium bisa menghambat penyerapannya (mis. obat tiroid, diabetes, jantung, litium, karbamazepin).',
+      'Obat diabetes: gula darah bisa turun lebih banyak; pantau dan konsultasikan dosis.',
+    ],
+    sideEffects: ['Kembung, banyak gas, kram perut ringan di awal (berkurang bila dosis dinaikkan pelan).', 'Jarang: reaksi alergi (gatal, sesak).'],
+    warnings: [
+      'Wajib dengan cukup air. Kurang air → gel bisa menggumpal dan menyumbat kerongkongan atau usus, bisa tersedak.',
+      'Jangan dipakai bila sulit menelan, pernah sumbatan/penyempitan usus, atau alergi psyllium.',
+      'Bukan pengganti serat dari sayur, buah, dan biji-bijian.',
+    ],
+    seeDoctor: BOWEL_RED_FLAGS,
   },
 
   // ---------- Allergy ----------
