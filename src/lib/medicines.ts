@@ -1,4 +1,4 @@
-import type { CareGuide } from '../data/careGuides';
+import type { CareGuide, CareGuideSection } from '../data/careGuides';
 import {
   AVAILABILITY_LABELS,
   GROUP_LABELS,
@@ -63,6 +63,14 @@ const medicineSearchText = (medicine: Medicine) =>
     ].join(' '),
   );
 
+/** All searchable words of a guide section (heading, intro, table cells, points). */
+export const guideSectionText = (section: CareGuideSection): string[] => [
+  section.heading,
+  section.text ?? '',
+  ...(section.table ? [...section.table.columns, ...section.table.rows.flat()] : []),
+  ...(section.points ?? []),
+];
+
 /** Every word of the query must appear somewhere (name, brand, ingredient, symptom words, summary). */
 const matchesQuery = (haystack: string, query: string) => {
   const words = normalize(query).split(/\s+/).filter(Boolean);
@@ -88,7 +96,7 @@ export const filterGuides = (guides: CareGuide[], symptom: OrAny<Symptom>, query
     (guide) =>
       (symptom === ANY || guide.symptoms.includes(symptom)) &&
       matchesQuery(
-        normalize([guide.title, guide.summary, ...symptomText(guide.symptoms), ...guide.sections.flatMap((section) => [section.heading, ...section.points])].join(' ')),
+        normalize([guide.title, guide.summary, ...symptomText(guide.symptoms), ...guide.sections.flatMap(guideSectionText)].join(' ')),
         query,
       ),
   );

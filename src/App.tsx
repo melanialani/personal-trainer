@@ -1,6 +1,9 @@
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { BiblePage } from './features/bible/BiblePage';
 import { BmiPage } from './features/bmi/BmiPage';
+import { CyclePage } from './features/cycle/CyclePage';
+import { DietGuidePage } from './features/diet/DietGuidePage';
+import { FastingPage } from './features/fasting/FastingPage';
 import { ChildrenPage } from './features/parenting/ChildrenPage';
 import { DevelopmentPage } from './features/parenting/DevelopmentPage';
 import { GrowthPage } from './features/parenting/GrowthPage';
@@ -36,6 +39,9 @@ export const App = () => (
               <Route path="workouts" element={<WorkoutsPage />} />
               <Route path="weight" element={<WeightPage />} />
               <Route path="medicine" element={<MedicinePage />} />
+              <Route path="fasting" element={<FastingPage />} />
+              <Route path="cycle" element={<CyclePage />} />
+              <Route path="diet-guide" element={<DietGuidePage />} />
               <Route path="children" element={<ChildrenPage />} />
               <Route path="development" element={<DevelopmentPage />} />
               <Route path="immunization" element={<ImmunizationPage />} />

@@ -1,8 +1,10 @@
 import {
   Apple,
   Baby,
+  BookHeart,
   BookOpenText,
   Calculator,
+  CalendarHeart,
   Church,
   Dumbbell,
   Flower2,
@@ -12,6 +14,7 @@ import {
   NotebookPen,
   Pill,
   Ruler,
+  Salad,
   Smile,
   Sparkles,
   Syringe,
@@ -19,6 +22,7 @@ import {
   Search,
   Settings,
   Target,
+  Timer,
   UtensilsCrossed,
   type LucideIcon,
 } from 'lucide-react';
@@ -32,7 +36,7 @@ export interface NavItem {
   isSidebarOnly?: boolean;
 }
 
-export type NavGroupId = 'fitness' | 'health' | 'parenting' | 'spiritual';
+export type NavGroupId = 'fitness' | 'health' | 'diet' | 'parenting' | 'spiritual';
 
 export interface NavGroup {
   id: NavGroupId;
@@ -67,6 +71,17 @@ export const NAV_GROUPS: NavGroup[] = [
       { path: '/lookup', label: 'Calorie Lookup', shortLabel: 'Lookup', icon: Search },
       { path: '/meal-plan', label: 'Meal Planner', shortLabel: 'Meals', icon: UtensilsCrossed },
       { path: '/medicine', label: 'Medicine Guide', shortLabel: 'Medicine', icon: Pill },
+    ],
+  },
+  {
+    id: 'diet',
+    label: 'Diet & Cycle',
+    shortLabel: 'Diet',
+    icon: Salad,
+    items: [
+      { path: '/fasting', label: 'Fasting', shortLabel: 'Fasting', icon: Timer },
+      { path: '/cycle', label: 'Cycle', shortLabel: 'Cycle', icon: CalendarHeart },
+      { path: '/diet-guide', label: 'Diet Guide', shortLabel: 'Guide', icon: BookHeart },
     ],
   },
   {

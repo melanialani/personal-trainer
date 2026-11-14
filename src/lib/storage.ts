@@ -1,10 +1,12 @@
 import { ALL_EQUIPMENT } from '../data/exercises';
 import { BIBLE_VERSIONS } from '../data/bibleBooks';
-import type { AppData, BibleState, Child, Equipment, ParentingState, Profile, VerseNote, WorkoutPlan } from '../types';
+import type { AppData, BibleState, Child, Equipment, FastingSession, FastingState, ParentingState, PeriodEntry, Profile, VerseNote, WorkoutPlan } from '../types';
 
 // Keys and app id keep the old "fitplan" name so saved data and existing backups keep working.
 const STORAGE_KEY = 'fitplan:data';
 const EXPORT_APP_ID = 'fitplan';
+
+export const DEFAULT_FASTING_HOURS = 16;
 
 const createDefaultBible = (): BibleState => ({ versionId: BIBLE_VERSIONS[0].id, bookId: 'MAT', chapter: 1, verse: 1, notes: {} });
 
@@ -21,6 +23,8 @@ export const createEmptyData = (): AppData => ({
   workoutPlan: null,
   bible: createDefaultBible(),
   parenting: { children: [], activeChildId: '' },
+  fasting: { targetHours: DEFAULT_FASTING_HOURS, sessions: [] },
+  periods: [],
 });
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -116,6 +120,39 @@ const normalizeParenting = (raw: unknown): ParentingState => {
   return { children, activeChildId };
 };
 
+const isDateTimeKey = (value: unknown): value is string => typeof value === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value);
+
+const isFastingHours = (value: unknown): value is number => typeof value === 'number' && value >= 1 && value <= 72;
+
+const normalizeFastingSession = (raw: unknown): FastingSession | null => {
+  if (!isRecord(raw) || typeof raw.id !== 'string' || !isDateTimeKey(raw.startAt)) return null;
+  return {
+    id: raw.id,
+    date: raw.startAt.slice(0, 10),
+    startAt: raw.startAt,
+    endAt: isDateTimeKey(raw.endAt) && raw.endAt > raw.startAt ? raw.endAt : undefined,
+    targetHours: isFastingHours(raw.targetHours) ? raw.targetHours : DEFAULT_FASTING_HOURS,
+    isBinge: raw.isBinge === true ? true : undefined,
+    note: typeof raw.note === 'string' && raw.note ? raw.note : undefined,
+  };
+};
+
+const normalizeFasting = (raw: unknown): FastingState => {
+  if (!isRecord(raw)) return { targetHours: DEFAULT_FASTING_HOURS, sessions: [] };
+  const sessions = Array.isArray(raw.sessions)
+    ? raw.sessions.map(normalizeFastingSession).filter((session): session is FastingSession => session !== null)
+    : [];
+  return { targetHours: isFastingHours(raw.targetHours) ? raw.targetHours : DEFAULT_FASTING_HOURS, sessions };
+};
+
+const normalizePeriods = (raw: unknown): PeriodEntry[] =>
+  pickRecordsWithDate<PeriodEntry>(raw).map((entry) => ({
+    id: entry.id,
+    date: entry.date,
+    endDate: isDateKey(entry.endDate) && entry.endDate >= entry.date ? entry.endDate : undefined,
+    note: typeof entry.note === 'string' && entry.note ? entry.note : undefined,
+  }));
+
 /** Fills missing fields with defaults so older or partial data keeps working. */
 export const normalizeData = (raw: unknown): AppData => {
   const empty = createEmptyData();
@@ -135,6 +172,8 @@ export const normalizeData = (raw: unknown): AppData => {
     workoutPlan: normalizeWorkoutPlan(raw.workoutPlan),
     bible: normalizeBible(raw.bible),
     parenting: normalizeParenting(raw.parenting),
+    fasting: normalizeFasting(raw.fasting),
+    periods: normalizePeriods(raw.periods),
   };
 };
 
@@ -204,4 +243,6 @@ export const mergeData = (current: AppData, incoming: AppData): AppData => ({
     children: mergeById(current.parenting.children, incoming.parenting.children),
     activeChildId: current.parenting.activeChildId || incoming.parenting.activeChildId,
   },
+  fasting: { targetHours: current.fasting.targetHours, sessions: mergeById(current.fasting.sessions, incoming.fasting.sessions) },
+  periods: mergeById(current.periods, incoming.periods),
 });

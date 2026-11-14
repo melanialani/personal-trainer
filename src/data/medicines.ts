@@ -15,6 +15,7 @@ export type MedicineGroup =
   | 'pain-fever'
   | 'diarrhea'
   | 'fiber-supplement'
+  | 'herbal'
   | 'allergy';
 
 export type Symptom =
@@ -35,6 +36,7 @@ export type Symptom =
   | 'diarrhea'
   | 'constipation'
   | 'high-cholesterol'
+  | 'weight-loss'
   | 'allergy';
 
 export type MedicineForm =
@@ -105,6 +107,7 @@ export const GROUP_LABELS: Record<MedicineGroup, string> = {
   'pain-fever': 'Pain & fever',
   diarrhea: 'Diarrhea',
   'fiber-supplement': 'Fiber supplement',
+  herbal: 'Herbal ingredient (jamu)',
   allergy: 'Allergy & itch',
 };
 
@@ -126,6 +129,7 @@ export const SYMPTOM_LABELS: Record<Symptom, string> = {
   diarrhea: 'Diarrhea',
   constipation: 'Constipation',
   'high-cholesterol': 'High cholesterol',
+  'weight-loss': 'Weight loss / slimming',
   allergy: 'Allergy',
 };
 
@@ -148,6 +152,7 @@ export const SYMPTOM_KEYWORDS: Record<Symptom, string[]> = {
   diarrhea: ['diare', 'mencret', 'bab cair', 'dehidrasi'],
   constipation: ['sembelit', 'konstipasi', 'susah bab', 'sulit bab', 'bab keras', 'serat'],
   'high-cholesterol': ['kolesterol', 'ldl', 'lemak darah'],
+  'weight-loss': ['pelangsing', 'langsing', 'diet', 'turun berat badan', 'berat badan', 'gemuk', 'obesitas', 'lemak', 'nafsu makan', 'jamu'],
   allergy: ['alergi', 'bersin', 'pilek alergi', 'biduran', 'kaligata', 'bentol'],
 };
 
@@ -243,6 +248,45 @@ const BOWEL_RED_FLAGS = [
   'Perut sangat sakit, kembung keras, muntah, dan tidak bisa kentut (curiga sumbatan usus) — segera ke IGD.',
   'Nyeri dada, tersedak, atau sulit menelan setelah minum psyllium — segera ke IGD.',
 ];
+
+const SLIMMING_RED_FLAGS = [
+  'Jantung berdebar kencang, nyeri dada, sesak, atau tekanan darah naik — hentikan dan segera ke dokter/IGD.',
+  'Kulit atau mata kuning, urin gelap seperti teh, mual hebat, nyeri perut kanan atas (tanda gangguan hati).',
+  'Susah tidur berhari-hari, cemas atau gelisah berlebihan, perubahan suasana hati yang jelas.',
+  'Haid telat lebih dari 1 siklus atau berhenti.',
+  'Efek "terlalu cepat" (nafsu makan hilang total, berat turun drastis) — curigai campuran obat ilegal (sibutramin).',
+];
+
+/** Jamu slimming ingredients share most of their safety text. Doses are not on mixed-product labels. */
+const herbal = (entry: Pick<Medicine, 'id' | 'name' | 'ingredients' | 'summary' | 'howItWorks' | 'sideEffects'> & Partial<Medicine>): Medicine => ({
+  brands: ['Kapsul pelangsing herbal campuran (mis. Flamora, SULEM)'],
+  group: 'herbal',
+  symptoms: ['weight-loss'],
+  forms: ['capsule'],
+  timing: 'any-time',
+  availability: 'otc',
+  childUse: 'not-recommended',
+  pregnancy: 'avoid',
+  bestTime: ['Ikuti label produk. Bila lambung sensitif (maag), minum setelah makan.'],
+  howToUse: ['Telan dengan air sesuai label. Jangan melebihi dosis atau menggabungkan beberapa produk pelangsing.'],
+  dose: {
+    adult: ['Tidak ada dosis baku; produk campuran tidak mencantumkan dosis per bahan. Ikuti label, jangan melebihi.'],
+    child: ['Tidak untuk anak dan remaja sebagai pelangsing.'],
+  },
+  duration: 'Bila tetap dipakai: maksimal beberapa minggu, lalu evaluasi. Tidak dianjurkan jangka panjang (data keamanan minim).',
+  interactions: [
+    'Beri jarak 2 jam dengan obat lain.',
+    'Obat diabetes, darah tinggi, jantung, pengencer darah, obat tiroid: tanya dokter dulu.',
+  ],
+  warnings: [
+    'BPOM "TR" = obat tradisional: izin menilai keamanan dan mutu, khasiat berdasarkan pemakaian turun-temurun — bukan uji klinis.',
+    'Cek nomor izin di cekbpom.pom.go.id. Jamu pelangsing berulang kali ditemukan dicampur sibutramin (ilegal, berbahaya untuk jantung).',
+    'Turun berat dari efek peluruh kencing atau BAB lancar = air dan isi usus, bukan lemak.',
+  ],
+  seeDoctor: SLIMMING_RED_FLAGS,
+  relatedIds: ['psyllium-husk'],
+  ...entry,
+});
 
 const ALLERGY_RED_FLAGS = [
   'Bengkak bibir/mata/lidah, sesak, suara serak, atau pusing mau pingsan = reaksi alergi berat (anafilaksis), segera ke IGD.',
@@ -1403,6 +1447,133 @@ export const MEDICINES: Medicine[] = [
     ],
     seeDoctor: BOWEL_RED_FLAGS,
   },
+
+  // ---------- Herbal (jamu) slimming ingredients ----------
+  herbal({
+    id: 'bitter-orange',
+    name: 'Bitter orange (jeruk pahit)',
+    ingredients: ['Bitter orange (Citrus aurantium, synephrine)'],
+    summary: 'Stimulan pelangsing (sinefrin, mirip efedrin). Bukti penurunan berat lemah; risiko jantung dan tekanan darah, terutama bila digabung kafein.',
+    howItWorks:
+      'Sinefrin merangsang sistem saraf seperti efedrin (versi lebih lemah): sedikit menaikkan pembakaran kalori dan menekan lapar. Pada studi efeknya ke berat badan sangat kecil.',
+    analogy: 'Menginjak gas mesin tubuh — sedikit lebih boros bensin, tapi mesin (jantung) ikut dipacu.',
+    sideEffects: ['Jantung berdebar, tekanan darah naik, gelisah, cemas, mudah marah, susah tidur, sakit kepala.', 'Laporan kasus gangguan irama jantung dan stroke, terutama bila digabung kafein.'],
+    dose: {
+      adult: [
+        'Produk campuran tidak mencantumkan kadar sinefrin.',
+        'Patokan Health Canada: sinefrin maks 50 mg/hari; bila digabung kafein maks 40 mg sinefrin + 320 mg kafein per hari.',
+      ],
+      child: ['Jangan.'],
+    },
+    interactions: [
+      'Kafein, kopi, teh hijau, minuman energi: efek stimulan bertambah (kombinasi paling berisiko).',
+      'Obat darah tinggi, obat jantung, antidepresan MAOI, obat flu dengan pseudoefedrin/fenilefrin: hindari.',
+      'Beri jarak 2 jam dengan obat lain.',
+    ],
+    warnings: [
+      'Hindari bila hipertensi, penyakit jantung, gangguan irama jantung, tiroid berlebih, glaukoma, cemas.',
+      'Tidak dianjurkan jangka panjang: risiko jantung menumpuk.',
+      'BPOM "TR" = obat tradisional: izin menilai keamanan dan mutu, bukan uji klinis. Cek izin di cekbpom.pom.go.id.',
+    ],
+    relatedIds: ['green-tea-extract', 'psyllium-husk'],
+  }),
+  herbal({
+    id: 'mulberry-leaf',
+    name: 'Mulberry leaf (daun murbei)',
+    ingredients: ['Mulberry leaf (Morus alba)'],
+    symptoms: ['weight-loss', 'high-cholesterol'],
+    pregnancy: 'ask-doctor',
+    summary: 'Menahan penyerapan karbohidrat sehingga lonjakan gula darah setelah makan sedikit turun. Efek ke berat badan kecil; relatif aman sebagai teh.',
+    howItWorks:
+      'Zat DNJ di daun murbei menghambat enzim pemecah karbohidrat di usus, sehingga gula diserap lebih lambat. Gula darah lebih stabil → "lapar mendadak" bisa berkurang (efek tidak langsung).',
+    sideEffects: ['Kembung, banyak gas, diare ringan (karbo yang tidak tercerna difermentasi bakteri usus).'],
+    bestTime: ['Bersama atau sebelum makan yang mengandung karbohidrat.'],
+    duration: 'Sebagai teh relatif aman dipakai rutin. Dalam kapsul pelangsing campuran: tidak dianjurkan jangka panjang.',
+    interactions: ['Obat diabetes/insulin: gula darah bisa terlalu rendah — pantau dan tanya dokter.', 'Beri jarak 2 jam dengan obat lain.'],
+  }),
+  herbal({
+    id: 'jati-belanda',
+    name: 'Jati belanda leaf (daun jati belanda)',
+    ingredients: ['Jati belanda leaf (Guazuma ulmifolia)'],
+    summary: 'Pelangsing tradisional Indonesia. Bukti sangat lemah (hanya lab/hewan); data keamanan jangka panjang pada manusia minim.',
+    howItWorks:
+      'Diklaim menghambat penyerapan lemak di usus (lendir dan taninnya). Baru diuji di tabung lab atau hewan — belum terbukti menurunkan lemak pada manusia.',
+    sideEffects: ['Perut tidak nyaman, mual, BAB berubah (lebih sering atau malah sembelit karena tanin).'],
+  }),
+  herbal({
+    id: 'green-tea-extract',
+    name: 'Green tea extract (ekstrak teh hijau)',
+    ingredients: ['Green tea (Camellia sinensis, catechins/EGCG, caffeine)'],
+    summary: 'Katekin + kafein, efek turun berat kecil (± 1 kg dalam beberapa bulan). Ekstrak pekat berisiko merusak hati; teh seduhan jauh lebih aman.',
+    howItWorks:
+      'Katekin (terutama EGCG) dan kafein sedikit menaikkan pembakaran kalori. Dalam ekstrak/kapsul dosisnya jauh lebih pekat daripada teh seduhan.',
+    sideEffects: [
+      'Kafein: susah tidur, berdebar, cemas, perut perih.',
+      'Ekstrak pekat: kerusakan hati (jarang tapi serius), terutama saat perut kosong.',
+      'Menghambat penyerapan zat besi — berisiko lemas/anemia bila haid banyak.',
+    ],
+    dose: {
+      adult: [
+        'EFSA: EGCG ≥ 800 mg/hari dari suplemen berkaitan dengan kerusakan hati.',
+        'Kafein total dewasa ≤ 400 mg/hari (hamil ≤ 200 mg/hari), termasuk kopi dan teh.',
+        'Lebih aman: teh hijau seduhan 2–3 cangkir/hari.',
+      ],
+      child: ['Jangan (ekstrak).'],
+    },
+    duration: 'Teh seduhan boleh rutin. Ekstrak pekat: tidak dianjurkan jangka panjang (risiko hati).',
+    interactions: [
+      'Jeruk pahit, kopi, minuman energi: efek stimulan bertambah.',
+      'Zat besi tablet: beri jarak 2 jam.',
+      'Warfarin, obat jantung (nadolol), obat lain: beri jarak 2 jam dan tanya dokter.',
+    ],
+    relatedIds: ['bitter-orange', 'psyllium-husk'],
+  }),
+  herbal({
+    id: 'ginger',
+    name: 'Ginger (jahe)',
+    ingredients: ['Ginger (Zingiber officinale)'],
+    symptoms: ['weight-loss', 'nausea-vomiting'],
+    pregnancy: 'ask-doctor',
+    childUse: 'doctor',
+    summary: 'Bukti kuat untuk mual dan cukup baik untuk nyeri haid; untuk berat badan efeknya sangat kecil. Paling aman di antara bahan pelangsing.',
+    howItWorks: 'Zat gingerol dan shogaol membantu pengosongan lambung dan meredakan mual. Efek "membakar lemak" pada manusia sangat kecil.',
+    sideEffects: ['Umumnya aman. Dosis tinggi: heartburn, perut perih, diare.'],
+    dose: {
+      adult: ['Sebagai bumbu atau minuman: aman dalam jumlah makanan.', 'Suplemen: ikuti label.'],
+      child: ['Sebagai makanan boleh; suplemen dengan anjuran dokter.'],
+    },
+    duration: 'Sebagai bumbu/minuman aman jangka panjang. Dalam kapsul pelangsing campuran: ikuti batasan produknya.',
+    interactions: ['Obat pengencer darah (warfarin, aspirin dosis harian): dosis tinggi menambah risiko perdarahan.', 'Obat diabetes: gula darah bisa sedikit turun.'],
+    warnings: ['Batu empedu: tanya dokter dulu untuk dosis suplemen.', 'Akan operasi: hentikan suplemen jahe ± 2 minggu sebelumnya (risiko perdarahan).'],
+  }),
+  herbal({
+    id: 'kemuning',
+    name: 'Kemuning leaf (daun kemuning)',
+    ingredients: ['Kemuning leaf (Murraya paniculata)'],
+    summary: 'Pelangsing tradisional. Bukti sangat lemah (hanya hewan); data keamanan jangka panjang pada manusia hampir tidak ada.',
+    howItWorks: 'Diklaim menurunkan lemak dan kolesterol berdasarkan pemakaian tradisional dan studi hewan. Belum ada uji klinis yang memadai pada manusia.',
+    sideEffects: ['Data efek samping pada manusia minim; laporan umumnya keluhan pencernaan.'],
+  }),
+  herbal({
+    id: 'meniran',
+    name: 'Meniran',
+    ingredients: ['Meniran (Phyllanthus niruri)'],
+    summary: 'Terbukti sedang untuk daya tahan tubuh (bahan Stimuno), bukan untuk berat badan. Bisa menurunkan gula dan tekanan darah; hindari saat hamil.',
+    howItWorks:
+      'Imunomodulator: membantu mengatur respons daya tahan tubuh. Secara tradisional juga peluruh kencing — berat yang turun dari efek ini adalah air, bukan lemak.',
+    sideEffects: ['Sering buang air kecil, gangguan pencernaan ringan.', 'Gula darah dan tekanan darah bisa turun.'],
+    duration: 'Untuk daya tahan tubuh biasanya jangka pendek. Tidak dianjurkan diminum rutin bertahun-tahun, apalagi pada penyakit autoimun.',
+    interactions: ['Obat diabetes dan darah tinggi: efek penurunan bisa bertambah.', 'Obat penekan imun (mis. setelah transplantasi, autoimun): tanya dokter.', 'Beri jarak 2 jam dengan obat lain.'],
+  }),
+  herbal({
+    id: 'bangle',
+    name: 'Bangle rhizome (rimpang bangle)',
+    ingredients: ['Bangle (Zingiber montanum / cassumunar)'],
+    summary: 'Pelangsing tradisional, sering dipakai setelah melahirkan; anti-radang. Bukti lemah (lab/hewan); data jangka panjang minim.',
+    howItWorks: 'Kerabat jahe; zatnya bersifat anti-radang. Efek pelangsing berdasarkan pemakaian tradisional, belum terbukti pada manusia.',
+    sideEffects: ['Iritasi lambung, perut perih.'],
+    bestTime: ['Setelah makan bila lambung sensitif.'],
+  }),
 
   // ---------- Allergy ----------
   {

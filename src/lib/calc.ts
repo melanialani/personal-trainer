@@ -1,6 +1,6 @@
 import type { ActivityLevel, GoalType, MacroPreset, Profile, Sex, WeightEntry } from '../types';
-import { addDays, ageFromBirthDate, diffDays, sortByDateDesc, todayKey } from './date';
-import { average, clamp, roundTo } from './math';
+import { addDays, ageFromBirthDate, diffDays, sortByDateDesc, startOfWeek, todayKey } from './date';
+import { average, clamp, roundTo, roundTo1 } from './math';
 
 /** Approximate energy content of 1 kg of body fat. */
 export const KCAL_PER_KG = 7700;
@@ -157,6 +157,31 @@ export const weeklyTrendKg = (weights: WeightEntry[], days = 28): number | null 
   }
   if (den === 0) return null;
   return (num / den) * 7;
+};
+
+export interface WeeklyAverage {
+  /** Monday of the week (YYYY-MM-DD). */
+  weekStart: string;
+  averageKg: number;
+  count: number;
+  /** Change vs the previous week that has weigh-ins; null for the first one. */
+  changeKg: number | null;
+}
+
+/** Average weight per calendar week (Monday start), newest first, limited to the last `weeks` weeks with data. */
+export const weeklyAverages = (weights: WeightEntry[], weeks = 12): WeeklyAverage[] => {
+  const groups = new Map<string, number[]>();
+  weights.forEach((entry) => {
+    const key = startOfWeek(entry.date);
+    groups.set(key, [...(groups.get(key) ?? []), entry.weightKg]);
+  });
+  const ascending = Array.from(groups.entries())
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([weekStart, values]) => ({ weekStart, averageKg: roundTo1(average(values)), count: values.length }));
+  return ascending
+    .map((week, index) => ({ ...week, changeKg: index === 0 ? null : roundTo1(week.averageKg - ascending[index - 1].averageKg) }))
+    .reverse()
+    .slice(0, weeks);
 };
 
 /** Goal progress between start and target weight as 0–1. */

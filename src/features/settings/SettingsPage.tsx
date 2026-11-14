@@ -21,6 +21,8 @@ const summarize = (data: AppData) => [
   { label: 'Custom foods', value: formatNumber(data.customFoods.length) },
   { label: 'Meal plan', value: data.mealPlan ? `${data.mealPlan.days.length} days` : 'None' },
   { label: 'Workout plan', value: data.workoutPlan ? 'Yes' : 'None' },
+  { label: 'Fasts logged', value: formatNumber(data.fasting.sessions.length) },
+  { label: 'Periods logged', value: formatNumber(data.periods.length) },
 ];
 
 const SummaryList = ({ data }: { data: AppData }) => (

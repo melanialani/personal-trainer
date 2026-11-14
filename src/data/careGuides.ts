@@ -1,11 +1,19 @@
 import type { Symptom } from './medicines';
 
-export interface CareGuideSection {
-  heading: string;
-  points: string[];
+export interface GuideTable {
+  columns: string[];
+  rows: string[][];
 }
 
-/** Step-by-step home-care guides on the Medicine page. Content in Indonesian, like the medicine data. */
+export interface CareGuideSection {
+  heading: string;
+  /** Optional intro paragraph shown before the table and points. */
+  text?: string;
+  table?: GuideTable;
+  points?: string[];
+}
+
+/** Step-by-step home-care guides on the Medicine page (diet guides reuse the shape). Content in Indonesian, like the medicine data. */
 export interface CareGuide {
   id: string;
   title: string;
@@ -353,57 +361,5 @@ export const CARE_GUIDES: CareGuide[] = [
       },
     ],
     relatedMedicineIds: ['paracetamol', 'ibuprofen'],
-  },
-  {
-    id: 'protein-milk-meal-replacement',
-    title: 'Susu tinggi protein & meal replacement',
-    summary: 'Beda susu biasa, susu protein, dan meal replacement — plus resep rakitan sendiri.',
-    symptoms: [],
-    sections: [
-      {
-        heading: 'Patokan protein',
-        points: [
-          'Susu UHT biasa ± 8 g protein per 250 ml (mis. Ultra Milk Full Cream 8 g).',
-          'Susu bubuk berbasis whey (protein susu yang dipisahkan) ± 20–27 g per saji.',
-          'Kebutuhan protein dewasa (AKG Kemenkes): ± 60 g/hari perempuan, ± 65 g/hari laki-laki; lebih tinggi bila rutin latihan beban.',
-          'Contoh merek: L-Men, Evolene, WRP (bubuk protein dewasa); Ensure, Boost (nutrisi lengkap); HiLo Teen, Morinaga, Dancow (anak/remaja). Gram protein per merek: cek label Informasi Nilai Gizi.',
-        ],
-      },
-      {
-        heading: 'Cara memilih',
-        points: [
-          'Lihat protein per kalori, bukan hanya gram: bagus bila ≥ 10 g protein per 100 kkal.',
-          'Cek gula — banyak susu "protein" berperisa yang gulanya tinggi.',
-          'Alternatif alami: greek yogurt (± 10 g protein/100 g), susu skim (protein sama, kalori lebih rendah), telur (± 6 g/butir).',
-        ],
-      },
-      {
-        heading: 'Apa itu meal replacement',
-        points: [
-          'Produk yang menggantikan 1 kali makan dengan gizi lengkap, bukan sekadar mengenyangkan.',
-          'Patokan Uni Eropa per 1 kali makan: 200–400 kkal, protein 25–50% kalori (± 15–25 g), lemak maks 30% kalori, vitamin & mineral ≥ 30% kebutuhan harian; idealnya ada serat.',
-          'Susu biasa atau whey saja belum cukup: kalori, karbohidrat, serat, dan vitaminnya kurang. Ensure dan sejenisnya paling mendekati (cek gulanya).',
-        ],
-      },
-      {
-        heading: 'Rakit sendiri (1 gelas, ± 430 kkal)',
-        points: [
-          'Susu skim 240 ml + oat 40 g + 1 pisang + 1 sdm selai kacang, diblender.',
-          'Hasil ± 19 g protein, ± 69 g karbohidrat, ± 11 g lemak. Ganti susu skim dengan susu whey untuk ± 30+ g protein.',
-          'Opsional psyllium 1 sdt untuk serat — tambah air dan langsung diminum.',
-          'Tersedia di database makanan: "Smoothie meal replacement".',
-        ],
-      },
-      {
-        heading: 'Batasan',
-        points: [
-          'Untuk turun berat badan, meal replacement terbukti membantu karena kalori terukur dan praktis.',
-          'Kelemahan: cepat bosan, tidak melatih kebiasaan makan, berat sering naik lagi setelah berhenti.',
-          'Paling realistis ganti 1 kali makan per hari (mis. sarapan), bukan semua.',
-          'Diabetes, penyakit ginjal, atau hamil: tanya dokter dulu.',
-        ],
-      },
-    ],
-    relatedMedicineIds: ['psyllium-husk'],
   },
 ];

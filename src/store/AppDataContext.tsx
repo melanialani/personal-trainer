@@ -3,7 +3,7 @@ import { calcDailyTargets, type DailyTargets } from '../lib/calc';
 import { loadData, saveData } from '../lib/storage';
 import type { AppData } from '../types';
 
-type CollectionKey = 'weights' | 'foodLog' | 'workoutLog' | 'customFoods';
+type CollectionKey = 'weights' | 'foodLog' | 'workoutLog' | 'customFoods' | 'periods';
 type CollectionItem<K extends CollectionKey> = AppData[K][number];
 
 interface AppDataContextValue {

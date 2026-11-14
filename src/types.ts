@@ -220,6 +220,35 @@ export interface ParentingState {
   activeChildId: string;
 }
 
+/** One fast. Times are local "YYYY-MM-DDTHH:mm" strings (as from <input type="datetime-local">). */
+export interface FastingSession {
+  id: string;
+  /** Local date the fast started (YYYY-MM-DD). */
+  date: string;
+  startAt: string;
+  /** Empty while the fast is running. */
+  endAt?: string;
+  targetHours: number;
+  /** Very hungry / overate when breaking the fast. */
+  isBinge?: boolean;
+  note?: string;
+}
+
+export interface FastingState {
+  /** Default target for new fasts, in hours (e.g. 16 for 16:8). */
+  targetHours: number;
+  sessions: FastingSession[];
+}
+
+/** One period: `date` is the first day of bleeding. */
+export interface PeriodEntry {
+  id: string;
+  date: string;
+  /** Last day of bleeding (inclusive); empty while ongoing or not logged. */
+  endDate?: string;
+  note?: string;
+}
+
 export interface AppData {
   version: 1;
   profile: Profile | null;
@@ -234,4 +263,6 @@ export interface AppData {
   workoutPlan: WorkoutPlan | null;
   bible: BibleState;
   parenting: ParentingState;
+  fasting: FastingState;
+  periods: PeriodEntry[];
 }

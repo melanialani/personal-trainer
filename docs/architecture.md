@@ -8,8 +8,11 @@
 | `/lookup` | `features/lookup` | Calorie lookup: built-in DB, Open Food Facts search/barcode, custom foods, "time to burn it off" |
 | `/meal-plan` | `features/meal-plan` | 7-day plan generated from `data/mealTemplates.ts`, swap meal, log to diary, shopping list |
 | `/workouts` | `features/workouts` | Weekly plan from `lib/workoutGenerator.ts`, activity log + chart, exercise library |
-| `/weight` | `features/weight` | Weigh-ins, 7-day moving average chart, trend, goal progress |
+| `/weight` | `features/weight` | Weigh-ins, 7-day moving average chart, trend, goal progress, weekly averages (weeks with a period start are tagged) |
 | `/medicine` | `features/medicine` | Medicine guide: search + filters (symptom, group, ingredient, form, meal timing, availability, children, pregnancy), detail modal with dose/interactions, care guides |
+| `/fasting` | `features/fasting` | Intermittent fasting timer (presets 12:12 … OMAD), past-fast log, 7-day summary (count, average, on target, streak, binge flags), OMAD / binge / late-period notices |
+| `/cycle` | `features/cycle` | Period log, month calendar (logged, estimated end, predicted), cycle day, next period, average cycle/period, ACOG/FIGO flags |
+| `/diet-guide` | `features/diet` | Diet guides from `data/dietGuides.ts` (water vs fat, plateau, IF, OMAD, water before meals, drinks, psyllium, protein milk, slimming herbs, late period) with topic chips and search |
 | `/children` | `features/parenting` | Children list (add/edit/delete), per-child summary: stage, vaccines due, vitamin A / deworming, growth status |
 | `/development` | `features/parenting` | Stage picker 0–18 years: CDC milestones checklist (ticked per child), red flags, parenting guide (focus, daily life, tips, do & don't + why, sleep/screen/food) |
 | `/immunization` | `features/parenting` | IDAI 2024 vaccine schedule 0–18 years with per-dose status and dates; vitamin K, vitamin A rounds, deworming, iron, vitamin D, routine checks |
@@ -22,7 +25,7 @@
 | `/settings` | `features/settings` | Export / import (merge or replace), appearance (theme), sample data, delete all |
 
 ## Navigation
-- `layout/navItems.ts` groups pages: Fitness, Food & Health, Parenting, Spiritual Guide (≤ 4 pages each). Items with `isSidebarOnly` (BMI Calculator) show in
+- `layout/navItems.ts` groups pages: Fitness, Food & Health, Diet & Cycle, Parenting, Spiritual Guide (≤ 4 pages each). Items with `isSidebarOnly` (BMI Calculator) show in
   the desktop sidebar but not in the phone bottom bar; phones reach them via in-page links. Settings is outside
   the groups (gear icon in the phone header, last link in the sidebar).
 - Phone: the header holds the group switcher; the bottom bar shows only the active group's pages (no "More" menu).
@@ -68,6 +71,17 @@ plus the user's excluded keywords.
   Content is Indonesian; UI labels are English. Filtering/search logic lives in `lib/medicines.ts`.
 - Each medicine has adult and child doses, meal timing, interactions, warnings and red flags. Static, read-only:
   nothing is stored in `fitplan:data`.
+- Guide sections (`CareGuideSection`) may hold `text`, a `table` and `points`; `CareGuideCard` renders all three and
+  search covers table cells. Herbal slimming ingredients are `herbal` group entries (one per ingredient, not per product).
+
+## Diet & Cycle
+- Fasting: `AppData.fasting` = `{ targetHours, sessions }`. A session stores local `startAt` / `endAt` strings
+  (`YYYY-MM-DDTHH:mm`, no time zone) and `targetHours`; no `endAt` = running. Logic in `lib/fasting.ts`; writes go through
+  `features/fasting/useFasting.ts` (`update`). A fast ended in its first minute is dropped.
+- Cycle: `AppData.periods` = `PeriodEntry[]` (`date` = first day, optional `endDate`), written with `upsert('periods')`.
+  `lib/cycle.ts` averages the last ≤ 6 plausible cycles (15–90 days; default 28 / period 5) and raises flags from
+  `data/cycle.ts` (ACOG CO 651, FIGO 2018). Predictions are calendar averages only (no fertile window).
+- Diet guides: `data/dietGuides.ts` (Indonesian, sources in the file header), shown by `features/diet/DietGuidePage.tsx`.
 
 ## Parenting
 - Data: `AppData.parenting` = `{ children: Child[], activeChildId }`. A child holds `measurements`, `vaccines`

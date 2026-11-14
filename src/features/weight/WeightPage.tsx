@@ -1,9 +1,9 @@
 import { Calculator, Pencil, Plus, Scale, Trash2, TrendingDown, TrendingUp } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { bmiCategory, calcBmi, currentWeightKg, goalProgress, weeklyTrendKg } from '../../lib/calc';
-import { formatDate, sortByDateDesc } from '../../lib/date';
-import { formatKg, formatNumber, formatSigned } from '../../lib/format';
+import { bmiCategory, calcBmi, currentWeightKg, goalProgress, weeklyAverages, weeklyTrendKg } from '../../lib/calc';
+import { addDays, formatDate, sortByDateDesc, startOfWeek } from '../../lib/date';
+import { formatKg, formatNumber, formatSigned, pluralize } from '../../lib/format';
 import { Badge } from '../../shared/components/Badge';
 import { Button, IconButton } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
@@ -48,6 +48,8 @@ const WeightContent = () => {
   const change = current - profile.startWeightKg;
   const toGo = profile.targetWeightKg - current;
   const trend = weeklyTrendKg(data.weights);
+  const weeks = useMemo(() => weeklyAverages(data.weights), [data.weights]);
+  const periodWeeks = useMemo(() => new Set(data.periods.map((period) => startOfWeek(period.date))), [data.periods]);
   const bmi = calcBmi(current, profile.heightCm);
   const category = bmiCategory(bmi);
   const progress = goalProgress(profile, current);
@@ -124,6 +126,56 @@ const WeightContent = () => {
           </div>
         </Card>
       </div>
+
+      <Card
+        title="Weekly averages"
+        subtitle="Compare weeks, not days. Weeks 1–2 of a diet are mostly water and glycogen; fat loss shows from week 3."
+        className="mt-5"
+        bodyClassName=""
+      >
+        {weeks.length === 0 ? (
+          <p className="px-4 py-6 text-center text-sm text-slate-400 sm:px-5">Log a few weigh-ins to see weekly averages.</p>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-slate-100 text-left text-xs uppercase tracking-wide text-slate-500">
+                  <th className="px-4 py-2.5 font-medium sm:px-5">Week</th>
+                  <th className="px-3 py-2.5 text-right font-medium">Average</th>
+                  <th className="px-3 py-2.5 text-right font-medium">Change</th>
+                  <th className="px-4 py-2.5 text-right font-medium sm:px-5">Weigh-ins</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {weeks.map((week) => (
+                  <tr key={week.weekStart} className="hover:bg-slate-50">
+                    <td className="whitespace-nowrap px-4 py-2.5 text-slate-700 sm:px-5">
+                      {formatDate(week.weekStart, { day: 'numeric', month: 'short' })} – {formatDate(addDays(week.weekStart, 6), { day: 'numeric', month: 'short' })}
+                      {periodWeeks.has(week.weekStart) && (
+                        <span className="ml-2">
+                          <Badge tone="danger">Period</Badge>
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-3 py-2.5 text-right font-semibold tabular-nums">{formatKg(week.averageKg)}</td>
+                    <td
+                      className={`px-3 py-2.5 text-right tabular-nums ${week.changeKg === null ? 'text-slate-400' : week.changeKg < 0 ? 'text-emerald-700 dark:text-emerald-400' : week.changeKg > 0 ? 'text-rose-700 dark:text-rose-400' : 'text-slate-500'}`}
+                    >
+                      {week.changeKg === null ? '—' : `${formatSigned(week.changeKg)} kg`}
+                    </td>
+                    <td className="px-4 py-2.5 text-right tabular-nums text-slate-500 sm:px-5">{pluralize(week.count, 'time')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {periodWeeks.size > 0 && (
+              <p className="border-t border-slate-100 px-4 py-2.5 text-xs text-slate-500 sm:px-5">
+                "Period" = a period started that week; water retention around it can add 0.5–2 kg.
+              </p>
+            )}
+          </div>
+        )}
+      </Card>
 
       <Card title="History" className="mt-5" bodyClassName="">
         {sortedDesc.length === 0 ? (
