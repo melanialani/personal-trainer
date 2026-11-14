@@ -489,6 +489,8 @@ const ROWS: FoodRow[] = [
   ['pancake', 'Pancake + sirup', BREAD, '2 buah', 150, 350, 7, 55, 11, ['egg', 'dairy']],
   ['muesli', 'Muesli tanpa gula', BREAD, '1/2 cangkir', 45, 160, 4.5, 30, 2.5],
   ['milk-skim', 'Susu skim', BREAD, '1 gelas', 240, 83, 8.3, 12, 0.2, ['dairy']],
+  ['psyllium-husk', 'Psyllium husk (serat)', BREAD, '1 sdm serpihan / 1 sdt bubuk', 5, 15, 0.1, 4, 0],
+  ['meal-replacement-smoothie', 'Smoothie meal replacement (susu skim, oat, pisang, selai kacang)', BREAD, '1 gelas', 414, 433, 18.5, 69.5, 11.3, ['dairy']],
   ['milk-chocolate-uht', 'Susu UHT cokelat', BREAD, '1 kotak (200 ml)', 200, 140, 6, 22, 3.5, ['dairy']],
   ['kefir', 'Kefir plain', BREAD, '1 gelas', 240, 145, 8, 11, 8, ['dairy']],
   ['yakult', 'Yakult', BREAD, '1 botol', 65, 50, 0.8, 11.5, 0, ['dairy']],
