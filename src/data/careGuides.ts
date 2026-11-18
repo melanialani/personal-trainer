@@ -362,4 +362,49 @@ export const CARE_GUIDES: CareGuide[] = [
     ],
     relatedMedicineIds: ['paracetamol', 'ibuprofen'],
   },
+  {
+    id: 'lip-eye-moisturizer-swap',
+    title: 'Petroleum jelly, lip balm, eye cream: boleh ditukar?',
+    summary: 'Mana yang aman dipakai di sekitar mata atau di bibir. Kuncinya ada di daftar bahan, bukan nama produknya.',
+    symptoms: ['dry-skin'],
+    sections: [
+      {
+        heading: 'Petroleum jelly (vaselin murni) di sekitar mata',
+        points: [
+          'Umumnya aman dan sering dipakai untuk kelopak mata kering. Sifatnya oklusif: menutup kulit agar air tidak menguap.',
+          'Hanya melembapkan. Tidak ada bahan aktif seperti peptide atau caffeine, jadi tidak mengurangi kerutan atau bengkak.',
+          'Pada sebagian orang bisa memicu milia (bintil putih kecil di bawah mata). Hentikan bila muncul.',
+          'Oles tipis di malam hari, tepuk-tepuk, jangan digosok. Bila masuk ke mata, penglihatan bisa buram sementara.',
+        ],
+      },
+      {
+        heading: 'Lip balm / krim bibir di sekitar mata',
+        text: 'Hati-hati. Banyak lip balm berisi bahan yang membuat mata perih.',
+        points: [
+          'Hindari yang mengandung menthol, camphor, peppermint (efek dingin), pewangi atau perisa, tabir surya kimia (mis. oxybenzone, avobenzone), pewarna, atau shimmer.',
+          'Relatif aman hanya bila bahannya sederhana dan tanpa wangi: petrolatum, beeswax, shea butter, atau lanolin.',
+          'Cek label: bahan yang tertulis paling awal adalah yang paling banyak.',
+        ],
+      },
+      {
+        heading: 'Eye cream sebagai lip balm',
+        points: [
+          'Boleh, tapi kurang efektif. Bibir hampir tidak punya kelenjar minyak, jadi butuh lapisan penutup tebal; eye cream umumnya terlalu ringan.',
+          'Hindari eye cream berisi retinol/retinoid (bibir bisa mengelupas dan perih) atau vitamin C/AHA (perih di bibir pecah).',
+          'Eye cream tidak dirancang untuk tertelan. Jumlah kecil tidak masalah, tapi bukan pemakaian ideal.',
+          'Yang isinya hanya pelembap (mis. ceramide, hyaluronic acid) tidak berbahaya, hanya mahal untuk fungsi yang bisa digantikan vaselin.',
+        ],
+      },
+      {
+        heading: 'Kesimpulan',
+        points: [
+          'Paling hemat dan aman untuk dua area: petroleum jelly murni tanpa wangi.',
+          'Lip balm ke mata: jangan, kecuali sudah dicek bebas menthol, pewangi, dan SPF.',
+          'Eye cream ke bibir: boleh bila bebas retinol dan asam, tapi tidak efisien.',
+          'Mata merah, perih, atau bengkak setelah dipakai: hentikan dan bilas dengan air bersih.',
+        ],
+      },
+    ],
+    relatedMedicineIds: ['petroleum-jelly'],
+  },
 ];

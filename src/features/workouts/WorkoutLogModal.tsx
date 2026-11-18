@@ -134,8 +134,8 @@ export const WorkoutLogModal = ({ isOpen, onClose, planDay }: WorkoutLogModalPro
               {exercises.map((item, index) => (
                 <div key={`${item.exerciseId}-${index}`} className="grid grid-cols-3 items-center gap-2 px-3 py-2 sm:grid-cols-[minmax(0,1fr)_72px_80px_84px]">
                   <span className="col-span-3 truncate text-sm text-slate-800 sm:col-span-1">{exerciseById(item.exerciseId)?.name ?? item.exerciseId}</span>
-                  <NumberInput value={item.sets} min={0} onValueChange={(v) => updateExercise(index, { sets: v === '' ? 0 : v })} suffix="sets" className="px-2 text-xs" />
-                  <TextInput value={item.reps} onChange={(e) => updateExercise(index, { reps: e.target.value })} className="px-2 text-xs" aria-label="Reps" />
+                  <NumberInput value={item.sets} min={0} onValueChange={(v) => updateExercise(index, { sets: v === '' ? 0 : v })} suffix="sets" className="px-2 sm:text-xs!" />
+                  <TextInput value={item.reps} onChange={(e) => updateExercise(index, { reps: e.target.value })} className="px-2 sm:text-xs!" aria-label="Reps" />
                   <NumberInput
                     value={item.weightKg ?? ''}
                     min={0}
@@ -143,7 +143,7 @@ export const WorkoutLogModal = ({ isOpen, onClose, planDay }: WorkoutLogModalPro
                     placeholder="—"
                     onValueChange={(v) => updateExercise(index, { weightKg: v === '' ? undefined : v })}
                     suffix="kg"
-                    className="px-2 text-xs"
+                    className="px-2 sm:text-xs!"
                   />
                 </div>
               ))}

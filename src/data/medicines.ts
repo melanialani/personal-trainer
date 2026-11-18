@@ -649,11 +649,15 @@ export const MEDICINES: Medicine[] = [
     howToUse: [
       'Oles tipis 2–3x sehari.',
       'Agar tidak cepat hilang kena baju: tutup kasa tipis atau plester kertas, atau pakai celana panjang tipis.',
+      'Boleh untuk kelopak/bawah mata yang kering: oles sangat tipis di malam hari, tepuk-tepuk, jangan sampai masuk ke mata.',
     ],
     dose: { adult: ['Oles tipis 2–3x sehari atau saat terasa kering.'], child: ['Sama seperti dewasa.'] },
     duration: 'Selama diperlukan.',
     interactions: ['Jangan dioles di bawah lembaran silikon.', 'Bila keluar rumah, lanjutkan dengan sunscreen.'],
-    sideEffects: ['Terasa lengket. Kadang memicu bintik kecil di area yang berminyak.'],
+    sideEffects: [
+      'Terasa lengket. Kadang memicu bintik kecil di area yang berminyak.',
+      'Di bawah mata kadang memicu milia (bintil putih kecil). Hentikan bila muncul.',
+    ],
     warnings: [
       'Untuk mencegah bekas luka menebal, efeknya lebih lemah dibanding silikon.',
       'Jangan dioles pada luka bakar yang baru terjadi: dinginkan dulu dengan air mengalir 20 menit.',

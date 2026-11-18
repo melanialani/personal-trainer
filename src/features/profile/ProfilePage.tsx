@@ -12,6 +12,7 @@ import { Card } from '../../shared/components/Card';
 import { Checkbox, Field, NumberInput, Segmented, Select, TextInput } from '../../shared/components/FormFields';
 import { PageHeader } from '../../shared/components/PageHeader';
 import { useToast } from '../../shared/components/ToastProvider';
+import { useVisualViewport } from '../../shared/hooks/useVisualViewport';
 import { useAppData } from '../../store/AppDataContext';
 import type { Sex } from '../../types';
 import { DEFAULT_DRAFT, draftToProfile, profileToDraft, validateDraft, type ProfileDraft } from './profileDraft';
@@ -26,6 +27,8 @@ const SEX_OPTIONS: { value: Sex; label: string }[] = [
 export const ProfilePage = () => {
   const { data, update } = useAppData();
   const navigate = useNavigate();
+  // While typing on a phone the keyboard covers the bottom; hide the floating Save bar so it does not cover the field.
+  const { isKeyboardOpen } = useVisualViewport();
   const showToast = useToast();
   const isNew = data.profile === null;
   const [draft, setDraft] = useState<ProfileDraft>(() => (data.profile ? profileToDraft(data.profile) : DEFAULT_DRAFT));
@@ -170,7 +173,7 @@ export const ProfilePage = () => {
 
       {/* Phones: keep Save reachable above the bottom navigation while scrolling the long form. */}
       <div className="h-16 lg:hidden" />
-      <div className="no-print fixed inset-x-0 bottom-[calc(55px+env(safe-area-inset-bottom))] z-20 flex items-center justify-between gap-3 border-t border-slate-200 bg-surface/95 px-4 py-2.5 backdrop-blur md:bottom-0 lg:hidden">
+      <div className={`no-print fixed inset-x-0 bottom-[calc(55px+env(safe-area-inset-bottom))] z-20 ${isKeyboardOpen ? 'hidden' : 'flex'} items-center justify-between gap-3 border-t border-slate-200 bg-surface/95 px-4 py-2.5 backdrop-blur md:bottom-0 lg:hidden`}>
         <p className="text-xs text-slate-500">
           {isValid ? (
             <>
