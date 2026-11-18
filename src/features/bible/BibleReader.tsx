@@ -149,7 +149,7 @@ export const BibleReader = () => {
   return (
     <div className={selected.length > 0 ? 'pb-40 md:pb-24' : ''}>
       {/* Sticky under the 56px phone header (h-14); at the top on desktop */}
-      <div ref={toolbarRef} className="sticky top-14 z-20 -mx-4 mb-3 border-b border-slate-200 bg-page/95 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6 md:top-0">
+      <div ref={toolbarRef} className="sticky top-14 z-20 -mx-4 mb-3 border-b border-slate-200 bg-page px-4 py-2 sm:-mx-6 sm:px-6 md:top-0">
         <div className="flex items-center gap-1">
           <IconButton label="Previous chapter" onClick={() => previous && goTo(previous)} disabled={!previous}>
             <ChevronLeft size={18} />

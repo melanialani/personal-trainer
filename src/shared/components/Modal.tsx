@@ -48,7 +48,7 @@ export const Modal = ({ isOpen, title, description, size = 'md', onClose, footer
 
   return createPortal(
     <div
-      className="fixed inset-x-0 top-0 z-50 flex items-end justify-center overscroll-contain bg-black/50 backdrop-blur-[2px] sm:items-center sm:p-4"
+      className="fixed inset-x-0 top-0 z-50 flex items-end justify-center overscroll-contain bg-black/50 sm:items-center sm:p-4"
       style={{ top: viewport.offsetTop, height: viewport.height || '100dvh' }}
       onClick={blockEvent}
       onMouseDown={blockEvent}

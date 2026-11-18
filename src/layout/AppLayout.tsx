@@ -83,7 +83,7 @@ export const AppLayout = () => {
       </aside>
 
       {/* Mobile top bar: switch between groups; the bottom bar shows the active group's pages */}
-      <header className="no-print sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-slate-200 bg-surface/90 px-3 backdrop-blur md:hidden">
+      <header className="no-print sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-slate-200 bg-surface px-3 md:hidden">
         <nav aria-label="Sections" className="flex min-w-0 flex-1 gap-1 rounded-xl bg-slate-100 p-1">
           {NAV_GROUPS.map((group) => {
             const isActive = group.id === activeGroup.id;
