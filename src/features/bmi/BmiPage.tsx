@@ -1,7 +1,8 @@
 import { Calculator, Info } from 'lucide-react';
 import { useState } from 'react';
 import { BMI_ASIA_BANDS, bmiCategory, bmiCategoryWho, calcBmi, healthyWeightRange, latestWeight } from '../../lib/calc';
-import { formatNumber, formatSigned } from '../../lib/format';
+import { CHILD_SEX_OPTIONS } from '../../lib/child';
+import { formatKg, formatNumber, formatSigned } from '../../lib/format';
 import { assessChildBmi } from '../../lib/growth';
 import { clamp } from '../../lib/math';
 import { Badge } from '../../shared/components/Badge';
@@ -17,11 +18,6 @@ type Mode = 'adult' | 'child';
 const MODE_OPTIONS: { value: Mode; label: string }[] = [
   { value: 'adult', label: 'Adult (18+)' },
   { value: 'child', label: 'Child (under 18)' },
-];
-
-const SEX_OPTIONS: { value: Sex; label: string }[] = [
-  { value: 'female', label: 'Girl' },
-  { value: 'male', label: 'Boy' },
 ];
 
 const isValidWeight = (v: number | '') => v !== '' && v >= 2 && v <= 300;
@@ -55,7 +51,7 @@ export const BmiPage = () => {
             {mode === 'child' && (
               <div className="grid grid-cols-2 gap-3">
                 <Field label="Sex" className="col-span-2">
-                  <Segmented value={sex} options={SEX_OPTIONS} onChange={setSex} />
+                  <Segmented value={sex} options={CHILD_SEX_OPTIONS} onChange={setSex} />
                 </Field>
                 <Field label="Age (years)">
                   <NumberInput value={years} min={0} max={17} step={1} onValueChange={setYears} suffix="yr" />
@@ -161,8 +157,8 @@ const AdultResult = ({ weightKg, heightCm }: { weightKg: number; heightCm: numbe
         {diff === 0
           ? 'Your weight is inside this range.'
           : weightKg < low
-            ? `About ${formatNumber(diff, 1)} kg below the range.`
-            : `About ${formatNumber(diff, 1)} kg above the range.`}
+            ? `About ${formatKg(diff)} below the range.`
+            : `About ${formatKg(diff)} above the range.`}
       </p>
     </Card>
   );

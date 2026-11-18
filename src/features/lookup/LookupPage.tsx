@@ -1,15 +1,16 @@
-import { Footprints, Pencil, Plus, Search, Trash2 } from 'lucide-react';
+import { Footprints, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
 import { ACTIVITIES } from '../../data/activities';
 import { minutesToBurn } from '../../lib/calc';
 import { scaleNutrition } from '../../lib/foods';
-import { formatNumber } from '../../lib/format';
-import { Button, IconButton } from '../../shared/components/Button';
+import { formatKcal, formatKg, formatNumber } from '../../lib/format';
+import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
 import { useConfirmDelete } from '../../shared/components/ConfirmProvider';
 import { EmptyState } from '../../shared/components/EmptyState';
 import { Modal } from '../../shared/components/Modal';
 import { PageHeader } from '../../shared/components/PageHeader';
+import { RowActions } from '../../shared/components/RowActions';
 import { Tabs } from '../../shared/components/Tabs';
 import { useBodyWeightKg } from '../../shared/hooks/useBodyWeightKg';
 import { useIsDesktop } from '../../shared/hooks/useMediaQuery';
@@ -57,7 +58,7 @@ export const LookupPage = () => {
       {targets && (
         <p className="text-sm text-slate-600">
           That is <span className="font-semibold text-slate-900">{formatNumber((totals.kcal / targets.kcal) * 100)}%</span> of your daily target of{' '}
-          {formatNumber(targets.kcal)} kcal.
+          {formatKcal(targets.kcal)}.
         </p>
       )}
       <div>
@@ -74,7 +75,7 @@ export const LookupPage = () => {
             </li>
           ))}
         </ul>
-        <p className="mt-1 text-[11px] text-slate-400">Based on a body weight of {formatNumber(weightKg, 1)} kg.</p>
+        <p className="mt-1 text-[11px] text-slate-400">Based on a body weight of {formatKg(weightKg)}.</p>
       </div>
       {data.profile && (
         <Button className="w-full" icon={<Plus size={16} />} disabled={amount <= 0} onClick={() => setIsAddOpen(true)}>
@@ -136,14 +137,7 @@ export const LookupPage = () => {
                     food={food}
                     onSelect={() => handleSelect(food)}
                     trailing={
-                      <div className="flex">
-                        <IconButton label="Edit food" onClick={() => setEditingFood(food)}>
-                          <Pencil size={15} />
-                        </IconButton>
-                        <IconButton label="Delete food" tone="danger" onClick={() => handleDeleteCustom(food)}>
-                          <Trash2 size={15} />
-                        </IconButton>
-                      </div>
+                      <RowActions itemLabel="food" onEdit={() => setEditingFood(food)} onDelete={() => handleDeleteCustom(food)} />
                     }
                   />
                 ))}

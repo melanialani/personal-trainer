@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { kcalFromMacros } from '../../lib/calc';
 import { createId } from '../../lib/id';
-import { Button } from '../../shared/components/Button';
 import { Checkbox, Field, NumberInput, TextInput } from '../../shared/components/FormFields';
 import { Modal } from '../../shared/components/Modal';
 import { useToast } from '../../shared/components/ToastProvider';
 import { useAppData } from '../../store/AppDataContext';
 import type { FoodItem, FoodTag } from '../../types';
+import { ModalActions } from '../../shared/components/ModalActions';
 
 interface CustomFoodModalProps {
   isOpen: boolean;
@@ -108,12 +108,7 @@ export const CustomFoodModal = ({ isOpen, food, initialName, onClose, onSaved }:
       description="Values are per serving. Check the nutrition label on the package."
       onClose={onClose}
       footer={
-        <>
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave}>Save food</Button>
-        </>
+        <ModalActions onCancel={onClose} onSave={handleSave} saveLabel="Save food" />
       }
     >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

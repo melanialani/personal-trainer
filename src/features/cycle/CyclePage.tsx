@@ -1,15 +1,16 @@
-import { CalendarHeart, CheckCircle2, Droplet, Pencil, Plus, Trash2, TriangleAlert } from 'lucide-react';
+import { CalendarHeart, CheckCircle2, Droplet, Plus, TriangleAlert } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { CYCLE_FLAG_TEXT, CYCLE_TIPS } from '../../data/cycle';
-import { calcCycleStats, cycleCalendarDays, periodCovering, periodLength, sortPeriodsAsc } from '../../lib/cycle';
-import { diffDays, formatDate, todayKey } from '../../lib/date';
+import { calcCycleStats, cycleCalendarDays, periodCovering, periodLength } from '../../lib/cycle';
+import { diffDays, formatDate, formatShortDate, sortByDateAsc, todayKey } from '../../lib/date';
 import { pluralize } from '../../lib/format';
-import { Button, IconButton } from '../../shared/components/Button';
+import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
 import { useConfirmDelete } from '../../shared/components/ConfirmProvider';
 import { EmptyState } from '../../shared/components/EmptyState';
 import { Notice } from '../../shared/components/Notice';
 import { PageHeader } from '../../shared/components/PageHeader';
+import { RowActions } from '../../shared/components/RowActions';
 import { StatTile } from '../../shared/components/StatTile';
 import { TextLink } from '../../shared/components/TextLink';
 import { useToast } from '../../shared/components/ToastProvider';
@@ -32,7 +33,7 @@ export const CyclePage = () => {
 
   const stats = useMemo(() => calcCycleStats(data.periods, today), [data.periods, today]);
   const calendarDays = useMemo(() => cycleCalendarDays(data.periods, stats, today), [data.periods, stats, today]);
-  const ascending = useMemo(() => sortPeriodsAsc(data.periods), [data.periods]);
+  const ascending = useMemo(() => sortByDateAsc(data.periods), [data.periods]);
   const history = useMemo(() => [...ascending].reverse(), [ascending]);
   const latest = ascending[ascending.length - 1];
 
@@ -82,18 +83,21 @@ export const CyclePage = () => {
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatTile
+          tone="rose"
           label="Cycle day"
           value={stats.cycleDay ?? '—'}
           hint={stats.lastStart ? `Since ${formatDate(stats.lastStart)}${stats.isOngoing ? ' · period ongoing' : ''}` : 'No period logged yet'}
           icon={<Droplet size={16} />}
         />
         <StatTile
+          tone="pink"
           label="Next period"
-          value={stats.nextStart ? formatDate(stats.nextStart, { day: 'numeric', month: 'short' }) : '—'}
+          value={stats.nextStart ? formatShortDate(stats.nextStart) : '—'}
           hint={nextHint}
           icon={<CalendarHeart size={16} />}
         />
         <StatTile
+          tone="violet"
           label="Average cycle"
           value={`${stats.averageCycle} d`}
           hint={
@@ -103,6 +107,7 @@ export const CyclePage = () => {
           }
         />
         <StatTile
+          tone="sky"
           label="Average period"
           value={`${stats.averagePeriod} d`}
           hint={stats.periodsWithEnd ? `From ${pluralize(stats.periodsWithEnd, 'logged end')}` : 'Default 5 d until an end is logged'}
@@ -168,14 +173,7 @@ export const CyclePage = () => {
                       <td className="px-3 py-2.5 text-right tabular-nums text-slate-600">{next ? `${diffDays(entry.date, next.date)} d` : '—'}</td>
                       <td className="hidden max-w-[16rem] truncate px-3 py-2.5 text-slate-500 sm:table-cell">{entry.note ?? ''}</td>
                       <td className="px-2 py-2.5 sm:px-5">
-                        <div className="flex justify-end">
-                          <IconButton label="Edit period" onClick={() => setModal({ entry })}>
-                            <Pencil size={15} />
-                          </IconButton>
-                          <IconButton label="Delete period" tone="danger" onClick={() => handleDelete(entry)}>
-                            <Trash2 size={15} />
-                          </IconButton>
-                        </div>
+                        <RowActions itemLabel="period" onEdit={() => setModal({ entry })} onDelete={() => handleDelete(entry)} className="flex justify-end" />
                       </td>
                     </tr>
                   );

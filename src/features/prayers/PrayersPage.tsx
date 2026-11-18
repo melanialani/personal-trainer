@@ -3,6 +3,7 @@ import { useMemo, useState } from 'react';
 import { PRAYER_CATEGORY_LABELS, PRAYERS, type Prayer, type PrayerCategory } from '../../data/prayers';
 import { pluralize } from '../../lib/format';
 import { searchPrayers } from '../../lib/prayers';
+import { Badge } from '../../shared/components/Badge';
 import { Card } from '../../shared/components/Card';
 import { Chip } from '../../shared/components/Chip';
 import { EmptyState } from '../../shared/components/EmptyState';
@@ -67,8 +68,8 @@ export const PrayersPage = () => {
                 <span className="block font-semibold text-slate-900">{prayer.title}</span>
                 <span className="mt-0.5 block truncate text-sm text-slate-500">{previewLine(prayer.text)}</span>
               </span>
-              <span className="shrink-0 rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600">
-                {PRAYER_CATEGORY_LABELS[prayer.category]}
+              <span className="shrink-0">
+                <Badge tone="brand">{PRAYER_CATEGORY_LABELS[prayer.category]}</Badge>
               </span>
             </button>
           ))}

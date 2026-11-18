@@ -1,6 +1,6 @@
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { addDays, formatShortDate, todayKey } from '../../lib/date';
-import { formatNumber } from '../../lib/format';
+import { addDays, formatShortDate, sortByDateAsc, todayKey } from '../../lib/date';
+import { formatKg } from '../../lib/format';
 import { average, roundTo1 } from '../../lib/math';
 import { CHART_AXIS, CHART_GRID, CHART_TOOLTIP, COLORS } from '../../shared/theme';
 import type { WeightEntry } from '../../types';
@@ -16,7 +16,7 @@ interface WeightChartProps {
 const MOVING_AVERAGE_DAYS = 7;
 
 export const WeightChart = ({ weights, targetKg, rangeDays, height = 260 }: WeightChartProps) => {
-  const sorted = [...weights].sort((a, b) => a.date.localeCompare(b.date));
+  const sorted = sortByDateAsc(weights);
   const withAverage = sorted.map((entry) => {
     const windowStart = addDays(entry.date, -(MOVING_AVERAGE_DAYS - 1));
     const window = sorted.filter((w) => w.date >= windowStart && w.date <= entry.date);
@@ -42,7 +42,7 @@ export const WeightChart = ({ weights, targetKg, rangeDays, height = 260 }: Weig
         <YAxis domain={[min, max]} {...CHART_AXIS} width={44} />
         <Tooltip
           labelFormatter={(label) => formatShortDate(String(label))}
-          formatter={(value, name) => [`${formatNumber(Number(value), 1)} kg`, name === 'weight' ? 'Weight' : '7-day average']}
+          formatter={(value, name) => [formatKg(Number(value)), name === 'weight' ? 'Weight' : '7-day average']}
           contentStyle={CHART_TOOLTIP.contentStyle}
         />
         {targetKg && (

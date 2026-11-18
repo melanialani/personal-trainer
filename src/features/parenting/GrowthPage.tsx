@@ -160,7 +160,7 @@ const AssessmentTile = ({ assessment }: { assessment: GrowthAssessment }) => {
   const { indicator, value, z, status, range } = assessment;
   const unit = GROWTH_UNITS[indicator];
   return (
-    <div className="rounded-2xl border border-slate-200/80 bg-surface p-4 shadow-sm">
+    <Card bodyClassName="p-4">
       <p className="text-xs font-medium uppercase tracking-wide text-slate-500">{GROWTH_INDICATOR_LABELS[indicator]}</p>
       <p className="mt-1 text-xl font-bold tabular-nums text-slate-900">
         {formatNumber(value, 1)} <span className="text-sm font-medium text-slate-500">{unit}</span>
@@ -171,7 +171,7 @@ const AssessmentTile = ({ assessment }: { assessment: GrowthAssessment }) => {
       <p className="mt-2 text-xs text-slate-500">
         z-score {formatSigned(z, 1)} · −2 to +2 SD: {formatNumber(range.min ?? 0, 1)}–{formatNumber(range.max ?? 0, 1)} {unit}
       </p>
-    </div>
+    </Card>
   );
 };
 

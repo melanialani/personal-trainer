@@ -2,7 +2,7 @@ import { Search } from 'lucide-react';
 import type { InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from 'react';
 
 export const inputClass =
-  'block w-full rounded-lg border border-slate-200 bg-surface px-3 py-2 text-base text-slate-900 sm:text-sm shadow-sm placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 disabled:bg-slate-50';
+  'block w-full rounded-xl border border-slate-200 bg-surface px-3 py-2 text-base text-slate-900 sm:text-sm shadow-sm placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20 disabled:bg-slate-50';
 
 interface FieldProps {
   label: string;
@@ -14,7 +14,7 @@ interface FieldProps {
 
 export const Field = ({ label, hint, error, className = '', children }: FieldProps) => (
   <label className={`block ${className}`}>
-    <span className="mb-1 block text-xs font-medium text-slate-600">{label}</span>
+    <span className="mb-1 block text-xs font-semibold text-slate-600">{label}</span>
     {children}
     {error ? <span className="mt-1 block text-xs text-rose-600 dark:text-rose-400">{error}</span> : hint && <span className="mt-1 block text-xs text-slate-400">{hint}</span>}
   </label>
@@ -110,7 +110,7 @@ export const Segmented = <T extends string>({ value, options, onChange }: Segmen
         type="button"
         onClick={() => onChange(option.value)}
         className={`rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
-          option.value === value ? 'bg-raised text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-800'
+          option.value === value ? 'bg-raised text-brand-700 shadow-sm dark:text-brand-300' : 'text-slate-500 hover:text-slate-800'
         }`}
       >
         {option.label}

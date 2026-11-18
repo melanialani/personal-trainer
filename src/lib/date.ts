@@ -1,8 +1,9 @@
-const pad = (n: number) => String(n).padStart(2, '0');
+/** Two-digit zero padding, e.g. 7 → "07". */
+export const pad2 = (n: number): string => String(n).padStart(2, '0');
 
 /** Local date key in YYYY-MM-DD format. */
 export const toDateKey = (date: Date): string =>
-  `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+  `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
 
 export const todayKey = (): string => toDateKey(new Date());
 
@@ -25,9 +26,16 @@ export const weekdayIndex = (key: string): number => (parseDateKey(key).getDay()
 
 export const startOfWeek = (key: string): string => addDays(key, -weekdayIndex(key));
 
+/** First day of the key's month (YYYY-MM-01). */
+export const startOfMonth = (key: string): string => `${key.slice(0, 7)}-01`;
+
 /** Newest first; returns a new array. */
 export const sortByDateDesc = <T extends { date: string }>(items: T[]): T[] =>
   [...items].sort((a, b) => b.date.localeCompare(a.date));
+
+/** Oldest first; returns a new array. */
+export const sortByDateAsc = <T extends { date: string }>(items: T[]): T[] =>
+  [...items].sort((a, b) => a.date.localeCompare(b.date));
 
 export const WEEKDAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 export const WEEKDAY_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -36,6 +44,9 @@ export const formatDate = (key: string, options: Intl.DateTimeFormatOptions = { 
   parseDateKey(key).toLocaleDateString('en-GB', options);
 
 export const formatShortDate = (key: string): string => formatDate(key, { day: 'numeric', month: 'short' });
+
+/** "March 2026" */
+export const formatMonthYear = (key: string): string => formatDate(key, { month: 'long', year: 'numeric' });
 
 export const formatLongDate = (key: string): string =>
   formatDate(key, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });

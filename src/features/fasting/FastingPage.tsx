@@ -1,7 +1,7 @@
-import { CalendarHeart, Flame, Pencil, Play, Plus, Square, Timer, Trash2, TriangleAlert } from 'lucide-react';
+import { CalendarHeart, Flame, Pencil, Play, Plus, Square, Timer, TriangleAlert } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { calcCycleStats } from '../../lib/cycle';
-import { formatDate } from '../../lib/date';
+import { formatShortDate } from '../../lib/date';
 import {
   FASTING_PRESETS,
   LONG_FAST_HOURS,
@@ -16,7 +16,7 @@ import {
   summarizeFasting,
 } from '../../lib/fasting';
 import { Badge } from '../../shared/components/Badge';
-import { Button, IconButton } from '../../shared/components/Button';
+import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
 import { Chip } from '../../shared/components/Chip';
 import { useConfirmDelete } from '../../shared/components/ConfirmProvider';
@@ -24,6 +24,7 @@ import { EmptyState } from '../../shared/components/EmptyState';
 import { Notice } from '../../shared/components/Notice';
 import { PageHeader } from '../../shared/components/PageHeader';
 import { ProgressBar } from '../../shared/components/ProgressBar';
+import { RowActions } from '../../shared/components/RowActions';
 import { StatTile } from '../../shared/components/StatTile';
 import { TextLink } from '../../shared/components/TextLink';
 import { useNow } from '../../shared/hooks/useNow';
@@ -35,7 +36,7 @@ import { useFasting } from './useFasting';
 
 const formatTime = (key: string) => parseDateTimeKey(key).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 
-const formatDateTime = (key: string) => `${formatDate(key.slice(0, 10), { day: 'numeric', month: 'short' })}, ${formatTime(key)}`;
+const formatDateTime = (key: string) => `${formatShortDate(key.slice(0, 10))}, ${formatTime(key)}`;
 
 export const FastingPage = () => {
   const { data } = useAppData();
@@ -113,10 +114,10 @@ export const FastingPage = () => {
       </div>
 
       <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatTile label="Fasts (7 days)" value={summary.count} hint={`${summary.targetMetCount} on target`} icon={<Timer size={16} />} />
-        <StatTile label="Average fast" value={summary.count ? formatDuration(summary.averageHours) : '—'} hint="Last 7 days" />
-        <StatTile label="Streak" value={`${summary.streakDays} d`} hint="Days in a row on target" icon={<Flame size={16} />} />
-        <StatTile label="Binge flags" value={summary.bingeCount} hint="Very hungry / overate (7 days)" />
+        <StatTile tone="pink" label="Fasts (7 days)" value={summary.count} hint={`${summary.targetMetCount} on target`} icon={<Timer size={16} />} />
+        <StatTile tone="violet" label="Average fast" value={summary.count ? formatDuration(summary.averageHours) : '—'} hint="Last 7 days" />
+        <StatTile tone="orange" label="Streak" value={`${summary.streakDays} d`} hint="Days in a row on target" icon={<Flame size={16} />} />
+        <StatTile tone="amber" label="Binge flags" value={summary.bingeCount} hint="Very hungry / overate (7 days)" />
       </div>
 
       <div className="mt-4 space-y-3">
@@ -170,14 +171,7 @@ export const FastingPage = () => {
                     </td>
                     <td className="hidden max-w-[14rem] truncate px-3 py-2.5 text-slate-500 md:table-cell">{session.note ?? ''}</td>
                     <td className="px-2 py-2.5 sm:px-5">
-                      <div className="flex justify-end">
-                        <IconButton label="Edit fast" onClick={() => setModalSession(session)}>
-                          <Pencil size={15} />
-                        </IconButton>
-                        <IconButton label="Delete fast" tone="danger" onClick={() => handleDelete(session)}>
-                          <Trash2 size={15} />
-                        </IconButton>
-                      </div>
+                      <RowActions itemLabel="fast" onEdit={() => setModalSession(session)} onDelete={() => handleDelete(session)} className="flex justify-end" />
                     </td>
                   </tr>
                 ))}

@@ -1,13 +1,11 @@
 import { CYCLE_RULES, type CycleFlagId } from '../data/cycle';
 import type { PeriodEntry } from '../types';
-import { addDays, diffDays, todayKey } from './date';
+import { addDays, diffDays, sortByDateAsc, todayKey } from './date';
 import { average } from './math';
-
-export const sortPeriodsAsc = (periods: PeriodEntry[]): PeriodEntry[] => [...periods].sort((a, b) => a.date.localeCompare(b.date));
 
 /** Days from one period start to the next (only plausible gaps; longer gaps are probably missed logging). */
 export const cycleLengths = (periods: PeriodEntry[]): number[] => {
-  const sorted = sortPeriodsAsc(periods);
+  const sorted = sortByDateAsc(periods);
   return sorted
     .slice(1)
     .map((entry, index) => diffDays(sorted[index].date, entry.date))
@@ -36,7 +34,7 @@ export interface CycleStats {
 }
 
 export const calcCycleStats = (periods: PeriodEntry[], today = todayKey()): CycleStats => {
-  const sorted = sortPeriodsAsc(periods.filter((entry) => entry.date <= today));
+  const sorted = sortByDateAsc(periods.filter((entry) => entry.date <= today));
   const recentCycles = cycleLengths(sorted).slice(-CYCLE_RULES.cyclesForAverage);
   const lengths = sorted.map(periodLength).filter((days): days is number => days !== undefined);
   const averageCycle = recentCycles.length ? Math.round(average(recentCycles)) : CYCLE_RULES.defaultCycleDays;
@@ -92,7 +90,7 @@ export type CycleDayKind = 'period' | 'period-estimated' | 'predicted';
  */
 export const cycleCalendarDays = (periods: PeriodEntry[], stats: CycleStats, today = todayKey(), cyclesAhead = 3): Map<string, CycleDayKind> => {
   const days = new Map<string, CycleDayKind>();
-  const sorted = sortPeriodsAsc(periods);
+  const sorted = sortByDateAsc(periods);
   sorted.forEach((entry, index) => {
     const isLatest = index === sorted.length - 1;
     const end = entry.endDate ?? addDays(entry.date, stats.averagePeriod - 1);

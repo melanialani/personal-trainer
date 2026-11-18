@@ -24,7 +24,7 @@ export const MedicineCard = ({ medicine, onOpen }: MedicineCardProps) => (
     <button
       type="button"
       onClick={onOpen}
-      className="mt-auto inline-flex items-center gap-1 self-start text-sm font-medium text-brand-700 hover:underline dark:text-brand-300"
+      className="mt-auto inline-flex items-center gap-1 self-start text-sm font-medium text-brand-700 hover:underline dark:text-brand-400"
     >
       How to use, dose & interactions
       <ChevronRight size={16} />

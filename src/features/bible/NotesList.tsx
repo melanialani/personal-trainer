@@ -1,7 +1,7 @@
 import { BookOpenText, Highlighter, Trash2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { formatRef, getVersion, hasBook, HIGHLIGHT_CLASSES, HIGHLIGHT_COLORS, listNotes, loadBook, verseKey, type BookText, type NoteEntry } from '../../lib/bible';
-import { formatDate } from '../../lib/date';
+import { formatDate, toDateKey } from '../../lib/date';
 import { pluralize } from '../../lib/format';
 import { Card } from '../../shared/components/Card';
 import { Chip } from '../../shared/components/Chip';
@@ -135,7 +135,7 @@ export const NotesList = ({ onOpen }: NotesListProps) => {
                     </p>
                   )}
                   {entry.comment && <p className="mt-2 whitespace-pre-line rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-800">{entry.comment}</p>}
-                  <p className="mt-1.5 text-xs text-slate-500">Updated {formatDate(entry.updatedAt.slice(0, 10))}</p>
+                  <p className="mt-1.5 text-xs text-slate-500">Updated {formatDate(toDateKey(new Date(entry.updatedAt)))}</p>
                 </button>
                 <IconButton label="Delete" tone="danger" onClick={() => deleteEntry(entry)}>
                   <Trash2 size={16} />

@@ -1,15 +1,15 @@
-import { CheckCircle2, Dumbbell, Flame, NotebookPen, Plus, Scale, UtensilsCrossed } from 'lucide-react';
+import { BarChart3, CheckCircle2, Dumbbell, Flame, NotebookPen, Plus, Scale, UtensilsCrossed } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Exercise } from '../../data/exercises';
 import { effectiveWeeklyRateKg, goalProgress, projectedGoalDate } from '../../lib/calc';
 import { addDays, formatDate, formatLongDate, todayKey, weekdayIndex } from '../../lib/date';
-import { formatKg, formatNumber } from '../../lib/format';
+import { formatKcal, formatKg, formatNumber } from '../../lib/format';
 import { MEAL_LABELS } from '../../lib/meals';
 import { plannedItemsNutrition } from '../../lib/mealPlanGenerator';
 import { estimateSession } from '../../lib/workoutGenerator';
 import { Badge } from '../../shared/components/Badge';
-import { Button } from '../../shared/components/Button';
+import { Button, IconButton } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
 import { EmptyState } from '../../shared/components/EmptyState';
 import { PageHeader } from '../../shared/components/PageHeader';
@@ -102,140 +102,145 @@ const Dashboard = () => {
         }
       />
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <DaySummaryCard
-            title="Today"
-            totals={totals}
-            burned={burned}
-            targets={targets}
-            action={
-              <TextLink to="/diary" className="text-xs">
-                Open diary →
-              </TextLink>
-            }
-          />
-        </div>
-
-        <Card
-          icon={<Dumbbell size={16} className="text-brand-700 dark:text-brand-400" />}
-          title="Today’s workout"
-          subtitle={todayPlan?.title}
-          action={
-            workouts.length > 0 ? (
-              <Badge tone="success">
-                <CheckCircle2 size={12} /> Done
-              </Badge>
-            ) : undefined
-          }
-        >
-          {!todayPlan ? (
-            <EmptyState
-              title="No workout plan yet"
+      {/* Phones: one column in reading order (`order-*`); desktop: main column + side column without gaps. */}
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3 lg:items-start">
+        <div className="contents lg:col-span-2 lg:flex lg:flex-col lg:gap-5">
+          <div className="order-1">
+            <DaySummaryCard
+              title="Today"
+              totals={totals}
+              burned={burned}
+              targets={targets}
               action={
-                <Button size="sm" onClick={() => navigate('/workouts')}>
-                  Create a plan
-                </Button>
+                <TextLink to="/diary" className="text-xs">
+                  Open diary →
+                </TextLink>
               }
             />
-          ) : todayPlan.isRest ? (
-            <div className="text-sm text-slate-500">
-              <p>Rest day — recovery is when muscles grow. A light walk is a great idea.</p>
-              <Button size="sm" variant="secondary" className="mt-3" onClick={() => setIsWorkoutLogOpen(true)}>
-                Log an activity
-              </Button>
-            </div>
-          ) : (
-            <>
-              {todayEstimate && <SessionEstimate minutes={todayEstimate.minutes} kcal={todayEstimate.kcal} className="mb-1" />}
-              <PlanDayExercises exercises={todayPlan.exercises.slice(0, 5)} onShowExercise={setShownExercise} />
-              {todayPlan.exercises.length > 5 && (
-                <TextLink to="/workouts" className="mt-1 block text-xs">
-                  +{todayPlan.exercises.length - 5} more exercises
+          </div>
+          <div className="order-3 grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <Card
+              title="Weight"
+              icon={<Scale />}
+              tone="indigo"
+              action={
+                <TextLink to="/weight" className="text-xs">
+                  Details →
                 </TextLink>
-              )}
-              <Button size="sm" className="mt-3 w-full" onClick={() => setIsWorkoutLogOpen(true)}>
-                Log this workout
-              </Button>
-            </>
-          )}
-        </Card>
-
-        <Card
-          title="Weight"
-          action={
-            <TextLink to="/weight" className="text-xs">
-              Details →
-            </TextLink>
-          }
-        >
-          <div className="flex items-end justify-between">
-            <div>
-              <p className="text-3xl font-bold tabular-nums text-slate-900">{formatKg(targets.weightKg)}</p>
-              <p className="text-xs text-slate-500">Target {formatKg(profile.targetWeightKg)}</p>
-            </div>
-            {goalDate && (
-              <div className="text-right text-xs text-slate-500">
-                Est. goal date
-                <p className="text-sm font-semibold text-slate-800">{formatDate(goalDate)}</p>
+              }
+            >
+              <div className="flex items-end justify-between">
+                <div>
+                  <p className="font-display text-3xl font-extrabold tabular-nums text-slate-900">{formatKg(targets.weightKg)}</p>
+                  <p className="text-xs text-slate-500">Target {formatKg(profile.targetWeightKg)}</p>
+                </div>
+                {goalDate && (
+                  <div className="text-right text-xs text-slate-500">
+                    Est. goal date
+                    <p className="text-sm font-semibold text-slate-800">{formatDate(goalDate)}</p>
+                  </div>
+                )}
               </div>
-            )}
+              <div className="mt-3">
+                <ProgressBar value={progress} />
+                <p className="mt-1 text-xs text-slate-500">{formatNumber(progress * 100)}% of the way to your goal</p>
+              </div>
+              <div className="mt-3">
+                <WeightChart weights={data.weights} targetKg={profile.targetWeightKg} rangeDays={30} height={140} />
+              </div>
+            </Card>
+            <Card title="Last 7 days" icon={<BarChart3 />} tone="amber" subtitle={`Calories eaten vs. target (${formatKcal(targets.kcal)})`}>
+              <WeeklyCaloriesChart foodLog={data.foodLog} targetKcal={targets.kcal} />
+            </Card>
           </div>
-          <div className="mt-3">
-            <ProgressBar value={progress} />
-            <p className="mt-1 text-xs text-slate-500">{formatNumber(progress * 100)}% of the way to your goal</p>
+        </div>
+        <div className="contents lg:flex lg:flex-col lg:gap-5">
+          <div className="order-2">
+            <Card
+              icon={<Dumbbell />}
+              tone="violet"
+              title="Today’s workout"
+              subtitle={todayPlan?.title}
+              action={
+                workouts.length > 0 ? (
+                  <Badge tone="success">
+                    <CheckCircle2 size={12} /> Done
+                  </Badge>
+                ) : undefined
+              }
+            >
+              {!todayPlan ? (
+                <EmptyState
+                  title="No workout plan yet"
+                  action={
+                    <Button size="sm" onClick={() => navigate('/workouts')}>
+                      Create a plan
+                    </Button>
+                  }
+                />
+              ) : todayPlan.isRest ? (
+                <div className="text-sm text-slate-500">
+                  <p>Rest day — recovery is when muscles grow. A light walk is a great idea.</p>
+                  <Button size="sm" variant="secondary" className="mt-3" onClick={() => setIsWorkoutLogOpen(true)}>
+                    Log an activity
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  {todayEstimate && <SessionEstimate minutes={todayEstimate.minutes} kcal={todayEstimate.kcal} className="mb-1" />}
+                  <PlanDayExercises exercises={todayPlan.exercises.slice(0, 5)} onShowExercise={setShownExercise} />
+                  {todayPlan.exercises.length > 5 && (
+                    <TextLink to="/workouts" className="mt-1 block text-xs">
+                      +{todayPlan.exercises.length - 5} more exercises
+                    </TextLink>
+                  )}
+                  <Button size="sm" className="mt-3 w-full" onClick={() => setIsWorkoutLogOpen(true)}>
+                    Log this workout
+                  </Button>
+                </>
+              )}
+            </Card>
           </div>
-          <div className="mt-3">
-            <WeightChart weights={data.weights} targetKg={profile.targetWeightKg} rangeDays={30} height={140} />
+          <div className="order-4">
+            <WaterTracker date={today} />
           </div>
-        </Card>
-
-        <Card title="Last 7 days" subtitle={`Calories eaten vs. target (${formatNumber(targets.kcal)} kcal)`}>
-          <WeeklyCaloriesChart foodLog={data.foodLog} targetKcal={targets.kcal} />
-        </Card>
-
-        <div className="space-y-5">
-          <WaterTracker date={today} />
-          <Card
-            icon={<UtensilsCrossed size={16} className="text-brand-700 dark:text-brand-400" />}
-            title="Today’s menu"
-            action={
-              <TextLink to="/meal-plan" className="text-xs">
-                Planner →
-              </TextLink>
-            }
-          >
-            {!todayMenu ? (
-              <p className="text-sm text-slate-500">
-                No menu for today. <TextLink to="/meal-plan">Generate a meal plan</TextLink>
-              </p>
-            ) : (
-              <ul className="space-y-2">
-                {todayMenu.meals.map((meal) => (
-                  <li key={meal.meal} className="flex items-center gap-2">
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">{MEAL_LABELS[meal.meal]}</p>
-                      <p className="truncate text-sm text-slate-800">{meal.title}</p>
-                    </div>
-                    <span className="text-xs tabular-nums text-slate-500">{formatNumber(plannedItemsNutrition(meal.items, data.customFoods).kcal)} kcal</span>
-                    {loggedMeals.has(meal.meal) ? (
-                      <CheckCircle2 size={18} className="text-brand-500" aria-label="Logged" />
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => logPlannedMeals(today, [meal])}
-                        className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-brand-700 dark:hover:text-brand-400"
-                        aria-label={`Log ${MEAL_LABELS[meal.meal]} to diary`}
-                        title="Log to diary"
-                      >
-                        <NotebookPen size={16} />
-                      </button>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </Card>
+          <div className="order-5">
+            <Card
+              icon={<UtensilsCrossed />}
+              tone="orange"
+              title="Today’s menu"
+              action={
+                <TextLink to="/meal-plan" className="text-xs">
+                  Planner →
+                </TextLink>
+              }
+            >
+              {!todayMenu ? (
+                <p className="text-sm text-slate-500">
+                  No menu for today. <TextLink to="/meal-plan">Generate a meal plan</TextLink>
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {todayMenu.meals.map((meal) => (
+                    <li key={meal.meal} className="flex items-center gap-2">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">{MEAL_LABELS[meal.meal]}</p>
+                        <p className="truncate text-sm text-slate-800">{meal.title}</p>
+                      </div>
+                      <span className="text-xs tabular-nums text-slate-500">{formatKcal(plannedItemsNutrition(meal.items, data.customFoods).kcal)}</span>
+                      {loggedMeals.has(meal.meal) ? (
+                        <CheckCircle2 size={18} className="text-brand-500" aria-label="Logged" />
+                      ) : (
+                        <IconButton label={`Log ${MEAL_LABELS[meal.meal]} to diary`} onClick={() => logPlannedMeals(today, [meal])}>
+                          <NotebookPen size={16} />
+                        </IconButton>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </Card>
+          </div>
         </div>
       </div>
 

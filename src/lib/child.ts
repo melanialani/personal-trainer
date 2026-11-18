@@ -1,10 +1,16 @@
 import type { ChildSupplement, DoseByAge } from '../data/childSupplements';
 import { VACCINES, type Vaccine, type VaccineDose } from '../data/vaccines';
-import type { Child, ChildMeasurement } from '../types';
-import { addMonths, completedMonths, sortByDateDesc, todayKey } from './date';
+import type { Child, ChildMeasurement, Sex } from '../types';
+import { addMonths, completedMonths, sortByDateDesc, startOfMonth, todayKey } from './date';
 
 /** Children are followed until their 18th birthday. */
 export const MAX_CHILD_MONTHS = 216;
+
+/** Sex picker options worded for a child. */
+export const CHILD_SEX_OPTIONS: { value: Sex; label: string }[] = [
+  { value: 'female', label: 'Girl' },
+  { value: 'male', label: 'Boy' },
+];
 
 export const childAgeMonths = (child: Pick<Child, 'birthDate'>, onDate = todayKey()): number =>
   Math.max(0, completedMonths(child.birthDate, onDate));
@@ -127,8 +133,6 @@ export interface SupplementRound {
   ageMonths: number;
 }
 
-const monthStart = (key: string) => `${key.slice(0, 7)}-01`;
-
 /**
  * Program rounds (e.g. vitamin A every February and August) the child is eligible for, oldest first.
  * A dose logged between one round month and the next counts for that round (late catch-up at the Puskesmas).
@@ -137,13 +141,13 @@ export const listSupplementRounds = (child: Child, supplement: ChildSupplement, 
   if (supplement.schedule.kind !== 'rounds') return [];
   const months = supplement.schedule.months;
   const entries = child.supplements.filter((entry) => entry.supplementId === supplement.id).map((entry) => entry.date).sort();
-  const start = monthStart(addMonths(child.birthDate, supplement.fromMonths));
-  const end = monthStart(addMonths(child.birthDate, supplement.untilMonths));
+  const start = startOfMonth(addMonths(child.birthDate, supplement.fromMonths));
+  const end = startOfMonth(addMonths(child.birthDate, supplement.untilMonths));
   const rounds: string[] = [];
   for (let cursor = start; cursor <= end; cursor = addMonths(cursor, 1)) {
     if (months.includes(Number(cursor.slice(5, 7)))) rounds.push(cursor);
   }
-  const currentMonth = monthStart(onDate);
+  const currentMonth = startOfMonth(onDate);
   return rounds.map((month, index) => {
     const next = rounds[index + 1] ?? addMonths(month, 6);
     const givenOn = entries.find((date) => date >= month && date < next);

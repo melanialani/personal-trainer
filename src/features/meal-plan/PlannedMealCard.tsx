@@ -1,6 +1,6 @@
 import { NotebookPen, RefreshCw } from 'lucide-react';
 import { findFood, scaleNutrition } from '../../lib/foods';
-import { formatNumber, formatServings } from '../../lib/format';
+import { formatKcal, formatNumber, formatServings } from '../../lib/format';
 import { MEAL_LABELS } from '../../lib/meals';
 import { plannedItemsNutrition } from '../../lib/mealPlanGenerator';
 import { IconButton } from '../../shared/components/Button';
@@ -28,7 +28,7 @@ export const PlannedMealCard = ({ meal, customFoods, isLogged, onSwap, onLog }: 
       }
       subtitle={
         <span className="inline-flex flex-wrap items-center gap-x-2">
-          <span className="font-semibold text-slate-700">{formatNumber(totals.kcal)} kcal</span>
+          <span className="font-semibold text-slate-700">{formatKcal(totals.kcal)}</span>
           <MacroInline values={totals} />
         </span>
       }

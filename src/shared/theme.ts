@@ -17,12 +17,13 @@ export const COLORS = {
   hover: 'var(--color-slate-50)',
 } as const;
 
-/** Growth chart lines: WHO SD curves and the child's own measurements. */
+/** Growth chart lines: WHO SD curves and the child's own measurements. Fixed hues (not the module accent),
+ * so "ideal" stays green and the child's line stays distinct from every SD curve. */
 export const GROWTH_COLORS = {
   sd3: '#f43f5e',
   sd2: '#f59e0b',
-  median: 'var(--color-brand-500)',
-  child: '#0ea5e9',
+  median: '#10b981',
+  child: '#6366f1',
 } as const;
 
 /** Shared Recharts styling so every chart looks the same. */

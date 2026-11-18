@@ -18,3 +18,10 @@ export const formatServings = (servings: number, servingLabel: string): string =
 /** "1 item", "3 items" */
 export const pluralize = (count: number, singular: string, plural = `${singular}s`): string =>
   `${count} ${count === 1 ? singular : plural}`;
+
+/** Lower-case and strip accents (diacritics) for search matching, e.g. "Café" → "cafe". */
+export const foldAccents = (text: string): string =>
+  text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');

@@ -49,9 +49,9 @@ export const WorkoutHistoryTab = () => {
         </Button>
       </div>
       <div className="grid grid-cols-3 gap-3">
-        <StatTile label="Sessions this week" value={thisWeek.length} />
-        <StatTile label="Active minutes" value={formatNumber(sumBy(thisWeek, (w) => w.durationMin))} hint="WHO: 150+ min/week" />
-        <StatTile label="kcal burned" value={formatNumber(sumBy(thisWeek, (w) => w.kcalBurned))} />
+        <StatTile tone="emerald" label="Sessions this week" value={thisWeek.length} />
+        <StatTile tone="sky" label="Active minutes" value={formatNumber(sumBy(thisWeek, (w) => w.durationMin))} hint="WHO: 150+ min/week" />
+        <StatTile tone="orange" label="kcal burned" value={formatNumber(sumBy(thisWeek, (w) => w.kcalBurned))} />
       </div>
 
       <Card title="Active minutes per week" className="mt-5">

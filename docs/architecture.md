@@ -27,7 +27,7 @@
 ## Navigation
 - `layout/navItems.ts` groups pages: Fitness, Food & Health, Diet & Cycle, Parenting, Spiritual Guide (≤ 4 pages each). Items with `isSidebarOnly` (BMI Calculator) show in
   the desktop sidebar but not in the phone bottom bar; phones reach them via in-page links. Settings is outside
-  the groups (gear icon in the phone header, last link in the sidebar).
+  the groups (gear icon in the phone header and at the top of the desktop sidebar).
 - Phone: the header holds the group switcher; the bottom bar shows only the active group's pages (no "More" menu).
   `layout/useNavGroup.ts` remembers the last page per group in localStorage `fitplan:nav` (per device, not in
   backups); tapping the current group goes back to its first page. Desktop: the sidebar lists every group.
@@ -106,6 +106,25 @@ plus the user's excluded keywords.
   remaps the slate scale and light tints. So `bg-surface` (not `bg-white`) for cards/inputs, and colored text needs a
   `dark:` shade (e.g. `text-brand-700 dark:text-brand-400`). JS/chart colors use CSS variables from `shared/theme.ts`.
 - Text must meet WCAG AA (4.5:1) in both themes.
+
+## Colors & UI conventions
+- Module accents: each nav group has a color (Fitness emerald, Food & Health orange, Diet & Cycle pink, Parenting
+  sky, Spiritual violet). `AppLayout` sets `data-accent="<group id>"` on `<html>`; `index.css` remaps the whole
+  `brand-*` scale (plus `brand-ink`, `--grad-from/--grad-to`) under it, light and dark. So `brand-*` classes and
+  `COLORS.brand*` always mean "this module's color". Sidebar groups and header group pills set their own `data-accent`.
+  White text only on `brand-700`/`-800` (≥ 4.5:1 in every accent). Gradients (`bg-accent-gradient`) are for icons
+  and decoration, never under text.
+- Mixed colors: `shared/tones.ts` (`Tone`, `TONE_TILE`, `TONE_BAR`). `Card` and `StatTile` take a `tone` for their
+  icon tile / top strip; give cards and tiles on one page different tones. Meaning colors stay fixed: rose = over /
+  danger, amber = warning, emerald = good, growth-chart curves (`GROWTH_COLORS`).
+- Type: `font-display` (Plus Jakarta Sans) for page/card titles and big numbers; Inter for body text.
+- `PageHeader` shows the page's nav icon automatically (from `findItemByPath`).
+- Form modals: footer is always `ModalActions` (Back / Delete on the left in red with a trash icon, then Cancel and
+  the primary Save on the right). Read-only modals have no Save.
+- Phone keyboard: bottom-pinned bars (bottom nav, Profile save bar) hide while `useKeyboardOpen()` is true (a focused
+  text field and a shrunk screen: Chrome/Safari shrink the visual viewport, Firefox on Android the window). Modals size
+  themselves to the visible viewport (`useVisualViewport`). Page-level search fields do not autofocus on touch screens.
+- No `backdrop-filter` (`backdrop-blur`) on sticky/fixed bars: Firefox on Android paints them as an empty strip.
 
 ## Food data
 Food names and serving labels are Indonesian; ids are stable English slugs (searchable). Categories stay English (UI).

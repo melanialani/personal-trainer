@@ -13,9 +13,10 @@ import {
   milestoneProgress,
   pickForAge,
 } from '../../lib/child';
-import { formatDate, sortByDateDesc } from '../../lib/date';
+import { formatDate, formatMonthYear, sortByDateDesc } from '../../lib/date';
 import { assessMeasurement } from '../../lib/growth';
 import { Badge } from '../../shared/components/Badge';
+import type { Tone } from '../../shared/tones';
 import { Card } from '../../shared/components/Card';
 import { EmptyState } from '../../shared/components/EmptyState';
 import { TextLink } from '../../shared/components/TextLink';
@@ -68,7 +69,7 @@ const ChildOverview = ({ child }: { child: Child }) => {
         const rounds = listSupplementRounds(child, s);
         const current = rounds.find((r) => r.status === 'current');
         const next = rounds.find((r) => r.status === 'upcoming');
-        return { name: s.name, text: current ? 'Due this round' : next ? `Next: ${formatDate(next.month, { month: 'long', year: 'numeric' })}` : '—', isDue: Boolean(current) };
+        return { name: s.name, text: current ? 'Due this round' : next ? `Next: ${formatMonthYear(next.month)}` : '—', isDue: Boolean(current) };
       }
       const state = intervalState(child, s);
       return { name: s.name, text: state?.isDue ? 'Due now' : `Next: ${formatDate(state!.nextDue)}`, isDue: Boolean(state?.isDue) };
@@ -82,7 +83,7 @@ const ChildOverview = ({ child }: { child: Child }) => {
 
   return (
     <div className="grid gap-5 lg:grid-cols-2">
-      <SummaryCard icon={<Sparkles size={16} />} title={`${child.name} · ${formatChildAge(age)}`} link="/development" linkLabel="Milestones & guide">
+      <SummaryCard icon={<Sparkles />} tone="violet" title={`${child.name} · ${formatChildAge(age)}`} link="/development" linkLabel="Milestones & guide">
         <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{stage.label}</p>
         <p className="mt-1 text-sm text-slate-700">{stage.focus}</p>
         {progress && (
@@ -92,7 +93,7 @@ const ChildOverview = ({ child }: { child: Child }) => {
         )}
       </SummaryCard>
 
-      <SummaryCard icon={<Syringe size={16} />} title="Vaccines" link="/immunization" linkLabel="Full schedule">
+      <SummaryCard icon={<Syringe />} tone="teal" title="Vaccines" link="/immunization" linkLabel="Full schedule">
         {pending.length ? (
           <div className="flex flex-wrap gap-1.5">
             {pending.slice(0, 8).map((d) => (
@@ -113,7 +114,7 @@ const ChildOverview = ({ child }: { child: Child }) => {
         )}
       </SummaryCard>
 
-      <SummaryCard icon={<Pill size={16} />} title="Vitamin A & deworming" link="/immunization" linkLabel="Vitamins & meds">
+      <SummaryCard icon={<Pill />} tone="amber" title="Vitamin A & deworming" link="/immunization" linkLabel="Vitamins & meds">
         {supplementLines.length ? (
           <ul className="space-y-1.5">
             {supplementLines.map((line) => (
@@ -128,7 +129,7 @@ const ChildOverview = ({ child }: { child: Child }) => {
         )}
       </SummaryCard>
 
-      <SummaryCard icon={<Ruler size={16} />} title="Growth" link="/growth" linkLabel="Growth chart">
+      <SummaryCard icon={<Ruler />} tone="emerald" title="Growth" link="/growth" linkLabel="Growth chart">
         {latest ? (
           <>
             <ul className="space-y-1.5">
@@ -150,6 +151,7 @@ const ChildOverview = ({ child }: { child: Child }) => {
 };
 
 interface SummaryCardProps {
+  tone: Tone;
   icon: ReactNode;
   title: string;
   link: string;
@@ -157,8 +159,8 @@ interface SummaryCardProps {
   children: ReactNode;
 }
 
-const SummaryCard = ({ icon, title, link, linkLabel, children }: SummaryCardProps) => (
-  <Card title={title} icon={icon} action={<TextLink to={link} className="text-xs">{linkLabel} →</TextLink>}>
+const SummaryCard = ({ icon, tone, title, link, linkLabel, children }: SummaryCardProps) => (
+  <Card title={title} icon={icon} tone={tone} action={<TextLink to={link} className="text-xs">{linkLabel} →</TextLink>}>
     {children}
   </Card>
 );

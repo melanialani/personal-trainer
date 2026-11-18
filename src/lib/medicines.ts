@@ -13,6 +13,7 @@ import {
   type PregnancyUse,
   type Symptom,
 } from '../data/medicines';
+import { foldAccents } from './format';
 
 export const ANY = 'any';
 type OrAny<T> = T | typeof ANY;
@@ -41,17 +42,10 @@ export const EMPTY_MEDICINE_FILTERS: MedicineFilters = {
 
 export const countActiveFilters = (filters: MedicineFilters): number => Object.values(filters).filter((value) => value !== ANY).length;
 
-/** Lower-case, accent-free text so "Parasetamol" style queries match regardless of case. */
-const normalize = (text: string) =>
-  text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '');
-
 const symptomText = (symptoms: Symptom[]) => symptoms.flatMap((symptom) => [SYMPTOM_LABELS[symptom], ...SYMPTOM_KEYWORDS[symptom]]);
 
 const medicineSearchText = (medicine: Medicine) =>
-  normalize(
+  foldAccents(
     [
       medicine.name,
       ...medicine.brands,
@@ -73,7 +67,7 @@ export const guideSectionText = (section: CareGuideSection): string[] => [
 
 /** Every word of the query must appear somewhere (name, brand, ingredient, symptom words, summary). */
 const matchesQuery = (haystack: string, query: string) => {
-  const words = normalize(query).split(/\s+/).filter(Boolean);
+  const words = foldAccents(query).split(/\s+/).filter(Boolean);
   return words.every((word) => haystack.includes(word));
 };
 
@@ -96,7 +90,7 @@ export const filterGuides = (guides: CareGuide[], symptom: OrAny<Symptom>, query
     (guide) =>
       (symptom === ANY || guide.symptoms.includes(symptom)) &&
       matchesQuery(
-        normalize([guide.title, guide.summary, ...symptomText(guide.symptoms), ...guide.sections.flatMap(guideSectionText)].join(' ')),
+        foldAccents([guide.title, guide.summary, ...symptomText(guide.symptoms), ...guide.sections.flatMap(guideSectionText)].join(' ')),
         query,
       ),
   );

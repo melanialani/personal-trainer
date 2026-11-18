@@ -1,9 +1,12 @@
 import type { ReactNode } from 'react';
+import { TONE_TILE, type Tone } from '../tones';
 
 interface CardProps {
   title?: ReactNode;
-  /** Small icon shown before the title. */
+  /** Small icon shown before the title, inside a tinted tile. */
   icon?: ReactNode;
+  /** Color of the icon tile; defaults to the module accent. */
+  tone?: Tone;
   subtitle?: ReactNode;
   action?: ReactNode;
   className?: string;
@@ -11,18 +14,20 @@ interface CardProps {
   children: ReactNode;
 }
 
-export const Card = ({ title, icon, subtitle, action, className = '', bodyClassName = 'p-4 sm:p-5', children }: CardProps) => (
-  <section className={`rounded-2xl border border-slate-200/80 bg-surface shadow-sm ${className}`}>
+export const Card = ({ title, icon, tone = 'brand', subtitle, action, className = '', bodyClassName = 'p-4 sm:p-5', children }: CardProps) => (
+  <section className={`rounded-2xl border border-slate-200/80 bg-surface shadow-sm shadow-slate-900/5 ${className}`}>
     {(title || action) && (
-      <header className="flex items-start justify-between gap-3 border-b border-slate-100 px-4 py-3 sm:px-5">
-        <div className="min-w-0">
-          {title && (
-            <h2 className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+      <header className="flex items-center justify-between gap-3 border-b border-slate-100 px-4 py-3 sm:px-5">
+        <div className="flex min-w-0 items-center gap-3">
+          {icon && (
+            <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg [&>svg]:h-4 [&>svg]:w-4 ${TONE_TILE[tone]}`} aria-hidden="true">
               {icon}
-              {title}
-            </h2>
+            </span>
           )}
-          {subtitle && <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>}
+          <div className="min-w-0">
+            {title && <h2 className="font-display text-[15px] font-bold text-slate-900">{title}</h2>}
+            {subtitle && <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>}
+          </div>
         </div>
         {action && <div className="flex shrink-0 items-center gap-2">{action}</div>}
       </header>

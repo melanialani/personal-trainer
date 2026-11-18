@@ -1,13 +1,11 @@
 import type { Prayer, PrayerCategory } from '../data/prayers';
 import { MYSTERY_SETS, type MysterySetId } from '../data/rosary';
 import { weekdayIndex } from './date';
+import { foldAccents } from './format';
 
 /** Lower-case and strip accents / punctuation so "salam maria" matches "Salam, Maria". */
 export const normalizeSearch = (text: string): string =>
-  text
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+  foldAccents(text)
     .replace(/[^a-z0-9\s]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();

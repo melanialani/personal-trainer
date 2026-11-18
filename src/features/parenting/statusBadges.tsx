@@ -1,4 +1,4 @@
-import { formatDate } from '../../lib/date';
+import { formatDate, formatShortDate } from '../../lib/date';
 import type { DoseStatus, RoundStatus } from '../../lib/child';
 import { Badge } from '../../shared/components/Badge';
 
@@ -28,7 +28,7 @@ export const DoseStatusBadge = ({ status, givenOn, dueFrom, isProgram }: DoseSta
 };
 
 export const RoundStatusBadge = ({ status, givenOn }: { status: RoundStatus; givenOn?: string }) => {
-  if (status === 'done') return <Badge tone="success">Given {givenOn ? formatDate(givenOn, { day: 'numeric', month: 'short' }) : ''}</Badge>;
+  if (status === 'done') return <Badge tone="success">Given {givenOn ? formatShortDate(givenOn) : ''}</Badge>;
   if (status === 'current') return <Badge tone="warning">Due now</Badge>;
   if (status === 'missed') return <Badge tone="neutral">Missed</Badge>;
   return <Badge tone="neutral">Upcoming</Badge>;

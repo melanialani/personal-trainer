@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Bar, BarChart, CartesianGrid, Cell, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { addDays, todayKey, WEEKDAY_SHORT, weekdayIndex } from '../../lib/date';
-import { formatNumber } from '../../lib/format';
+import { formatKcal } from '../../lib/format';
 import { sumBy } from '../../lib/math';
 import { CHART_AXIS, CHART_BAR, CHART_GRID, CHART_TOOLTIP, COLORS } from '../../shared/theme';
 import type { FoodLogEntry } from '../../types';
@@ -30,7 +30,7 @@ export const WeeklyCaloriesChart = ({ foodLog, targetKcal }: WeeklyCaloriesChart
         <CartesianGrid {...CHART_GRID} />
         <XAxis dataKey="label" {...CHART_AXIS} />
         <YAxis {...CHART_AXIS} />
-        <Tooltip formatter={(value) => [`${formatNumber(Number(value))} kcal`, 'Eaten']} {...CHART_TOOLTIP} />
+        <Tooltip formatter={(value) => [formatKcal(Number(value)), 'Eaten']} {...CHART_TOOLTIP} />
         <ReferenceLine y={targetKcal} stroke={COLORS.brandDark} strokeDasharray="4 4" />
         <Bar dataKey="kcal" {...CHART_BAR}>
           {points.map((point) => (

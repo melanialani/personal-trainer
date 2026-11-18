@@ -1,6 +1,7 @@
 import { Pause, Play, PlayCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { exerciseImageUrls, exerciseVideo, exerciseVideoUrl, type Exercise } from '../../data/exercises';
+import { TextButton } from '../../shared/components/TextLink';
 import { ExerciseVideo } from './ExerciseVideo';
 
 const FRAME_LABELS = ['1 · Start', '2 · Finish'];
@@ -60,9 +61,9 @@ export const ExerciseDemo = ({ exercise, isAnimated = false }: ExerciseDemoProps
     isVideoShown ? (
       videoPlayer
     ) : (
-      <button type="button" onClick={() => setIsVideoShown(true)} className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-700 dark:text-brand-400 hover:underline">
+      <TextButton onClick={() => setIsVideoShown(true)} className="inline-flex items-center gap-1.5 text-xs">
         <PlayCircle size={14} /> Play video demo
-      </button>
+      </TextButton>
     )
   ) : (
     videoLink

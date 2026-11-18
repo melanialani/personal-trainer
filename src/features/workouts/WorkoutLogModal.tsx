@@ -4,15 +4,15 @@ import { exerciseById } from '../../data/exercises';
 import { kcalFromMet } from '../../lib/calc';
 import { todayKey } from '../../lib/date';
 import { createId } from '../../lib/id';
-import { formatNumber } from '../../lib/format';
+import { formatKg } from '../../lib/format';
 import { estimateSession, scaleSessionKcal } from '../../lib/workoutGenerator';
-import { Button } from '../../shared/components/Button';
 import { Field, NumberInput, Segmented, Select, TextInput } from '../../shared/components/FormFields';
 import { Modal } from '../../shared/components/Modal';
 import { useToast } from '../../shared/components/ToastProvider';
 import { useBodyWeightKg } from '../../shared/hooks/useBodyWeightKg';
 import { useAppData } from '../../store/AppDataContext';
 import type { LoggedExercise, WorkoutEffort, WorkoutPlanDay } from '../../types';
+import { ModalActions } from '../../shared/components/ModalActions';
 
 interface WorkoutLogModalProps {
   isOpen: boolean;
@@ -93,14 +93,7 @@ export const WorkoutLogModal = ({ isOpen, onClose, planDay }: WorkoutLogModalPro
       size={planDay ? 'lg' : 'md'}
       onClose={onClose}
       footer={
-        <>
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} disabled={!isValid}>
-            Save workout
-          </Button>
-        </>
+        <ModalActions onCancel={onClose} onSave={handleSave} saveLabel="Save workout" isSaveDisabled={!isValid} />
       }
     >
       <div className="space-y-4">
@@ -116,7 +109,7 @@ export const WorkoutLogModal = ({ isOpen, onClose, planDay }: WorkoutLogModalPro
           <Field label="Duration">
             <NumberInput value={durationMin} min={1} onValueChange={setDurationMin} suffix="min" />
           </Field>
-          <Field label="Calories burned" hint={`Estimated ${estimatedKcal} kcal for ${formatNumber(weightKg, 1)} kg body weight. Override with your watch if you have one.`}>
+          <Field label="Calories burned" hint={`Estimated ${estimatedKcal} kcal for ${formatKg(weightKg)} body weight. Override with your watch if you have one.`}>
             <NumberInput value={kcalOverride} placeholder={String(estimatedKcal)} min={0} onValueChange={setKcalOverride} suffix="kcal" />
           </Field>
           <Field label="How did it feel?" hint="Used to pace your progression: “Too hard” keeps you at the current stage.">

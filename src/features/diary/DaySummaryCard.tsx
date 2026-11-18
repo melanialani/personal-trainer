@@ -1,3 +1,4 @@
+import { PieChart } from 'lucide-react';
 import type { ReactNode } from 'react';
 import type { DailyTargets } from '../../lib/calc';
 import { formatNumber } from '../../lib/format';
@@ -15,14 +16,14 @@ interface DaySummaryCardProps {
 
 const Figure = ({ label, value, tone = 'text-slate-900' }: { label: string; value: number; tone?: string }) => (
   <div>
-    <p className={`text-lg font-bold tabular-nums ${tone}`}>{formatNumber(Math.round(value))}</p>
+    <p className={`font-display text-lg font-bold tabular-nums ${tone}`}>{formatNumber(Math.round(value))}</p>
     <p className="text-xs text-slate-500">{label}</p>
   </div>
 );
 
 /** Calories-left ring, budget breakdown and macro progress for a single day. */
 export const DaySummaryCard = ({ title, totals, burned, targets, action }: DaySummaryCardProps) => (
-  <Card title={title} action={action}>
+  <Card title={title} icon={<PieChart />} action={action}>
     <div className="@container">
       <div className="flex flex-col items-center gap-6 @md:flex-row">
         <CalorieRing consumed={totals.kcal} burned={burned} target={targets.kcal} />
@@ -30,7 +31,7 @@ export const DaySummaryCard = ({ title, totals, burned, targets, action }: DaySu
           <div className="grid grid-cols-3 gap-2 text-center @md:text-left">
             <Figure label="Target" value={targets.kcal} />
             <Figure label="Eaten" value={totals.kcal} tone="text-brand-700 dark:text-brand-300" />
-            <Figure label="Exercise" value={burned} tone="text-orange-700 dark:text-orange-400" />
+            <Figure label="Exercise" value={burned} tone="text-violet-700 dark:text-violet-300" />
           </div>
           <MacroBars consumed={totals} target={targets} />
         </div>

@@ -16,3 +16,6 @@ export const useMediaQuery = (query: string): boolean => {
 
 /** Matches Tailwind's `lg` breakpoint, where pages switch to a two-column layout. */
 export const useIsDesktop = (): boolean => useMediaQuery('(min-width: 1024px)');
+
+/** Phones and tablets (finger input). Used to skip autofocus, which would pop the keyboard on page open. */
+export const useIsTouch = (): boolean => useMediaQuery('(pointer: coarse)');

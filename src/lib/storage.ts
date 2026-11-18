@@ -1,6 +1,7 @@
 import { ALL_EQUIPMENT } from '../data/exercises';
 import { BIBLE_VERSIONS } from '../data/bibleBooks';
 import type { AppData, BibleState, Child, Equipment, FastingSession, FastingState, ParentingState, PeriodEntry, Profile, VerseNote, WorkoutPlan } from '../types';
+import { todayKey } from './date';
 
 // Keys and app id keep the old "fitplan" name so saved data and existing backups keep working.
 const STORAGE_KEY = 'fitplan:data';
@@ -201,7 +202,7 @@ export const exportData = (data: AppData): void => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  link.download = `lifeplan-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  link.download = `lifeplan-backup-${todayKey()}.json`;
   link.click();
   URL.revokeObjectURL(url);
 };

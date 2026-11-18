@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { FASTING_PRESETS, activeSession, fastingLabel, formatDuration, hoursBetween, nowDateTimeKey } from '../../lib/fasting';
 import { createId } from '../../lib/id';
-import { Button } from '../../shared/components/Button';
 import { Checkbox, Field, Select, TextInput } from '../../shared/components/FormFields';
 import { Modal } from '../../shared/components/Modal';
 import { useToast } from '../../shared/components/ToastProvider';
 import type { FastingSession } from '../../types';
 import { useFasting } from './useFasting';
+import { ModalActions } from '../../shared/components/ModalActions';
 
 /** Longest fast accepted (also the data limit in `normalizeData`). */
 const MAX_FAST_HOURS = 72;
@@ -77,14 +77,7 @@ export const FastingSessionModal = ({ isOpen, session, onClose }: FastingSession
       size="sm"
       onClose={onClose}
       footer={
-        <>
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} disabled={!isValid}>
-            Save
-          </Button>
-        </>
+        <ModalActions onCancel={onClose} onSave={handleSave} isSaveDisabled={!isValid} />
       }
     >
       <div className="space-y-4">

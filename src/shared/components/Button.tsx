@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'dangerGhost';
 type ButtonSize = 'sm' | 'md';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -10,10 +10,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
-  primary: 'bg-brand-700 text-white hover:bg-brand-800 shadow-sm',
-  secondary: 'bg-surface text-slate-700 border border-slate-200 hover:bg-slate-50 shadow-sm',
+  primary: 'bg-brand-700 text-white hover:bg-brand-800 shadow-md shadow-brand-700/25 active:scale-[0.98]',
+  secondary: 'bg-surface text-slate-700 border border-slate-200 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-700 dark:hover:text-brand-300 shadow-sm active:scale-[0.98]',
   ghost: 'text-slate-600 hover:bg-slate-100',
-  danger: 'bg-rose-600 text-white hover:bg-rose-700 shadow-sm',
+  dangerGhost: 'text-rose-600 hover:bg-rose-50 dark:text-rose-400',
+  danger: 'bg-rose-600 text-white hover:bg-rose-700 shadow-md shadow-rose-600/25 active:scale-[0.98]',
 };
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
@@ -24,7 +25,7 @@ const SIZE_CLASSES: Record<ButtonSize, string> = {
 export const Button = ({ variant = 'primary', size = 'md', icon, className = '', children, type = 'button', ...rest }: ButtonProps) => (
   <button
     type={type}
-    className={`inline-flex items-center justify-center rounded-lg font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${className}`}
+    className={`inline-flex items-center justify-center rounded-xl font-semibold transition disabled:cursor-not-allowed disabled:opacity-50 ${VARIANT_CLASSES[variant]} ${SIZE_CLASSES[size]} ${className}`}
     {...rest}
   >
     {icon}

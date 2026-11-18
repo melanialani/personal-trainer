@@ -6,6 +6,7 @@ import { SearchInput, Select } from '../../shared/components/FormFields';
 import type { FoodItem } from '../../types';
 import { FoodRow } from './FoodRow';
 import { useFoods } from './useFoods';
+import { useIsTouch } from '../../shared/hooks/useMediaQuery';
 
 const ALL = 'all';
 const FAVORITES = 'favorites';
@@ -22,6 +23,7 @@ interface FoodPickerProps {
 
 /** Searchable picker over the built-in database plus the user's own foods. */
 export const FoodPicker = ({ onSelect, emptyAction, renderTrailing, listClassName = 'max-h-[50dvh]' }: FoodPickerProps) => {
+  const isTouch = useIsTouch();
   const { allFoods, favoriteIds, toggleFavorite } = useFoods();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<string>(ALL);
@@ -50,7 +52,7 @@ export const FoodPicker = ({ onSelect, emptyAction, renderTrailing, listClassNam
     <div>
       <div className="flex flex-col gap-2 sm:flex-row">
         <SearchInput
-          autoFocus
+          autoFocus={!isTouch}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search food, e.g. nasi goreng, chicken breast"

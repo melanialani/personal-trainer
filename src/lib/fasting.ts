@@ -1,5 +1,5 @@
 import type { FastingSession } from '../types';
-import { addDays, todayKey } from './date';
+import { addDays, pad2, toDateKey, todayKey } from './date';
 import { average } from './math';
 
 /** Fasts this long or longer, repeated, look like OMAD (one meal a day). */
@@ -14,11 +14,9 @@ export const FASTING_PRESETS = [
   { hours: 23, label: 'OMAD 23:1' },
 ] as const;
 
-const pad = (n: number) => String(n).padStart(2, '0');
-
 /** Local "YYYY-MM-DDTHH:mm" for a Date (the format of <input type="datetime-local">). */
 export const toDateTimeKey = (date: Date): string =>
-  `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+  `${toDateKey(date)}T${pad2(date.getHours())}:${pad2(date.getMinutes())}`;
 
 export const nowDateTimeKey = (): string => toDateTimeKey(new Date());
 
@@ -43,7 +41,7 @@ export const fastingLabel = (hours: number): string => FASTING_PRESETS.find((pre
 /** "14 h 05 m" */
 export const formatDuration = (hours: number): string => {
   const totalMinutes = Math.floor(hours * 60);
-  return `${Math.floor(totalMinutes / 60)} h ${pad(totalMinutes % 60)} m`;
+  return `${Math.floor(totalMinutes / 60)} h ${pad2(totalMinutes % 60)} m`;
 };
 
 /** The running fast (no end yet); the newest one if a merged backup left several. */

@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { CYCLE_RULES } from '../../data/cycle';
 import { diffDays, todayKey } from '../../lib/date';
 import { createId } from '../../lib/id';
-import { Button } from '../../shared/components/Button';
 import { Field, TextInput } from '../../shared/components/FormFields';
 import { Modal } from '../../shared/components/Modal';
 import { useToast } from '../../shared/components/ToastProvider';
 import { useAppData } from '../../store/AppDataContext';
 import type { PeriodEntry } from '../../types';
+import { ModalActions } from '../../shared/components/ModalActions';
 
 interface PeriodEntryModalProps {
   isOpen: boolean;
@@ -63,14 +63,7 @@ export const PeriodEntryModal = ({ isOpen, entry, defaultDate, onClose }: Period
       size="sm"
       onClose={onClose}
       footer={
-        <>
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} disabled={!isValid}>
-            Save
-          </Button>
-        </>
+        <ModalActions onCancel={onClose} onSave={handleSave} isSaveDisabled={!isValid} />
       }
     >
       <div className="space-y-4">

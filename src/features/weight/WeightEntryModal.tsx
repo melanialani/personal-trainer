@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { latestWeight } from '../../lib/calc';
 import { todayKey } from '../../lib/date';
 import { createId } from '../../lib/id';
-import { Button } from '../../shared/components/Button';
 import { Field, NumberInput, TextInput } from '../../shared/components/FormFields';
 import { Modal } from '../../shared/components/Modal';
 import { useToast } from '../../shared/components/ToastProvider';
 import { useAppData } from '../../store/AppDataContext';
 import type { WeightEntry } from '../../types';
+import { ModalActions } from '../../shared/components/ModalActions';
 
 interface WeightEntryModalProps {
   isOpen: boolean;
@@ -58,14 +58,7 @@ export const WeightEntryModal = ({ isOpen, entry, onClose }: WeightEntryModalPro
       size="sm"
       onClose={onClose}
       footer={
-        <>
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} disabled={!isValid}>
-            Save
-          </Button>
-        </>
+        <ModalActions onCancel={onClose} onSave={handleSave} isSaveDisabled={!isValid} />
       }
     >
       <div className="space-y-4">

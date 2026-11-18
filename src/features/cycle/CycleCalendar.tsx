@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
 import type { CycleDayKind } from '../../lib/cycle';
-import { WEEKDAY_SHORT, addDays, addMonths, formatDate, parseDateKey, startOfWeek, todayKey } from '../../lib/date';
+import { WEEKDAY_SHORT, addDays, addMonths, formatDate, formatMonthYear, parseDateKey, startOfMonth, startOfWeek, todayKey } from '../../lib/date';
 import { IconButton } from '../../shared/components/Button';
 
 interface CycleCalendarProps {
@@ -21,12 +21,10 @@ const LEGEND: { kind: CycleDayKind; label: string }[] = [
   { kind: 'predicted', label: 'Predicted' },
 ];
 
-const monthStart = (key: string) => `${key.slice(0, 7)}-01`;
-
 /** Month grid (Monday first). Tapping a day opens the period form for it. */
 export const CycleCalendar = ({ days, onSelectDay }: CycleCalendarProps) => {
   const today = todayKey();
-  const [month, setMonth] = useState(() => monthStart(today));
+  const [month, setMonth] = useState(() => startOfMonth(today));
   const gridStart = startOfWeek(month);
   const nextMonth = addMonths(month, 1);
   const cells: string[] = [];
@@ -38,8 +36,8 @@ export const CycleCalendar = ({ days, onSelectDay }: CycleCalendarProps) => {
         <IconButton label="Previous month" onClick={() => setMonth(addMonths(month, -1))}>
           <ChevronLeft size={18} />
         </IconButton>
-        <button type="button" className="text-sm font-semibold text-slate-900" onClick={() => setMonth(monthStart(today))} title="Back to this month">
-          {parseDateKey(month).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
+        <button type="button" className="text-sm font-semibold text-slate-900" onClick={() => setMonth(startOfMonth(today))} title="Back to this month">
+          {formatMonthYear(month)}
         </button>
         <IconButton label="Next month" onClick={() => setMonth(nextMonth)}>
           <ChevronRight size={18} />

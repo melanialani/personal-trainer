@@ -113,3 +113,7 @@ export const SETTINGS_ITEM: NavItem = { path: '/settings', label: 'Data & Settin
 
 export const findGroupByPath = (path: string): NavGroup | undefined =>
   NAV_GROUPS.find((group) => group.items.some((item) => item.path === path));
+
+/** The nav entry (any group, or Settings) for a route path. */
+export const findItemByPath = (path: string): NavItem | undefined =>
+  path === SETTINGS_ITEM.path ? SETTINGS_ITEM : NAV_GROUPS.flatMap((group) => group.items).find((item) => item.path === path);

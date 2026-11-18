@@ -1,25 +1,20 @@
 import { useEffect, useState } from 'react';
 import { addMonths, todayKey } from '../../lib/date';
 import { createId } from '../../lib/id';
-import { MAX_CHILD_MONTHS } from '../../lib/child';
-import { Button } from '../../shared/components/Button';
+import { CHILD_SEX_OPTIONS, MAX_CHILD_MONTHS } from '../../lib/child';
 import { useConfirmDelete } from '../../shared/components/ConfirmProvider';
 import { Field, Segmented, TextInput } from '../../shared/components/FormFields';
 import { Modal } from '../../shared/components/Modal';
 import { useToast } from '../../shared/components/ToastProvider';
 import type { Child, Sex } from '../../types';
 import { useChildren } from './useChildren';
+import { ModalActions } from '../../shared/components/ModalActions';
 
 interface ChildFormModalProps {
   isOpen: boolean;
   child?: Child | null;
   onClose: () => void;
 }
-
-const SEX_OPTIONS: { value: Sex; label: string }[] = [
-  { value: 'female', label: 'Girl' },
-  { value: 'male', label: 'Boy' },
-];
 
 export const ChildFormModal = ({ isOpen, child, onClose }: ChildFormModalProps) => {
   const { saveChild, removeChild } = useChildren();
@@ -73,19 +68,7 @@ export const ChildFormModal = ({ isOpen, child, onClose }: ChildFormModalProps) 
       size="sm"
       onClose={onClose}
       footer={
-        <>
-          {child && (
-            <Button variant="ghost" className="mr-auto text-rose-600 dark:text-rose-400" onClick={handleDelete}>
-              Delete
-            </Button>
-          )}
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} disabled={!isValid}>
-            Save
-          </Button>
-        </>
+        <ModalActions onCancel={onClose} onSave={handleSave} isSaveDisabled={!isValid} onDelete={child ? handleDelete : undefined} />
       }
     >
       <div className="space-y-4">
@@ -93,7 +76,7 @@ export const ChildFormModal = ({ isOpen, child, onClose }: ChildFormModalProps) 
           <TextInput value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Kenzo" autoFocus maxLength={40} />
         </Field>
         <Field label="Sex" hint="Growth standards differ for boys and girls.">
-          <Segmented value={sex} options={SEX_OPTIONS} onChange={setSex} />
+          <Segmented value={sex} options={CHILD_SEX_OPTIONS} onChange={setSex} />
         </Field>
         <Field label="Birth date" error={birthDate && birthDate > today ? 'Birth date cannot be in the future.' : undefined}>
           <TextInput type="date" value={birthDate} min={minBirthDate} max={today} onChange={(e) => setBirthDate(e.target.value)} />

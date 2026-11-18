@@ -1,4 +1,4 @@
-import { ArrowLeft, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { createFoodLogEntry, findFood } from '../../lib/foods';
 import { MEAL_LABELS, mealForCurrentTime } from '../../lib/meals';
@@ -14,6 +14,7 @@ import { FoodPicker } from './FoodPicker';
 import { OnlineFoodSearch } from './OnlineFoodSearch';
 import { ServingForm } from './ServingForm';
 import { useFoods } from './useFoods';
+import { ModalActions } from '../../shared/components/ModalActions';
 
 type SourceTab = 'database' | 'online';
 
@@ -78,19 +79,13 @@ export const AddFoodModal = ({ isOpen, onClose, date = todayKey(), meal, initial
               Cancel
             </Button>
           ) : (
-            <>
-              {!entry && !initialFood && (
-                <Button variant="ghost" icon={<ArrowLeft size={16} />} onClick={() => setFood(null)} className="mr-auto">
-                  Back
-                </Button>
-              )}
-              <Button variant="secondary" onClick={onClose}>
-                Cancel
-              </Button>
-              <Button onClick={handleSave} disabled={servings === '' || servings <= 0}>
-                {entry ? 'Save changes' : `Add to ${MEAL_LABELS[selectedMeal]}`}
-              </Button>
-            </>
+            <ModalActions
+              onCancel={onClose}
+              onSave={handleSave}
+              saveLabel={entry ? 'Save changes' : `Add to ${MEAL_LABELS[selectedMeal]}`}
+              isSaveDisabled={servings === '' || servings <= 0}
+              onBack={!entry && !initialFood ? () => setFood(null) : undefined}
+            />
           )
         }
       >

@@ -17,7 +17,8 @@ export const WaterTracker = ({ date }: { date: string }) => {
 
   return (
     <Card
-      icon={<Droplets size={16} className="text-sky-500" />}
+      icon={<Droplets />}
+      tone="sky"
       title="Water"
       subtitle={`${formatNumber(consumed)} / ${formatNumber(target)} ml`}
       action={

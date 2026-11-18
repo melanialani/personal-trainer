@@ -1,16 +1,16 @@
-import { BookOpen, ShieldAlert, X } from 'lucide-react';
+import { BookOpen, ShieldAlert } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { DIET_GUIDES, DIET_TOPICS } from '../../data/dietGuides';
 import type { Medicine } from '../../data/medicines';
 import { pluralize } from '../../lib/format';
 import { ANY, filterGuides } from '../../lib/medicines';
-import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
 import { Chip } from '../../shared/components/Chip';
 import { EmptyState } from '../../shared/components/EmptyState';
 import { SearchInput } from '../../shared/components/FormFields';
 import { Notice } from '../../shared/components/Notice';
 import { PageHeader } from '../../shared/components/PageHeader';
+import { ResultSummary } from '../../shared/components/ResultSummary';
 import { CareGuideCard } from '../medicine/CareGuideCard';
 import { MedicineDetailModal } from '../medicine/MedicineDetailModal';
 
@@ -61,14 +61,12 @@ export const DietGuidePage = () => {
         ))}
       </div>
 
-      <div className="mb-3 flex items-center justify-between gap-2 text-sm text-slate-500">
-        <span>{pluralize(guides.length, 'guide')}</span>
-        {(query || topicId !== ANY) && (
-          <Button variant="ghost" size="sm" icon={<X size={14} />} onClick={clearAll}>
-            Clear search & topic
-          </Button>
-        )}
-      </div>
+      <ResultSummary
+        count={pluralize(guides.length, 'guide')}
+        canClear={Boolean(query) || topicId !== ANY}
+        clearLabel="Clear search & topic"
+        onClear={clearAll}
+      />
 
       {guides.length === 0 ? (
         <Card>

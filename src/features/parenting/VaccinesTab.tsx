@@ -1,4 +1,4 @@
-import { ChevronDown, ExternalLink, Syringe } from 'lucide-react';
+import { ChevronDown, Syringe } from 'lucide-react';
 import { useState } from 'react';
 import { VACCINE_SCHEDULE_SOURCE, VACCINES, type Vaccine, type VaccineDose } from '../../data/vaccines';
 import { childAgeMonths, formatAgeShort, formatAgeWindow, listDoseStates, listRepeatStates, repeatDoseKey, type DoseState } from '../../lib/child';
@@ -13,6 +13,7 @@ import { Notice } from '../../shared/components/Notice';
 import { useToast } from '../../shared/components/ToastProvider';
 import type { Child } from '../../types';
 import { DateGivenModal } from './DateGivenModal';
+import { SourceLink } from './SourceLink';
 import { DoseStatusBadge, ProgramBadge } from './statusBadges';
 import { useChildren } from './useChildren';
 
@@ -69,8 +70,8 @@ export const VaccinesTab = ({ child }: { child: Child | null }) => {
     });
   };
 
-  const removeDate = () => {
-    if (!child || !editing) return;
+  const removeDate = async () => {
+    if (!child || !editing || !(await confirmDelete(`Date given for ${editing.title}`))) return;
     updateChild(child.id, (c) => {
       const vaccines = { ...c.vaccines };
       delete vaccines[editing.key];
@@ -184,14 +185,7 @@ export const VaccinesTab = ({ child }: { child: Child | null }) => {
         ))}
       </Card>
 
-      <a
-        href={VACCINE_SCHEDULE_SOURCE.url}
-        target="_blank"
-        rel="noreferrer"
-        className="inline-flex items-center gap-1 text-xs text-slate-500 underline-offset-2 hover:underline"
-      >
-        Source: {VACCINE_SCHEDULE_SOURCE.name} <ExternalLink size={12} />
-      </a>
+      <SourceLink source={VACCINE_SCHEDULE_SOURCE} prefix="Source: " className="underline-offset-2" />
 
       {child && editing && (
         <DateGivenModal

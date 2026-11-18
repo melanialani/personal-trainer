@@ -7,6 +7,7 @@ import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
 import { Chip } from '../../shared/components/Chip';
 import { Checkbox, Field, Segmented, Select } from '../../shared/components/FormFields';
+import { TextButton } from '../../shared/components/TextLink';
 import type { Equipment, WorkoutPreferences } from '../../types';
 
 type SetupPreset = Pick<WorkoutPreferences, 'equipment' | 'hasMat' | 'hasFurniture'> & { label: string };
@@ -117,9 +118,9 @@ export const TrainingPreferencesCard = ({ workout, recommendation, onChange }: T
                 <Select value={String(workout.minutesPerSession)} options={MINUTES_OPTIONS} onValueChange={(value) => set('minutesPerSession', Number(value))} />
               </Field>
             </div>
-            <button type="button" onClick={() => set('isCustomSchedule', false)} className="mt-2 text-xs font-medium text-brand-700 dark:text-brand-400 hover:underline">
+            <TextButton onClick={() => set('isCustomSchedule', false)} className="mt-2 text-xs">
               Use the recommendation instead
-            </button>
+            </TextButton>
           </div>
         )}
       </div>

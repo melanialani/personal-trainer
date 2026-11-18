@@ -1,4 +1,4 @@
-import { AlertTriangle, Check, ExternalLink, Moon, MonitorSmartphone, Soup, X } from 'lucide-react';
+import { AlertTriangle, Check, Moon, MonitorSmartphone, Soup, X } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { GENERAL_RED_FLAGS, MILESTONE_CHECKPOINTS, MILESTONE_DOMAIN_LABELS, type MilestoneCheckpoint, type MilestoneDomain } from '../../data/milestones';
 import { PARENTING_STAGES, type ParentingStage } from '../../data/parentingStages';
@@ -11,7 +11,9 @@ import { ProgressBar } from '../../shared/components/ProgressBar';
 import { Tabs } from '../../shared/components/Tabs';
 import type { Child } from '../../types';
 import { MedicalDisclaimer, ParentingHeader } from './ParentingHeader';
+import { SourceLink } from './SourceLink';
 import { useChildren } from './useChildren';
+import { TONE_TILE, type Tone } from '../../shared/tones';
 
 type DevelopmentTab = 'milestones' | 'guide';
 
@@ -155,15 +157,13 @@ const MilestoneList = ({ checkpoint, child }: { checkpoint: MilestoneCheckpoint;
       {child && checkpoint.isChecklist && !canTick && (
         <p className="mt-4 text-xs text-slate-500">You can tick these from about 3 months before this age.</p>
       )}
-      <a href={checkpoint.source.url} target="_blank" rel="noreferrer" className="mt-4 inline-flex items-center gap-1 text-xs text-slate-500 hover:underline">
-        {checkpoint.source.name} <ExternalLink size={12} />
-      </a>
+      <SourceLink source={checkpoint.source} className="mt-4" />
     </Card>
   );
 };
 
 const RedFlags = ({ stage }: { stage: ParentingStage }) => (
-  <Card title="When to see a doctor" icon={<AlertTriangle size={16} className="text-rose-600 dark:text-rose-400" />}>
+  <Card title="When to see a doctor" icon={<AlertTriangle />} tone="rose">
     {stage.redFlags.length > 0 && (
       <Notice tone="danger" size="sm" className="mb-3">
         <ul className="list-disc space-y-1 pl-4">
@@ -191,9 +191,9 @@ const StageGuide = ({ stage }: { stage: ParentingStage }) => (
     </Card>
 
     <div className="grid gap-3 sm:grid-cols-3">
-      <GuidelineTile icon={<Moon size={16} />} label="Sleep" text={stage.sleep} />
-      <GuidelineTile icon={<MonitorSmartphone size={16} />} label="Screens" text={stage.screen} />
-      <GuidelineTile icon={<Soup size={16} />} label="Food" text={stage.feeding} />
+      <GuidelineTile icon={<Moon size={14} />} tone="indigo" label="Sleep" text={stage.sleep} />
+      <GuidelineTile icon={<MonitorSmartphone size={14} />} tone="sky" label="Screens" text={stage.screen} />
+      <GuidelineTile icon={<Soup size={14} />} tone="orange" label="Food" text={stage.feeding} />
     </div>
 
     <Card title="Sebaiknya orang tua…">
@@ -201,10 +201,10 @@ const StageGuide = ({ stage }: { stage: ParentingStage }) => (
     </Card>
 
     <div className="grid gap-5 lg:grid-cols-2">
-      <Card title="Do" icon={<Check size={16} className="text-emerald-600 dark:text-emerald-400" />}>
+      <Card title="Do" icon={<Check />} tone="emerald">
         <DoDontList items={stage.dos} />
       </Card>
-      <Card title="Don't" icon={<X size={16} className="text-rose-600 dark:text-rose-400" />}>
+      <Card title="Don't" icon={<X />} tone="rose">
         <DoDontList items={stage.donts} />
       </Card>
     </div>
@@ -235,12 +235,14 @@ const DoDontList = ({ items }: { items: ParentingStage['dos'] }) => (
   </ul>
 );
 
-const GuidelineTile = ({ icon, label, text }: { icon: ReactNode; label: string; text: string }) => (
-  <div className="rounded-2xl border border-slate-200/80 bg-surface p-4 shadow-sm">
-    <p className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
-      {icon}
+const GuidelineTile = ({ icon, tone, label, text }: { icon: ReactNode; tone: Tone; label: string; text: string }) => (
+  <Card bodyClassName="p-4">
+    <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
+      <span className={`flex h-6 w-6 items-center justify-center rounded-md ${TONE_TILE[tone]}`} aria-hidden="true">
+        {icon}
+      </span>
       {label}
     </p>
     <p className="mt-1.5 text-sm text-slate-700">{text}</p>
-  </div>
+  </Card>
 );

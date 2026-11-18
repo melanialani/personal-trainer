@@ -1,8 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { todayKey } from '../../lib/date';
-import { Button } from '../../shared/components/Button';
 import { Field, TextInput } from '../../shared/components/FormFields';
 import { Modal } from '../../shared/components/Modal';
+import { ModalActions } from '../../shared/components/ModalActions';
 
 interface DateGivenModalProps {
   isOpen: boolean;
@@ -36,19 +36,7 @@ export const DateGivenModal = ({ isOpen, title, description, initialDate, minDat
       size="sm"
       onClose={onClose}
       footer={
-        <>
-          {onRemove && (
-            <Button variant="ghost" className="mr-auto text-rose-600 dark:text-rose-400" onClick={onRemove}>
-              Mark as not given
-            </Button>
-          )}
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={() => isValid && onSave(date)} disabled={!isValid}>
-            Save
-          </Button>
-        </>
+        <ModalActions onCancel={onClose} onSave={() => isValid && onSave(date)} isSaveDisabled={!isValid} onDelete={onRemove} deleteLabel="Mark as not given" />
       }
     >
       <Field label="Date given" error={date && !isValid ? 'Pick a date between the birth date and today.' : undefined}>

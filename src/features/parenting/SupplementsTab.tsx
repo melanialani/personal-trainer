@@ -1,4 +1,4 @@
-import { ClipboardCheck, ExternalLink, X } from 'lucide-react';
+import { ClipboardCheck, X } from 'lucide-react';
 import { useState } from 'react';
 import { CHILD_SUPPLEMENTS, ROUTINE_CHECKS, type ChildSupplement } from '../../data/childSupplements';
 import {
@@ -13,7 +13,7 @@ import {
 } from '../../lib/child';
 import { formatDate } from '../../lib/date';
 import { createId } from '../../lib/id';
-import { formatNumber } from '../../lib/format';
+import { formatKg, formatNumber } from '../../lib/format';
 import { Badge } from '../../shared/components/Badge';
 import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
@@ -21,6 +21,7 @@ import { useConfirmDelete } from '../../shared/components/ConfirmProvider';
 import { useToast } from '../../shared/components/ToastProvider';
 import type { Child } from '../../types';
 import { DateGivenModal } from './DateGivenModal';
+import { SourceLink } from './SourceLink';
 import { ProgramBadge, RoundStatusBadge } from './statusBadges';
 import { useChildren } from './useChildren';
 
@@ -97,7 +98,7 @@ const SupplementCard = ({ supplement, child }: { supplement: ChildSupplement; ch
                 {dose.text}
                 {dose.mgPerKg && weight && isForAge && (
                   <span className="mt-0.5 block text-xs font-medium text-brand-700 dark:text-brand-400">
-                    ≈ {formatNumber(Math.min(dose.mgPerKg * weight, dose.maxMg ?? Infinity), 1)} mg for {formatNumber(weight, 1)} kg
+                    ≈ {formatNumber(Math.min(dose.mgPerKg * weight, dose.maxMg ?? Infinity), 1)} mg for {formatKg(weight)}
                     (last weight)
                   </span>
                 )}
@@ -197,11 +198,3 @@ const ScheduleStatus = ({ supplement, child }: { supplement: ChildSupplement; ch
   return null;
 };
 
-const SourceLink = ({ source }: { source: ChildSupplement['source'] }) =>
-  source.url ? (
-    <a href={source.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-xs text-slate-500 hover:underline">
-      {source.name} <ExternalLink size={12} />
-    </a>
-  ) : (
-    <span className="text-xs text-slate-500">{source.name}</span>
-  );

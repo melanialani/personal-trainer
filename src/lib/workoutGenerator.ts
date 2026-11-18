@@ -14,7 +14,7 @@ import type {
 } from '../types';
 import { calcBmi, currentWeightKg, kcalFromMet } from './calc';
 import { ageFromBirthDate } from './date';
-import { average } from './math';
+import { average, clamp } from './math';
 import { assessProgress, startStageIndex, type TrainingProgress, type TrainingStage } from './trainingProgress';
 
 export const FITNESS_LEVEL_OPTIONS: { value: FitnessLevel; label: string }[] = [
@@ -286,7 +286,7 @@ export const assessTrainingForProfile = (profile: Profile, weights: WeightEntry[
 };
 
 export const generateWorkoutPlan = (settings: PlanSettings, goal: GoalType): WorkoutPlan => {
-  const daysPerWeek = Math.min(6, Math.max(1, settings.preferences.daysPerWeek));
+  const daysPerWeek = clamp(settings.preferences.daysPerWeek, 1, 6);
   const split = SPLITS[daysPerWeek];
   const trainingDays = TRAINING_DAYS[daysPerWeek];
   const days: WorkoutPlanDay[] = Array.from({ length: 7 }, (_, weekday) => {

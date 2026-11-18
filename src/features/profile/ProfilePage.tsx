@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ACTIVITY_LEVELS, calcBmi, calcDailyTargets, GOAL_OPTIONS, latestWeight, MACRO_PRESETS } from '../../lib/calc';
 import { ageFromBirthDate, todayKey } from '../../lib/date';
 import { DIET_OPTIONS } from '../../lib/foods';
-import { formatNumber } from '../../lib/format';
+import { formatKcal } from '../../lib/format';
 import { createId } from '../../lib/id';
 import { assessTraining, assessTrainingForProfile, generateWorkoutPlan, planOutdatedReason } from '../../lib/workoutGenerator';
 import { Button } from '../../shared/components/Button';
@@ -12,7 +12,7 @@ import { Card } from '../../shared/components/Card';
 import { Checkbox, Field, NumberInput, Segmented, Select, TextInput } from '../../shared/components/FormFields';
 import { PageHeader } from '../../shared/components/PageHeader';
 import { useToast } from '../../shared/components/ToastProvider';
-import { useVisualViewport } from '../../shared/hooks/useVisualViewport';
+import { useKeyboardOpen } from '../../shared/hooks/useKeyboardOpen';
 import { useAppData } from '../../store/AppDataContext';
 import type { Sex } from '../../types';
 import { DEFAULT_DRAFT, draftToProfile, profileToDraft, validateDraft, type ProfileDraft } from './profileDraft';
@@ -28,7 +28,7 @@ export const ProfilePage = () => {
   const { data, update } = useAppData();
   const navigate = useNavigate();
   // While typing on a phone the keyboard covers the bottom; hide the floating Save bar so it does not cover the field.
-  const { isKeyboardOpen } = useVisualViewport();
+  const isKeyboardOpen = useKeyboardOpen();
   const showToast = useToast();
   const isNew = data.profile === null;
   const [draft, setDraft] = useState<ProfileDraft>(() => (data.profile ? profileToDraft(data.profile) : DEFAULT_DRAFT));
@@ -179,7 +179,7 @@ export const ProfilePage = () => {
             <>
               Daily target{' '}
               <span className="block text-base font-bold tabular-nums text-slate-900">
-                {formatNumber(calcDailyTargets(draftToProfile(draft), data.weights).kcal)} kcal
+                {formatKcal(calcDailyTargets(draftToProfile(draft), data.weights).kcal)}
               </span>
             </>
           ) : (

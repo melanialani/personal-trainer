@@ -1,8 +1,8 @@
-import { Copy, Pencil, Plus, Trash2 } from 'lucide-react';
+import { Copy, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { addDays, todayKey } from '../../lib/date';
 import { sumNutrition } from '../../lib/foods';
-import { formatNumber, formatServings, pluralize } from '../../lib/format';
+import { formatKcal, formatNumber, formatServings, pluralize } from '../../lib/format';
 import { createId } from '../../lib/id';
 import { MEAL_LABELS, MEAL_ORDER } from '../../lib/meals';
 import { Button, IconButton } from '../../shared/components/Button';
@@ -12,6 +12,7 @@ import { DateNav } from '../../shared/components/DateNav';
 import { MacroInline } from '../../shared/components/Nutrition';
 import { PageHeader } from '../../shared/components/PageHeader';
 import { RequireProfile } from '../../shared/components/RequireProfile';
+import { RowActions } from '../../shared/components/RowActions';
 import { TextLink } from '../../shared/components/TextLink';
 import { useToast } from '../../shared/components/ToastProvider';
 import { useAppData } from '../../store/AppDataContext';
@@ -72,7 +73,7 @@ const DiaryContent = () => {
               <Card
                 key={meal}
                 title={MEAL_LABELS[meal]}
-                subtitle={mealEntries.length ? `${formatNumber(mealTotals.kcal)} kcal` : 'Nothing logged yet'}
+                subtitle={mealEntries.length ? formatKcal(mealTotals.kcal) : 'Nothing logged yet'}
                 bodyClassName=""
                 action={
                   <>
@@ -97,14 +98,7 @@ const DiaryContent = () => {
                           <MacroInline values={entry} />
                         </div>
                         <span className="text-sm font-semibold tabular-nums text-slate-900">{formatNumber(entry.kcal)}</span>
-                        <div className="flex">
-                          <IconButton label="Edit entry" onClick={() => setEditingEntry(entry)}>
-                            <Pencil size={15} />
-                          </IconButton>
-                          <IconButton label="Delete entry" tone="danger" onClick={() => handleDelete(entry)}>
-                            <Trash2 size={15} />
-                          </IconButton>
-                        </div>
+                        <RowActions itemLabel="entry" onEdit={() => setEditingEntry(entry)} onDelete={() => handleDelete(entry)} />
                       </li>
                     ))}
                   </ul>
@@ -119,7 +113,7 @@ const DiaryContent = () => {
             <DaySummaryCard title="Daily summary" totals={totals} burned={burned} targets={targets} />
           </div>
           <WaterTracker date={date} />
-          <Card title="Exercise" subtitle={workouts.length ? `${formatNumber(burned)} kcal burned` : 'No exercise logged'}>
+          <Card title="Exercise" subtitle={workouts.length ? `${formatKcal(burned)} burned` : 'No exercise logged'}>
             {workouts.length > 0 ? (
               <ul className="space-y-2 text-sm">
                 {workouts.map((workout) => (

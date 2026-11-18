@@ -1,8 +1,7 @@
-import { Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Button } from '../../shared/components/Button';
 import { TextArea } from '../../shared/components/FormFields';
 import { Modal } from '../../shared/components/Modal';
+import { ModalActions } from '../../shared/components/ModalActions';
 
 interface CommentModalProps {
   isOpen: boolean;
@@ -28,19 +27,7 @@ export const CommentModal = ({ isOpen, refLabel, initialComment, onSave, onDelet
       description={refLabel}
       onClose={onClose}
       footer={
-        <>
-          {initialComment && (
-            <Button variant="ghost" icon={<Trash2 size={16} />} onClick={onDelete} className="mr-auto">
-              Delete
-            </Button>
-          )}
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={() => onSave(comment)} disabled={!comment.trim()}>
-            Save
-          </Button>
-        </>
+        <ModalActions onCancel={onClose} onSave={() => onSave(comment)} isSaveDisabled={!comment.trim()} onDelete={initialComment ? onDelete : undefined} />
       }
     >
       <TextArea

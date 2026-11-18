@@ -110,7 +110,7 @@ export const calcDailyTargets = (profile: Profile, weights: WeightEntry[]): Dail
 
   const preset = MACRO_PRESETS.find((p) => p.value === profile.macroPreset) ?? MACRO_PRESETS[0];
   // Use target weight for protein when overweight so the number stays realistic.
-  const proteinBaseKg = profile.goal === 'lose' ? Math.min(weightKg, Math.max(profile.targetWeightKg, weightKg * 0.85)) : weightKg;
+  const proteinBaseKg = profile.goal === 'lose' ? clamp(profile.targetWeightKg, weightKg * 0.85, weightKg) : weightKg;
   const protein = Math.round(proteinBaseKg * preset.proteinPerKg);
   const fat = Math.round((kcal * preset.fatShare) / KCAL_PER_GRAM.fat);
   const carbs = Math.max(0, Math.round((kcal - protein * KCAL_PER_GRAM.protein - fat * KCAL_PER_GRAM.fat) / KCAL_PER_GRAM.carbs));

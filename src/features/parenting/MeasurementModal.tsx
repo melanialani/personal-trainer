@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { todayKey } from '../../lib/date';
 import { createId } from '../../lib/id';
-import { Button } from '../../shared/components/Button';
 import { useConfirmDelete } from '../../shared/components/ConfirmProvider';
 import { Field, NumberInput, TextInput } from '../../shared/components/FormFields';
 import { Modal } from '../../shared/components/Modal';
 import { useToast } from '../../shared/components/ToastProvider';
 import type { Child, ChildMeasurement } from '../../types';
 import { useChildren } from './useChildren';
+import { ModalActions } from '../../shared/components/ModalActions';
 
 interface MeasurementModalProps {
   isOpen: boolean;
@@ -81,19 +81,7 @@ export const MeasurementModal = ({ isOpen, child, entry, onClose }: MeasurementM
       size="sm"
       onClose={onClose}
       footer={
-        <>
-          {entry && (
-            <Button variant="ghost" className="mr-auto text-rose-600 dark:text-rose-400" onClick={handleDelete}>
-              Delete
-            </Button>
-          )}
-          <Button variant="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave} disabled={!isValid}>
-            Save
-          </Button>
-        </>
+        <ModalActions onCancel={onClose} onSave={handleSave} isSaveDisabled={!isValid} onDelete={entry ? handleDelete : undefined} />
       }
     >
       <div className="space-y-4">

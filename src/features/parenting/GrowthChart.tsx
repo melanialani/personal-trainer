@@ -3,7 +3,7 @@ import { GROWTH_LMS, type GrowthIndicator } from '../../data/growthStandards';
 import { formatAgeShort } from '../../lib/child';
 import { ageInMonthsExact, GROWTH_UNITS, measurementValue, valueAtZ } from '../../lib/growth';
 import { formatNumber } from '../../lib/format';
-import { roundTo1 } from '../../lib/math';
+import { clamp, roundTo1 } from '../../lib/math';
 import { CHART_AXIS, CHART_GRID, CHART_TOOLTIP, GROWTH_COLORS } from '../../shared/theme';
 import type { Child } from '../../types';
 
@@ -33,7 +33,7 @@ export const GrowthChart = ({ child, indicator, ageMonths, height = 300 }: Growt
 
   // Show up to 5 years of curve ending a little after today's age (or the last point).
   const lastAge = Math.max(ageMonths, ...points.map((p) => p.months));
-  const end = Math.min(tableMax, Math.max(tableMin + 12, Math.ceil(lastAge) + 6));
+  const end = clamp(Math.ceil(lastAge) + 6, tableMin + 12, tableMax);
   const start = Math.max(tableMin, end - (end <= 60 ? 60 : 72));
   if (ageMonths > tableMax) {
     return (

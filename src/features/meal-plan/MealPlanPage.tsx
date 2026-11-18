@@ -2,7 +2,7 @@ import { NotebookPen, RefreshCw, UtensilsCrossed } from 'lucide-react';
 import { useState } from 'react';
 import { formatDate, parseDateKey, toDateKey, todayKey, WEEKDAY_SHORT, weekdayIndex } from '../../lib/date';
 import { DIET_OPTIONS, sumNutrition } from '../../lib/foods';
-import { formatNumber } from '../../lib/format';
+import { formatKcal, formatNumber } from '../../lib/format';
 import { generateMealPlan, plannedItemsNutrition, swapMeal } from '../../lib/mealPlanGenerator';
 import { Badge } from '../../shared/components/Badge';
 import { Button } from '../../shared/components/Button';
@@ -123,7 +123,7 @@ const MealPlanContent = () => {
       />
       {isOutdated && (
         <Notice className="no-print mb-4">
-          This plan was made for {formatNumber(plan.targetKcal)} kcal but your target is now {formatNumber(targets.kcal)} kcal. Generate a new plan to match.
+          This plan was made for {formatKcal(plan.targetKcal)} but your target is now {formatKcal(targets.kcal)}. Generate a new plan to match.
         </Notice>
       )}
 
@@ -151,14 +151,14 @@ const MealPlanContent = () => {
           </div>
 
           {/* Phones: compact day total above the meals (the full card sits in the desktop sidebar). */}
-          <div className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-slate-200/80 bg-surface px-4 py-3 shadow-sm lg:hidden">
+          <Card className="mb-4 lg:hidden" bodyClassName="flex items-center justify-between gap-3 px-4 py-3">
             <p className="text-sm text-slate-500">
               <span className="text-lg font-bold tabular-nums text-slate-900">{formatNumber(dayTotals.kcal)}</span> / {formatNumber(targets.kcal)} kcal
             </p>
             <Button size="sm" icon={<NotebookPen size={14} />} onClick={() => logPlannedMeals(day.date, day.meals)}>
               Log day
             </Button>
-          </div>
+          </Card>
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {day.meals.map((meal, mealIndex) => (

@@ -1,6 +1,6 @@
 import { MEAL_LABELS, MEAL_ORDER } from '../../lib/meals';
 import { scaleNutrition } from '../../lib/foods';
-import { formatNumber } from '../../lib/format';
+import { formatKcal, formatNumber } from '../../lib/format';
 import { Chip } from '../../shared/components/Chip';
 import { Field, NumberInput, Segmented } from '../../shared/components/FormFields';
 import { MACROS } from '../../shared/components/Nutrition';
@@ -27,7 +27,7 @@ export const ServingForm = ({ food, servings, meal, onServingsChange, onMealChan
       <div>
         <p className="text-base font-semibold text-slate-900">{food.name}</p>
         <p className="text-sm text-slate-500">
-          1 serving = {food.servingLabel} ({formatNumber(food.servingGrams)} g) · {formatNumber(food.kcal)} kcal
+          1 serving = {food.servingLabel} ({formatNumber(food.servingGrams)} g) · {formatKcal(food.kcal)}
         </p>
       </div>
       {meal && onMealChange && (

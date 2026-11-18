@@ -1,4 +1,4 @@
-import { BookOpen, Pill, ShieldAlert, SlidersHorizontal, X } from 'lucide-react';
+import { BookOpen, Pill, ShieldAlert, SlidersHorizontal } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CARE_GUIDES } from '../../data/careGuides';
@@ -32,6 +32,7 @@ import { EmptyState } from '../../shared/components/EmptyState';
 import { Field, SearchInput, Select } from '../../shared/components/FormFields';
 import { Notice } from '../../shared/components/Notice';
 import { PageHeader } from '../../shared/components/PageHeader';
+import { ResultSummary } from '../../shared/components/ResultSummary';
 import { Tabs } from '../../shared/components/Tabs';
 import { CareGuideCard } from './CareGuideCard';
 import { MedicineCard } from './MedicineCard';
@@ -150,14 +151,12 @@ export const MedicinePage = () => {
         </Card>
       )}
 
-      <div className="mb-3 flex items-center justify-between gap-2 text-sm text-slate-500">
-        <span>{tab === 'medicines' ? pluralize(medicines.length, 'medicine') : pluralize(guides.length, 'guide')}</span>
-        {(activeCount > 0 || query) && (
-          <Button variant="ghost" size="sm" icon={<X size={14} />} onClick={clearAll}>
-            Clear search & filters
-          </Button>
-        )}
-      </div>
+      <ResultSummary
+        count={tab === 'medicines' ? pluralize(medicines.length, 'medicine') : pluralize(guides.length, 'guide')}
+        canClear={activeCount > 0 || Boolean(query)}
+        clearLabel="Clear search & filters"
+        onClear={clearAll}
+      />
 
       {tab === 'medicines' &&
         (medicines.length === 0 ? (

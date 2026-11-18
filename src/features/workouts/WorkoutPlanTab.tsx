@@ -20,6 +20,7 @@ import { EmptyState } from '../../shared/components/EmptyState';
 import { Notice } from '../../shared/components/Notice';
 import { TextLink } from '../../shared/components/TextLink';
 import { useToast } from '../../shared/components/ToastProvider';
+import { useBodyWeightKg } from '../../shared/hooks/useBodyWeightKg';
 import { useProfile } from '../../shared/hooks/useProfile';
 import { useAppData } from '../../store/AppDataContext';
 import type { FitnessLevel, WorkoutPlanDay } from '../../types';
@@ -30,7 +31,7 @@ import { TrainingProgressCard } from './TrainingProgressCard';
 import { WorkoutLogModal } from './WorkoutLogModal';
 
 export const WorkoutPlanTab = () => {
-  const { data, targets, update } = useAppData();
+  const { data, update } = useAppData();
   const confirm = useConfirm();
   const showToast = useToast();
   const [shownExercise, setShownExercise] = useState<Exercise | null>(null);
@@ -40,7 +41,7 @@ export const WorkoutPlanTab = () => {
   const today = todayKey();
   const todayIndex = weekdayIndex(today);
   const weekStart = startOfWeek(today);
-  const weightKg = targets?.weightKg ?? profile.startWeightKg;
+  const weightKg = useBodyWeightKg();
   const training = assessTrainingForProfile(profile, data.weights, data.workoutLog);
   const { preferences } = training;
 
@@ -124,6 +125,11 @@ export const WorkoutPlanTab = () => {
   }
 
   const outdatedReason = planOutdatedReason(plan, profile.goal, training);
+  const updatePlanButton = (
+    <button type="button" className="font-medium underline" onClick={handleUpdatePlan}>
+      Update my plan
+    </button>
+  );
 
   return (
     <>
@@ -139,25 +145,13 @@ export const WorkoutPlanTab = () => {
           {training.progress.stage.index > stageIndexFromId(plan.stageId)
             ? `Nice work — your workout log moved you up to the ${training.stage.label} stage.`
             : `After a break, the plan eases back to the ${training.stage.label} stage.`}{' '}
-          <button
-            type="button"
-            className="font-medium underline"
-            onClick={handleUpdatePlan}
-          >
-            Update my plan
-          </button>
+          {updatePlanButton}
         </Notice>
       )}
       {outdatedReason === 'settings' && (
         <Notice className="mb-4">
           Your goal or training preferences changed since this plan was created.{' '}
-          <button
-            type="button"
-            className="font-medium underline"
-            onClick={handleUpdatePlan}
-          >
-            Update my plan
-          </button>
+          {updatePlanButton}
         </Notice>
       )}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
