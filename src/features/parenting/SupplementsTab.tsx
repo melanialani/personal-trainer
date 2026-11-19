@@ -1,4 +1,4 @@
-import { ClipboardCheck, X } from 'lucide-react';
+import { ClipboardCheck, Pill, X } from 'lucide-react';
 import { useState } from 'react';
 import { CHILD_SUPPLEMENTS, ROUTINE_CHECKS, type ChildSupplement } from '../../data/childSupplements';
 import {
@@ -19,13 +19,17 @@ import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
 import { useConfirmDelete } from '../../shared/components/ConfirmProvider';
 import { useToast } from '../../shared/components/ToastProvider';
+import type { Tone } from '../../shared/tones';
 import type { Child } from '../../types';
 import { DateGivenModal } from './DateGivenModal';
 import { SourceLink } from './SourceLink';
 import { ProgramBadge, RoundStatusBadge } from './statusBadges';
 import { useChildren } from './useChildren';
 
-export const SupplementsTab = ({ child }: { child: Child | null }) => {
+/** Supplement cards cycle through these so neighbouring cards differ. */
+const SUPPLEMENT_TONES: Tone[] = ['brand', 'violet', 'orange', 'pink', 'indigo', 'emerald'];
+
+export const SupplementsTab =({ child }: { child: Child | null }) => {
   const age = child ? childAgeMonths(child) : null;
   // With a child: current items first, then upcoming, then finished.
   const order = (s: ChildSupplement) => (age === null ? 0 : isSupplementForAge(s, age) ? 0 : age < s.fromMonths ? 1 : 2);
@@ -38,11 +42,11 @@ export const SupplementsTab = ({ child }: { child: Child | null }) => {
         "appetite boosters") only on a doctor's advice.
       </p>
       <div className="grid gap-4 lg:grid-cols-2">
-        {supplements.map((supplement) => (
-          <SupplementCard key={supplement.id} supplement={supplement} child={child} />
+        {supplements.map((supplement, index) => (
+          <SupplementCard key={supplement.id} supplement={supplement} child={child} tone={SUPPLEMENT_TONES[index % SUPPLEMENT_TONES.length]} />
         ))}
       </div>
-      <Card title="Routine checks" icon={<ClipboardCheck size={16} />} subtitle="Not medicines, but every child should get them." bodyClassName="divide-y divide-slate-100">
+      <Card title="Routine checks" icon={<ClipboardCheck size={16} />} tone="teal" subtitle="Not medicines, but every child should get them." bodyClassName="divide-y divide-slate-100">
         {ROUTINE_CHECKS.map((check) => (
           <div key={check.name} className="px-4 py-3 sm:px-5">
             <p className="text-sm font-medium text-slate-800">{check.name}</p>
@@ -55,7 +59,7 @@ export const SupplementsTab = ({ child }: { child: Child | null }) => {
   );
 };
 
-const SupplementCard = ({ supplement, child }: { supplement: ChildSupplement; child: Child | null }) => {
+const SupplementCard = ({ supplement, child, tone }: { supplement: ChildSupplement; child: Child | null; tone: Tone }) => {
   const { updateChild } = useChildren();
   const showToast = useToast();
   const confirmDelete = useConfirmDelete();
@@ -84,6 +88,8 @@ const SupplementCard = ({ supplement, child }: { supplement: ChildSupplement; ch
   return (
     <Card
       title={supplement.name}
+      icon={<Pill />}
+      tone={tone}
       subtitle={formatAgeWindow(supplement.fromMonths, supplement.untilMonths)}
       action={<ProgramBadge isProgram={supplement.isProgram} />}
       className={isPast && supplement.schedule.kind !== 'once' ? 'opacity-70' : ''}

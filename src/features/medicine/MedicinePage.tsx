@@ -34,11 +34,15 @@ import { Notice } from '../../shared/components/Notice';
 import { PageHeader } from '../../shared/components/PageHeader';
 import { ResultSummary } from '../../shared/components/ResultSummary';
 import { Tabs } from '../../shared/components/Tabs';
+import type { Tone } from '../../shared/tones';
 import { CareGuideCard } from './CareGuideCard';
 import { MedicineCard } from './MedicineCard';
 import { MedicineDetailModal } from './MedicineDetailModal';
 
 type MedicineTab = 'medicines' | 'guides';
+
+/** Care guide cards cycle through these so neighbouring cards differ. */
+const GUIDE_TONES: Tone[] = ['brand', 'sky', 'violet', 'teal', 'pink', 'indigo'];
 
 const TABS: { value: MedicineTab; label: string }[] = [
   { value: 'medicines', label: 'Medicines' },
@@ -178,8 +182,8 @@ export const MedicinePage = () => {
           </Card>
         ) : (
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            {guides.map((guide) => (
-              <CareGuideCard key={guide.id} guide={guide} onOpenMedicine={setSelected} />
+            {guides.map((guide, index) => (
+              <CareGuideCard key={guide.id} guide={guide} tone={GUIDE_TONES[index % GUIDE_TONES.length]} onOpenMedicine={setSelected} />
             ))}
           </div>
         ))}

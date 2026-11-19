@@ -1,9 +1,20 @@
-import { useMemo, useState } from 'react';
-import { ALL_EQUIPMENT, EQUIPMENT_LABELS, EXERCISES, isExerciseAvailable, MUSCLE_LABELS, type MuscleGroup, type TrainingSetup } from '../../data/exercises';
+import { Dumbbell, HeartPulse, StretchHorizontal, Target } from 'lucide-react';
+import { useMemo, useState, type ReactNode } from 'react';
+import {
+  ALL_EQUIPMENT,
+  EQUIPMENT_LABELS,
+  EXERCISES,
+  isExerciseAvailable,
+  MUSCLE_LABELS,
+  type ExerciseType,
+  type MuscleGroup,
+  type TrainingSetup,
+} from '../../data/exercises';
 import { useAppData } from '../../store/AppDataContext';
 import { Card } from '../../shared/components/Card';
 import { EmptyState } from '../../shared/components/EmptyState';
 import { SearchInput, Select } from '../../shared/components/FormFields';
+import type { Tone } from '../../shared/tones';
 import type { Equipment } from '../../types';
 import { ExerciseDetails } from './ExerciseInfoModal';
 
@@ -15,6 +26,16 @@ const NOTHING = 'nothing';
 type EquipmentFilter = Equipment | typeof ALL | typeof MINE | typeof BODYWEIGHT | typeof NOTHING;
 
 const NO_SETUP: TrainingSetup = { equipment: [], hasMat: false, hasFurniture: false };
+
+const TYPE_ICONS: Record<ExerciseType, ReactNode> = {
+  strength: <Dumbbell />,
+  cardio: <HeartPulse />,
+  core: <Target />,
+  mobility: <StretchHorizontal />,
+};
+
+/** Cards cycle through these so neighbouring cards in the grid differ. */
+const CARD_TONES: Tone[] = ['brand', 'sky', 'violet', 'orange', 'teal', 'pink', 'indigo'];
 
 export const ExerciseLibraryTab = () => {
   const [query, setQuery] = useState('');
@@ -65,8 +86,8 @@ export const ExerciseLibraryTab = () => {
         </Card>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {results.map((exercise) => (
-            <Card key={exercise.id} title={exercise.name}>
+          {results.map((exercise, index) => (
+            <Card key={exercise.id} title={exercise.name} icon={TYPE_ICONS[exercise.type]} tone={CARD_TONES[index % CARD_TONES.length]}>
               <ExerciseDetails exercise={exercise} />
             </Card>
           ))}

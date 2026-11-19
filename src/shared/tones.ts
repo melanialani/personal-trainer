@@ -32,3 +32,31 @@ export const TONE_BAR: Record<Tone, string> = {
   orange: 'from-orange-400 to-amber-500',
   amber: 'from-amber-400 to-orange-500',
 };
+
+/** Soft wash for a card header or tile background (pastel in light mode, deep tint in dark). Text on it stays slate. */
+export const TONE_WASH: Record<Tone, string> = {
+  brand: 'from-brand-100/70 dark:from-brand-500/15',
+  emerald: 'from-emerald-100/70 dark:from-emerald-500/15',
+  teal: 'from-teal-100/70 dark:from-teal-500/15',
+  sky: 'from-sky-100/70 dark:from-sky-500/15',
+  indigo: 'from-indigo-100/70 dark:from-indigo-500/15',
+  violet: 'from-violet-100/70 dark:from-violet-500/15',
+  pink: 'from-pink-100/70 dark:from-pink-500/15',
+  rose: 'from-rose-100/70 dark:from-rose-500/15',
+  orange: 'from-orange-100/70 dark:from-orange-500/15',
+  amber: 'from-amber-100/70 dark:from-amber-500/15',
+};
+
+/** Tinted card border (light mode only; dark keeps the neutral border). */
+export const TONE_BORDER: Record<Tone, string> = {
+  brand: 'border-brand-200/70',
+  emerald: 'border-emerald-200/70',
+  teal: 'border-teal-200/70',
+  sky: 'border-sky-200/70',
+  indigo: 'border-indigo-200/70',
+  violet: 'border-violet-200/70',
+  pink: 'border-pink-200/70',
+  rose: 'border-rose-200/70',
+  orange: 'border-orange-200/70',
+  amber: 'border-amber-200/70',
+};

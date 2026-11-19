@@ -25,11 +25,8 @@ export const TrainingProgressCard = ({ progress, onChangeLevel }: TrainingProgre
   return (
     <Card
       className="mb-4"
-      title={
-        <span className="flex items-center gap-2">
-          <TrendingUp size={16} className="text-brand-700 dark:text-brand-400" /> Your progression
-        </span>
-      }
+      title="Your progression"
+      icon={<TrendingUp />}
       subtitle={`${levelLabel(stage.level)} · stage ${stage.index + 1} of ${stageCount}: ${stage.label}`}
     >
       <p className="text-sm text-slate-600">{stage.description}</p>

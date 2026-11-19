@@ -16,6 +16,7 @@ export const BottomNav = ({ group, isHidden }: BottomNavProps) => {
       aria-label={group.label}
       className={`no-print fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-surface pb-[env(safe-area-inset-bottom)] md:hidden ${isHidden ? 'hidden' : ''}`}
     >
+      <span className="bg-rainbow absolute inset-x-0 top-0 h-0.5" aria-hidden="true" />
       <div className="grid" style={{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }}>
         {items.map(({ path, shortLabel, icon: Icon }) => (
           <NavLink
@@ -29,7 +30,7 @@ export const BottomNav = ({ group, isHidden }: BottomNavProps) => {
             {({ isActive }) => (
               <>
                 <span
-                  className={`flex h-6 w-12 items-center justify-center rounded-full transition-colors ${isActive ? 'bg-brand-100 dark:bg-brand-500/20' : ''}`}
+                  className={`flex h-6 w-12 items-center justify-center rounded-full transition-colors ${isActive ? 'bg-accent-strong text-white shadow-sm shadow-brand-700/30' : ''}`}
                 >
                   <Icon size={20} />
                 </span>

@@ -1,4 +1,4 @@
-import { Calculator, Info } from 'lucide-react';
+import { Calculator, Gauge, Info } from 'lucide-react';
 import { useState } from 'react';
 import { BMI_ASIA_BANDS, bmiCategory, bmiCategoryWho, calcBmi, healthyWeightRange, latestWeight } from '../../lib/calc';
 import { CHILD_SEX_OPTIONS } from '../../lib/child';
@@ -88,7 +88,7 @@ export const BmiPage = () => {
         )}
       </div>
 
-      <Card title="Good to know" icon={<Info size={16} />} className="mt-5">
+      <Card title="Good to know" icon={<Info size={16} />} tone="amber" className="mt-5">
         <ul className="list-disc space-y-1.5 pl-4 text-sm text-slate-600">
           <li>
             BMI is like a speedometer, not a full engine check: it only compares weight with height. It cannot tell fat from
@@ -119,7 +119,7 @@ const AdultResult = ({ weightKg, heightCm }: { weightKg: number; heightCm: numbe
   const position = (value: number) => ((clamp(value, 15, 35) - 15) / 20) * 100;
 
   return (
-    <Card title="Result">
+    <Card title="Result" icon={<Gauge />} tone="sky">
       <p className="text-4xl font-bold tabular-nums text-slate-900">{formatNumber(bmi, 1)}</p>
       <div className="mt-2 flex flex-wrap items-center gap-2">
         <Badge tone={category.tone}>{category.label} (Asia-Pacific)</Badge>
@@ -189,7 +189,7 @@ const ChildResult = ({ sex, ageMonths, weightKg, heightCm }: ChildResultProps) =
     );
   }
   return (
-    <Card title="Result (BMI-for-age)">
+    <Card title="Result (BMI-for-age)" icon={<Gauge />} tone="sky">
       <p className="text-4xl font-bold tabular-nums text-slate-900">{formatNumber(result.bmi, 1)}</p>
       <div className="mt-2 flex flex-wrap items-center gap-2">
         <Badge tone={result.status.tone}>{result.status.label}</Badge>

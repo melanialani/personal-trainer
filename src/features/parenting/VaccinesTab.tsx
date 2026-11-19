@@ -1,4 +1,4 @@
-import { ChevronDown, Syringe } from 'lucide-react';
+import { CalendarClock, ChevronDown, Repeat, Syringe } from 'lucide-react';
 import { useState } from 'react';
 import { VACCINE_SCHEDULE_SOURCE, VACCINES, type Vaccine, type VaccineDose } from '../../data/vaccines';
 import { childAgeMonths, formatAgeShort, formatAgeWindow, listDoseStates, listRepeatStates, repeatDoseKey, type DoseState } from '../../lib/child';
@@ -125,7 +125,7 @@ export const VaccinesTab = ({ child }: { child: Child | null }) => {
         </Notice>
       )}
 
-      <Card title="Schedule by age" subtitle="IDAI 2024 recommendation; doses marked Free are in the government program." bodyClassName="divide-y divide-slate-100">
+      <Card title="Schedule by age" icon={<CalendarClock />} subtitle="IDAI 2024 recommendation; doses marked Free are in the government program." bodyClassName="divide-y divide-slate-100">
         {ages.map((age) => {
           const items = groups.get(age)!.filter(({ dose }) => showDone || stateOf(dose.id)?.status !== 'done');
           if (!items.length) return null;
@@ -147,7 +147,7 @@ export const VaccinesTab = ({ child }: { child: Child | null }) => {
       </Card>
 
       {child && repeats.length > 0 && (
-        <Card title="Repeat doses" subtitle="Given again after the first doses.">
+        <Card title="Repeat doses" icon={<Repeat />} tone="violet" subtitle="Given again after the first doses.">
           <ul className="space-y-3">
             {repeats.map((r) => (
               <li key={r.vaccine.id} className="flex flex-wrap items-center justify-between gap-2">
@@ -179,7 +179,7 @@ export const VaccinesTab = ({ child }: { child: Child | null }) => {
         </Card>
       )}
 
-      <Card title="About each vaccine" icon={<Syringe size={16} />} bodyClassName="divide-y divide-slate-100">
+      <Card title="About each vaccine" icon={<Syringe size={16} />} tone="teal" bodyClassName="divide-y divide-slate-100">
         {VACCINES.map((vaccine) => (
           <VaccineInfo key={vaccine.id} vaccine={vaccine} />
         ))}

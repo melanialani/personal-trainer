@@ -1,4 +1,4 @@
-import { CalendarHeart, Flame, Pencil, Play, Plus, Square, Timer, TriangleAlert } from 'lucide-react';
+import { CalendarHeart, Flame, History, Hourglass, Lightbulb, Pencil, Play, Plus, Square, Timer, TriangleAlert } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { calcCycleStats } from '../../lib/cycle';
 import { formatShortDate } from '../../lib/date';
@@ -101,7 +101,7 @@ export const FastingPage = () => {
           )}
         </Card>
 
-        <Card title="Tips">
+        <Card title="Tips" icon={<Lightbulb />} tone="amber">
           <ul className="list-disc space-y-1.5 pl-5 text-sm text-slate-700">
             <li>Water, black coffee and plain tea are fine while fasting.</li>
             <li>Break the fast with protein and vegetables first; eat slowly.</li>
@@ -115,9 +115,9 @@ export const FastingPage = () => {
 
       <div className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatTile tone="pink" label="Fasts (7 days)" value={summary.count} hint={`${summary.targetMetCount} on target`} icon={<Timer size={16} />} />
-        <StatTile tone="violet" label="Average fast" value={summary.count ? formatDuration(summary.averageHours) : '—'} hint="Last 7 days" />
+        <StatTile tone="violet" label="Average fast" value={summary.count ? formatDuration(summary.averageHours) : '—'} hint="Last 7 days" icon={<Hourglass />} />
         <StatTile tone="orange" label="Streak" value={`${summary.streakDays} d`} hint="Days in a row on target" icon={<Flame size={16} />} />
-        <StatTile tone="amber" label="Binge flags" value={summary.bingeCount} hint="Very hungry / overate (7 days)" />
+        <StatTile tone="amber" label="Binge flags" value={summary.bingeCount} hint="Very hungry / overate (7 days)" icon={<TriangleAlert />} />
       </div>
 
       <div className="mt-4 space-y-3">
@@ -141,7 +141,7 @@ export const FastingPage = () => {
         )}
       </div>
 
-      <Card title="History" className="mt-5" bodyClassName="">
+      <Card title="History" icon={<History />} tone="teal" className="mt-5" bodyClassName="">
         {history.length === 0 ? (
           <EmptyState icon={<Timer size={22} />} title="No finished fasts yet" description="Start a fast above, or log one you did earlier." />
         ) : (

@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { formatNumber } from '../../lib/format';
 import type { NutritionValues } from '../../types';
 import { COLORS } from '../theme';
@@ -59,16 +60,23 @@ export const CalorieRing = ({ consumed, burned, target, size = 168 }: CalorieRin
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const isOver = remaining < 0;
+  const gradientId = useId();
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
+        <defs>
+          <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" style={{ stopColor: COLORS.gradFrom }} />
+            <stop offset="100%" style={{ stopColor: COLORS.gradTo }} />
+          </linearGradient>
+        </defs>
         <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke={COLORS.track} strokeWidth={stroke} />
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke={isOver ? COLORS.over : COLORS.brand}
+          stroke={isOver ? COLORS.over : `url(#${gradientId})`}
           strokeWidth={stroke}
           strokeLinecap="round"
           strokeDasharray={circumference}
@@ -77,7 +85,7 @@ export const CalorieRing = ({ consumed, burned, target, size = 168 }: CalorieRin
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <span className={`text-3xl font-bold tabular-nums ${isOver ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900'}`}>
+        <span className={`font-display text-3xl font-extrabold tabular-nums ${isOver ? 'text-rose-600 dark:text-rose-400' : 'text-slate-900'}`}>
           {formatNumber(Math.abs(Math.round(remaining)))}
         </span>
         <span className="text-xs text-slate-500">{isOver ? 'kcal over' : 'kcal left'}</span>

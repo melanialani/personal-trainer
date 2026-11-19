@@ -1,4 +1,4 @@
-import { Footprints, Plus, Search } from 'lucide-react';
+import { Apple, Footprints, Plus, Search } from 'lucide-react';
 import { useState } from 'react';
 import { ACTIVITIES } from '../../data/activities';
 import { minutesToBurn } from '../../lib/calc';
@@ -146,7 +146,7 @@ export const LookupPage = () => {
         </Card>
 
         <div className="hidden lg:sticky lg:top-8 lg:block lg:self-start">
-          <Card title="Nutrition details">
+          <Card title="Nutrition details" icon={<Apple />} tone="emerald">
             {details || (
               <EmptyState icon={<Search size={22} />} title="Pick a food" description="Select any food to see its calories, macros and how long it takes to burn off." />
             )}

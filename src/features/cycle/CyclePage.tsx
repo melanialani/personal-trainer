@@ -1,4 +1,4 @@
-import { CalendarHeart, CheckCircle2, Droplet, Plus, TriangleAlert } from 'lucide-react';
+import { CalendarDays, CalendarHeart, CheckCircle2, Droplet, History, Lightbulb, Plus, Repeat, Timer, TriangleAlert } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { CYCLE_FLAG_TEXT, CYCLE_TIPS } from '../../data/cycle';
 import { calcCycleStats, cycleCalendarDays, periodCovering, periodLength } from '../../lib/cycle';
@@ -105,12 +105,14 @@ export const CyclePage = () => {
               ? `From ${pluralize(stats.cyclesUsed, 'cycle')}${stats.shortestCycle !== stats.longestCycle ? ` (${stats.shortestCycle}–${stats.longestCycle} d)` : ''}`
               : 'Default 28 d until 2 periods are logged'
           }
+          icon={<Repeat />}
         />
         <StatTile
           tone="sky"
           label="Average period"
           value={`${stats.averagePeriod} d`}
           hint={stats.periodsWithEnd ? `From ${pluralize(stats.periodsWithEnd, 'logged end')}` : 'Default 5 d until an end is logged'}
+          icon={<Timer />}
         />
       </div>
 
@@ -125,10 +127,10 @@ export const CyclePage = () => {
       )}
 
       <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <Card title="Calendar" subtitle="Tap a day to log or edit a period.">
+        <Card title="Calendar" icon={<CalendarDays />} subtitle="Tap a day to log or edit a period.">
           <CycleCalendar days={calendarDays} onSelectDay={handleSelectDay} />
         </Card>
-        <Card title="Good to know">
+        <Card title="Good to know" icon={<Lightbulb />} tone="amber">
           <ul className="list-disc space-y-1.5 pl-5 text-sm text-slate-700">
             {CYCLE_TIPS.map((tip) => (
               <li key={tip}>{tip}</li>
@@ -140,7 +142,7 @@ export const CyclePage = () => {
         </Card>
       </div>
 
-      <Card title="History" className="mt-5" bodyClassName="">
+      <Card title="History" icon={<History />} tone="violet" className="mt-5" bodyClassName="">
         {history.length === 0 ? (
           <EmptyState
             icon={<Droplet size={22} />}

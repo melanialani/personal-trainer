@@ -1,4 +1,4 @@
-import { Info } from 'lucide-react';
+import { Flame, Info } from 'lucide-react';
 import { bmiCategory, calcBmi, calcDailyTargets, effectiveWeeklyRateKg, healthyWeightRange, projectedGoalDate } from '../../lib/calc';
 import { formatDate } from '../../lib/date';
 import { formatKcal, formatNumber } from '../../lib/format';
@@ -23,7 +23,7 @@ const Row = ({ label, value }: { label: string; value: React.ReactNode }) => (
 export const TargetsPreview = ({ profile, weights }: TargetsPreviewProps) => {
   if (!profile) {
     return (
-      <Card title="Your daily targets">
+      <Card title="Your daily targets" icon={<Flame />} tone="sky">
         <p className="text-sm text-slate-500">Fill in your height, weight and target to see your calorie and macro targets.</p>
       </Card>
     );
@@ -36,7 +36,7 @@ export const TargetsPreview = ({ profile, weights }: TargetsPreviewProps) => {
   const goalDate = projectedGoalDate(profile, targets.weightKg, effectiveWeeklyRateKg(targets));
 
   return (
-    <Card title="Your daily targets" subtitle="Updates as you edit">
+    <Card title="Your daily targets" icon={<Flame />} tone="sky" subtitle="Updates as you edit">
       <div className="rounded-xl bg-brand-50 p-4 text-center">
         <p className="text-xs font-medium uppercase tracking-wide text-brand-700 dark:text-brand-300">Daily calories</p>
         <p className="mt-1 text-4xl font-bold tabular-nums text-brand-700 dark:text-brand-300">{formatNumber(targets.kcal)}</p>

@@ -1,4 +1,4 @@
-import { Calculator, Plus, Scale, TrendingDown, TrendingUp } from 'lucide-react';
+import { ArrowDownUp, CalendarRange, Calculator, ChartLine, Flag, History, Plus, Scale, Target, TrendingDown, TrendingUp } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { bmiCategory, calcBmi, currentWeightKg, goalProgress, weeklyAverages, weeklyTrendKg } from '../../lib/calc';
@@ -82,12 +82,13 @@ const WeightContent = () => {
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatTile tone="emerald" label="Current" value={formatKg(current)} hint={sortedDesc[0] ? `Last weigh-in ${formatDate(sortedDesc[0].date)}` : 'No weigh-ins yet'} icon={<Scale size={16} />} />
-        <StatTile tone="sky" label="Since start" value={`${formatSigned(change)} kg`} hint={`Started at ${formatKg(profile.startWeightKg)}`} />
+        <StatTile tone="sky" label="Since start" value={`${formatSigned(change)} kg`} hint={`Started at ${formatKg(profile.startWeightKg)}`} icon={<ArrowDownUp />} />
         <StatTile
           tone="violet"
           label="To goal"
           value={Math.abs(toGo) < 0.1 ? 'Reached 🎉' : formatKg(Math.abs(toGo))}
           hint={`Target ${formatKg(profile.targetWeightKg)}`}
+          icon={<Flag />}
         />
         <StatTile
           tone="orange"
@@ -99,10 +100,10 @@ const WeightContent = () => {
       </div>
 
       <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <Card title="Progress chart" action={<Tabs tabs={RANGE_TABS} value={range} onChange={setRange} />}>
+        <Card title="Progress chart" icon={<ChartLine />} action={<Tabs tabs={RANGE_TABS} value={range} onChange={setRange} />}>
           <WeightChart weights={data.weights} targetKg={profile.targetWeightKg} rangeDays={range === 'all' ? undefined : Number(range)} height={300} />
         </Card>
-        <Card title="Goal progress">
+        <Card title="Goal progress" icon={<Target />} tone="pink">
           <div className="space-y-4">
             <div>
               <div className="mb-1 flex justify-between text-xs text-slate-500">
@@ -132,6 +133,8 @@ const WeightContent = () => {
 
       <Card
         title="Weekly averages"
+        icon={<CalendarRange />}
+        tone="sky"
         subtitle="Compare weeks, not days. Weeks 1–2 of a diet are mostly water and glycogen; fat loss shows from week 3."
         className="mt-5"
         bodyClassName=""
@@ -180,7 +183,7 @@ const WeightContent = () => {
         )}
       </Card>
 
-      <Card title="History" className="mt-5" bodyClassName="">
+      <Card title="History" icon={<History />} tone="violet" className="mt-5" bodyClassName="">
         {sortedDesc.length === 0 ? (
           <EmptyState icon={<Scale size={22} />} title="No weigh-ins yet" action={<Button onClick={() => setModalEntry(null)}>Log your first weight</Button>} />
         ) : (

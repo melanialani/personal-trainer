@@ -1,4 +1,4 @@
-import { CheckCircle2, Dumbbell, RefreshCw } from 'lucide-react';
+import { CheckCircle2, Dumbbell, Moon, RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import { equipmentSummary, type Exercise } from '../../data/exercises';
 import { GOAL_OPTIONS } from '../../lib/calc';
@@ -22,6 +22,7 @@ import { TextLink } from '../../shared/components/TextLink';
 import { useToast } from '../../shared/components/ToastProvider';
 import { useBodyWeightKg } from '../../shared/hooks/useBodyWeightKg';
 import { useProfile } from '../../shared/hooks/useProfile';
+import type { Tone } from '../../shared/tones';
 import { useAppData } from '../../store/AppDataContext';
 import type { FitnessLevel, WorkoutPlanDay } from '../../types';
 import { ExerciseInfoModal } from './ExerciseInfoModal';
@@ -29,6 +30,9 @@ import { PlanDayExercises } from './PlanDayExercises';
 import { SessionEstimate } from './SessionEstimate';
 import { TrainingProgressCard } from './TrainingProgressCard';
 import { WorkoutLogModal } from './WorkoutLogModal';
+
+/** One tone per weekday, so the day cards in the grid each get their own color. */
+const DAY_TONES: Tone[] = ['brand', 'sky', 'violet', 'orange', 'teal', 'pink', 'indigo'];
 
 export const WorkoutPlanTab = () => {
   const { data, update } = useAppData();
@@ -163,6 +167,8 @@ export const WorkoutPlanTab = () => {
             <Card
               key={day.weekday}
               className={isToday ? 'order-first ring-2 ring-brand-500 md:order-none' : ''}
+              icon={day.isRest ? <Moon /> : <Dumbbell />}
+              tone={DAY_TONES[day.weekday % DAY_TONES.length]}
               title={
                 <span className="flex items-center gap-2">
                   {WEEKDAY_NAMES[day.weekday]}

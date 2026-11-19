@@ -11,8 +11,10 @@ const SettingsIcon = SETTINGS_ITEM.icon;
 
 /** Phone top bar: switch between groups (each in its own color); the bottom bar shows the active group's pages. */
 export const MobileHeader = ({ activeGroup, pathFor }: MobileHeaderProps) => (
-  // Solid background on purpose: backdrop-filter on a sticky bar paints blank in Firefox for Android.
-  <header className="no-print sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-slate-200 bg-surface px-3 md:hidden">
+  // Fixed (not sticky) and solid (no backdrop-filter): Firefox for Android painted the sticky, blurred version as an
+  // empty strip when its toolbar slid away. AppLayout pads <main> by the header height on phones.
+  <header className="no-print fixed inset-x-0 top-0 z-30 flex h-14 items-center gap-2 border-b border-slate-200 bg-surface px-3 md:hidden">
+    <span className="bg-rainbow absolute inset-x-0 bottom-0 h-0.5" aria-hidden="true" />
     <nav aria-label="Sections" className="flex min-w-0 flex-1 gap-1 rounded-xl bg-slate-100 p-1">
       {NAV_GROUPS.map((group) => {
         const isActive = group.id === activeGroup.id;
@@ -26,7 +28,7 @@ export const MobileHeader = ({ activeGroup, pathFor }: MobileHeaderProps) => (
             aria-label={group.label}
             title={group.label}
             className={`flex min-w-0 items-center justify-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-semibold transition-all ${
-              isActive ? 'flex-[3.5] bg-brand-700 text-white shadow-md shadow-brand-700/30' : 'flex-1 text-brand-600 dark:text-brand-400'
+              isActive ? 'bg-accent-strong flex-[3.5] text-white shadow-md shadow-brand-700/30' : 'flex-1 text-brand-600 dark:text-brand-400'
             }`}
           >
             <Icon size={16} className="shrink-0" />

@@ -7,6 +7,7 @@ import { IconButton } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
 import { MacroInline } from '../../shared/components/Nutrition';
 import type { FoodItem, PlannedMeal } from '../../types';
+import { MEAL_ICONS, MEAL_TONES } from '../diary/mealStyle';
 
 interface PlannedMealCardProps {
   meal: PlannedMeal;
@@ -20,6 +21,8 @@ export const PlannedMealCard = ({ meal, customFoods, isLogged, onSwap, onLog }: 
   const totals = plannedItemsNutrition(meal.items, customFoods);
   return (
     <Card
+      icon={MEAL_ICONS[meal.meal]}
+      tone={MEAL_TONES[meal.meal]}
       title={
         <span className="flex flex-col">
           <span className="text-xs font-medium uppercase tracking-wide text-brand-700 dark:text-brand-400">{MEAL_LABELS[meal.meal]}</span>

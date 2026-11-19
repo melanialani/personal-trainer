@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { TONE_BAR, TONE_TILE, type Tone } from '../tones';
+import { TONE_BAR, TONE_BORDER, TONE_TILE, TONE_WASH, type Tone } from '../tones';
 
 interface StatTileProps {
   label: string;
@@ -11,7 +11,9 @@ interface StatTileProps {
 }
 
 export const StatTile = ({ label, value, hint, icon, tone = 'brand' }: StatTileProps) => (
-  <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-surface p-4 shadow-sm shadow-slate-900/5">
+  <div
+    className={`relative overflow-hidden rounded-2xl border bg-surface dark:border-slate-200/80 ${TONE_BORDER[tone]} bg-gradient-to-br to-transparent to-80% p-4 shadow-sm shadow-slate-900/5 ${TONE_WASH[tone]}`}
+  >
     <span className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${TONE_BAR[tone]}`} aria-hidden="true" />
     <div className="flex items-center justify-between gap-2">
       <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</p>

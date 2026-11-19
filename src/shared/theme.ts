@@ -15,6 +15,10 @@ export const COLORS = {
   mutedDark: 'var(--color-slate-300)',
   axis: 'var(--color-slate-400)',
   hover: 'var(--color-slate-50)',
+  /** Module accent as a left-to-right gradient (progress bars). */
+  brandGradient: 'linear-gradient(90deg, var(--grad-from, var(--color-brand-500)), var(--grad-to, var(--color-brand-600)))',
+  gradFrom: 'var(--grad-from, var(--color-brand-500))',
+  gradTo: 'var(--grad-to, var(--color-brand-600))',
 } as const;
 
 /** Growth chart lines: WHO SD curves and the child's own measurements. Fixed hues (not the module accent),

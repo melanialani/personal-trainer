@@ -6,6 +6,7 @@ import { useKeyboardOpen } from '../shared/hooks/useKeyboardOpen';
 import { useAppData } from '../store/AppDataContext';
 import { BottomNav } from './BottomNav';
 import { MobileHeader } from './MobileHeader';
+import { ScrollToTop } from './ScrollToTop';
 import { Sidebar } from './Sidebar';
 import { useNavGroup } from './useNavGroup';
 
@@ -24,7 +25,7 @@ export const AppLayout = () => {
       <Sidebar />
       <MobileHeader activeGroup={activeGroup} pathFor={pathFor} />
 
-      <main className="relative isolate min-w-0 flex-1 px-4 pb-28 pt-5 sm:px-6 md:pb-10 lg:px-10 lg:pt-8">
+      <main className="relative isolate min-w-0 flex-1 px-4 pb-28 pt-[4.75rem] sm:px-6 md:pb-10 md:pt-5 lg:px-10 lg:pt-8">
         <div className="bg-accent-glow pointer-events-none absolute inset-x-0 top-0 -z-10 h-80" aria-hidden="true" />
         <div className="mx-auto max-w-6xl">
           {hasStorageError && (
@@ -32,6 +33,7 @@ export const AppLayout = () => {
               Could not save to browser storage (storage may be full or disabled). Export a backup to avoid losing data.
             </Notice>
           )}
+          <ScrollToTop />
           <Outlet />
         </div>
       </main>

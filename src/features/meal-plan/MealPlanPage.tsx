@@ -1,4 +1,4 @@
-import { NotebookPen, RefreshCw, UtensilsCrossed } from 'lucide-react';
+import { NotebookPen, PieChart, RefreshCw, SlidersHorizontal, UtensilsCrossed } from 'lucide-react';
 import { useState } from 'react';
 import { formatDate, parseDateKey, toDateKey, todayKey, WEEKDAY_SHORT, weekdayIndex } from '../../lib/date';
 import { DIET_OPTIONS, sumNutrition } from '../../lib/foods';
@@ -140,7 +140,7 @@ const MealPlanContent = () => {
                   type="button"
                   onClick={() => setSelectedIndex(index)}
                   className={`flex min-w-16 shrink-0 flex-col items-center rounded-xl border px-3 py-2 transition-colors ${
-                    isSelected ? 'border-brand-600 bg-brand-700 text-white' : 'border-slate-200 bg-surface text-slate-600 hover:border-brand-300'
+                    isSelected ? 'bg-accent-strong border-transparent text-white' : 'border-slate-200 bg-surface text-slate-600 hover:border-brand-300'
                   }`}
                 >
                   <span className="text-[11px] font-medium uppercase">{planDay.date === today ? 'Today' : WEEKDAY_SHORT[weekdayIndex(planDay.date)]}</span>
@@ -173,7 +173,7 @@ const MealPlanContent = () => {
               ))}
             </div>
             <div className="space-y-5 lg:sticky lg:top-8 lg:self-start">
-              <Card title={`Day total · ${formatDate(day.date, { weekday: 'long', day: 'numeric', month: 'short' })}`}>
+              <Card title={`Day total · ${formatDate(day.date, { weekday: 'long', day: 'numeric', month: 'short' })}`} icon={<PieChart />}>
                 <p className="text-3xl font-bold tabular-nums text-slate-900">
                   {formatNumber(dayTotals.kcal)} <span className="text-sm font-medium text-slate-500">/ {formatNumber(targets.kcal)} kcal</span>
                 </p>
@@ -184,7 +184,7 @@ const MealPlanContent = () => {
                   Log whole day to diary
                 </Button>
               </Card>
-              <Card title="Preferences">
+              <Card title="Preferences" icon={<SlidersHorizontal />} tone="teal">
                 {preferences}
                 <p className="mt-3 text-xs text-slate-500">
                   Tap <RefreshCw size={11} className="inline" /> on a meal to swap it. Portions are rounded to ¼ serving.

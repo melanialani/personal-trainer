@@ -1,4 +1,4 @@
-import { Printer } from 'lucide-react';
+import { Printer, ShoppingCart } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { formatNumber, formatServings } from '../../lib/format';
 import { buildShoppingList } from '../../lib/mealPlanGenerator';
@@ -29,6 +29,7 @@ export const ShoppingList = ({ plan, customFoods }: ShoppingListProps) => {
   return (
     <Card
       title="Shopping list"
+      icon={<ShoppingCart />}
       subtitle={`For ${plan.days.length} days · amounts are cooked/edible weight`}
       action={
         <Button size="sm" variant="secondary" icon={<Printer size={14} />} onClick={() => window.print()} className="no-print">

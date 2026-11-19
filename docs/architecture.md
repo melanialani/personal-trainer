@@ -125,6 +125,11 @@ plus the user's excluded keywords.
   text field and a shrunk screen: Chrome/Safari shrink the visual viewport, Firefox on Android the window). Modals size
   themselves to the visible viewport (`useVisualViewport`). Page-level search fields do not autofocus on touch screens.
 - No `backdrop-filter` (`backdrop-blur`) on sticky/fixed bars: Firefox on Android paints them as an empty strip.
+- The phone header is `position: fixed` (not sticky; `<main>` is padded by its height) and `layout/ScrollToTop.tsx`
+  opens every page at the top: both avoid Firefox-for-Android leaving a blank strip where its toolbar slid away.
+- Extra color layers: `bg-accent-strong` (filled buttons, active pills; white text ≥ 4.5:1), `bg-rainbow` lines on the
+  phone header/bottom nav, `TONE_WASH` header/tile washes and `TONE_BORDER` tinted borders (light mode), gradient
+  calorie ring and progress bars (`COLORS.brandGradient`). Light page background is a faint pink-lavender.
 
 ## Food data
 Food names and serving labels are Indonesian; ids are stable English slugs (searchable). Categories stay English (UI).

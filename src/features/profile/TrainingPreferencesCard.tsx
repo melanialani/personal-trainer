@@ -1,4 +1,4 @@
-import { Sparkles } from 'lucide-react';
+import { Dumbbell, Sparkles } from 'lucide-react';
 import { ALL_EQUIPMENT, EQUIPMENT_LABELS } from '../../data/exercises';
 import { todayKey } from '../../lib/date';
 import { pluralize } from '../../lib/format';
@@ -51,7 +51,7 @@ export const TrainingPreferencesCard = ({ workout, recommendation, onChange }: T
     });
 
   return (
-    <Card title="Training preferences" subtitle="Used by the workout planner">
+    <Card title="Training preferences" icon={<Dumbbell />} tone="violet" subtitle="Used by the workout planner">
       <div className="space-y-5">
         <Field label="Fitness level">
           {/* Progression restarts from the new level, so only workouts from today count toward it. */}

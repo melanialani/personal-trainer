@@ -1,4 +1,4 @@
-import { AlertTriangle, Check, Moon, MonitorSmartphone, Soup, X } from 'lucide-react';
+import { AlertTriangle, Blocks, Check, HeartHandshake, ListChecks, Moon, MonitorSmartphone, Soup, X } from 'lucide-react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { GENERAL_RED_FLAGS, MILESTONE_CHECKPOINTS, MILESTONE_DOMAIN_LABELS, type MilestoneCheckpoint, type MilestoneDomain } from '../../data/milestones';
 import { PARENTING_STAGES, type ParentingStage } from '../../data/parentingStages';
@@ -105,6 +105,7 @@ const MilestoneList = ({ checkpoint, child }: { checkpoint: MilestoneCheckpoint;
 
   return (
     <Card
+      icon={<ListChecks />}
       title={checkpoint.isChecklist ? `By ${checkpoint.label}, most children can…` : `At ${checkpoint.label}, children often…`}
       subtitle={
         checkpoint.isChecklist
@@ -184,7 +185,7 @@ const RedFlags = ({ stage }: { stage: ParentingStage }) => (
 
 const StageGuide = ({ stage }: { stage: ParentingStage }) => (
   <div className="space-y-5">
-    <Card title={`Sedang aktif apa? · ${stage.label}`}>
+    <Card title={`Sedang aktif apa? · ${stage.label}`} icon={<Blocks />} tone="violet">
       <p className="text-sm text-slate-700">{stage.focus}</p>
       <h3 className="mb-1.5 mt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">Biasanya ngapain</h3>
       <BulletList items={stage.dailyLife} />
@@ -196,7 +197,7 @@ const StageGuide = ({ stage }: { stage: ParentingStage }) => (
       <GuidelineTile icon={<Soup size={14} />} tone="orange" label="Food" text={stage.feeding} />
     </div>
 
-    <Card title="Sebaiknya orang tua…">
+    <Card title="Sebaiknya orang tua…" icon={<HeartHandshake />} tone="pink">
       <BulletList items={stage.parentTips} />
     </Card>
 

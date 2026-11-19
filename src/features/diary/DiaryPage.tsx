@@ -1,4 +1,4 @@
-import { Copy, Plus } from 'lucide-react';
+import { Copy, Dumbbell, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { addDays, todayKey } from '../../lib/date';
 import { sumNutrition } from '../../lib/foods';
@@ -20,6 +20,7 @@ import type { FoodLogEntry, MealType } from '../../types';
 import { AddFoodModal } from '../foods/AddFoodModal';
 import { WaterTracker } from '../water/WaterTracker';
 import { DaySummaryCard } from './DaySummaryCard';
+import { MEAL_ICONS, MEAL_TONES } from './mealStyle';
 import { useDaySummary } from './useDaySummary';
 
 export const DiaryPage = () => (
@@ -73,6 +74,8 @@ const DiaryContent = () => {
               <Card
                 key={meal}
                 title={MEAL_LABELS[meal]}
+                icon={MEAL_ICONS[meal]}
+                tone={MEAL_TONES[meal]}
                 subtitle={mealEntries.length ? formatKcal(mealTotals.kcal) : 'Nothing logged yet'}
                 bodyClassName=""
                 action={
@@ -113,7 +116,7 @@ const DiaryContent = () => {
             <DaySummaryCard title="Daily summary" totals={totals} burned={burned} targets={targets} />
           </div>
           <WaterTracker date={date} />
-          <Card title="Exercise" subtitle={workouts.length ? `${formatKcal(burned)} burned` : 'No exercise logged'}>
+          <Card title="Exercise" icon={<Dumbbell />} tone="violet" subtitle={workouts.length ? `${formatKcal(burned)} burned` : 'No exercise logged'}>
             {workouts.length > 0 ? (
               <ul className="space-y-2 text-sm">
                 {workouts.map((workout) => (

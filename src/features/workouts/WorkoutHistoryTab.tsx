@@ -1,4 +1,4 @@
-import { Activity, Plus, Trash2 } from 'lucide-react';
+import { Activity, BarChart3, Dumbbell, Flame, History, Plus, Timer, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { exerciseById } from '../../data/exercises';
@@ -49,12 +49,12 @@ export const WorkoutHistoryTab = () => {
         </Button>
       </div>
       <div className="grid grid-cols-3 gap-3">
-        <StatTile tone="emerald" label="Sessions this week" value={thisWeek.length} />
-        <StatTile tone="sky" label="Active minutes" value={formatNumber(sumBy(thisWeek, (w) => w.durationMin))} hint="WHO: 150+ min/week" />
-        <StatTile tone="orange" label="kcal burned" value={formatNumber(sumBy(thisWeek, (w) => w.kcalBurned))} />
+        <StatTile tone="emerald" label="Sessions this week" value={thisWeek.length} icon={<Dumbbell />} />
+        <StatTile tone="sky" label="Active minutes" value={formatNumber(sumBy(thisWeek, (w) => w.durationMin))} hint="WHO: 150+ min/week" icon={<Timer />} />
+        <StatTile tone="orange" label="kcal burned" value={formatNumber(sumBy(thisWeek, (w) => w.kcalBurned))} icon={<Flame />} />
       </div>
 
-      <Card title="Active minutes per week" className="mt-5">
+      <Card title="Active minutes per week" icon={<BarChart3 />} className="mt-5">
         <ResponsiveContainer width="100%" height={200}>
           <BarChart data={weeklyChart} margin={{ top: 8, right: 8, bottom: 0, left: -20 }}>
             <CartesianGrid {...CHART_GRID} />
@@ -70,7 +70,7 @@ export const WorkoutHistoryTab = () => {
         </ResponsiveContainer>
       </Card>
 
-      <Card title="History" className="mt-5" bodyClassName="">
+      <Card title="History" icon={<History />} tone="violet" className="mt-5" bodyClassName="">
         {sorted.length === 0 ? (
           <EmptyState icon={<Activity size={22} />} title="No workouts logged yet" description="Log a planned session or any activity like walking, futsal or badminton." />
         ) : (

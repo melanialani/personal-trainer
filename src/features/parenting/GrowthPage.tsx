@@ -1,4 +1,4 @@
-import { Plus, Ruler } from 'lucide-react';
+import { ChartLine, History, Info, Plus, Ruler, Table2 } from 'lucide-react';
 import { useState } from 'react';
 import type { GrowthIndicator } from '../../data/growthStandards';
 import { childAgeMonths, formatChildAge } from '../../lib/child';
@@ -105,6 +105,7 @@ const ChildGrowth = ({ child }: { child: Child | null }) => {
 
           <Card
             title="Growth chart"
+            icon={<ChartLine />}
             subtitle={`${child.name} · ${formatChildAge(age)}`}
             action={
               <div className="w-48">
@@ -122,7 +123,7 @@ const ChildGrowth = ({ child }: { child: Child | null }) => {
             </p>
           </Card>
 
-          <Card title="History" bodyClassName="divide-y divide-slate-100">
+          <Card title="History" icon={<History />} tone="violet" bodyClassName="divide-y divide-slate-100">
             {history.map((m) => (
               <button
                 key={m.id}
@@ -188,6 +189,7 @@ const ReferenceRanges = ({ defaultSex, highlightMonths }: ReferenceRangesProps) 
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
       <Card
         title={GROWTH_INDICATOR_LABELS[indicator]}
+        icon={<Table2 />}
         subtitle="WHO Child Growth Standards 2006 (0–5 years) · WHO Growth Reference 2007 (5–18 years)"
       >
         <div className="mb-4 grid gap-3 sm:grid-cols-2">
@@ -200,7 +202,7 @@ const ReferenceRanges = ({ defaultSex, highlightMonths }: ReferenceRangesProps) 
         </div>
         <GrowthReferenceTable sex={sex} indicator={indicator} highlightMonths={highlightMonths} />
       </Card>
-      <Card title="How to read this">
+      <Card title="How to read this" icon={<Info />} tone="teal">
         <ul className="list-disc space-y-2 pl-4 text-sm text-slate-600">
           <li>
             <b>Min (−2 SD)</b> and <b>Max (+2 SD)</b> bound the range where about 95% of healthy children fall. SD (standard

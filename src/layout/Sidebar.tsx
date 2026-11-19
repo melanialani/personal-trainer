@@ -27,7 +27,7 @@ const SettingsIcon = SETTINGS_ITEM.icon;
 
 /** Desktop sidebar (Settings is the gear next to the theme button): every group with its pages, each group in its own accent color. */
 export const Sidebar = () => (
-  <aside className="no-print sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-slate-200 bg-surface px-3 py-5 md:flex">
+  <aside className="no-print sticky top-0 hidden h-dvh w-64 shrink-0 flex-col border-r border-slate-200 bg-surface bg-gradient-to-b from-pink-50/80 via-transparent to-violet-50/80 px-3 py-5 md:flex dark:from-pink-500/5 dark:to-violet-500/5">
     <div className="flex items-center justify-between gap-2 px-2">
       <Logo />
       <div className="flex items-center">

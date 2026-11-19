@@ -1,4 +1,4 @@
-import { Save } from 'lucide-react';
+import { Save, Target, UserRound, Utensils } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ACTIVITY_LEVELS, calcBmi, calcDailyTargets, GOAL_OPTIONS, latestWeight, MACRO_PRESETS } from '../../lib/calc';
@@ -88,7 +88,7 @@ export const ProfilePage = () => {
       />
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-5">
-          <Card title="About you">
+          <Card title="About you" icon={<UserRound />}>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Name" error={visibleErrors.name}>
                 <TextInput value={draft.name} onChange={(e) => setField('name', e.target.value)} placeholder="e.g. Rina" />
@@ -112,7 +112,7 @@ export const ProfilePage = () => {
             </div>
           </Card>
 
-          <Card title="Goal">
+          <Card title="Goal" icon={<Target />} tone="pink">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="What do you want to achieve?" className="sm:col-span-2">
                 <Segmented value={draft.goal} options={GOAL_OPTIONS} onChange={(value) => setField('goal', value)} />
@@ -145,7 +145,7 @@ export const ProfilePage = () => {
             </div>
           </Card>
 
-          <Card title="Food preferences" subtitle="Used by the meal planner">
+          <Card title="Food preferences" icon={<Utensils />} tone="orange" subtitle="Used by the meal planner">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Diet">
                 <Select value={draft.dietPreference} options={DIET_OPTIONS} onValueChange={(value) => setField('dietPreference', value)} />

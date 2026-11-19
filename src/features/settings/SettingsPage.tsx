@@ -1,4 +1,4 @@
-import { Database, Download, RotateCcw, Sparkles, Upload } from 'lucide-react';
+import { Database, DatabaseBackup, Download, Palette, RotateCcw, Sparkles, TriangleAlert, Upload } from 'lucide-react';
 import { useRef, useState, type ChangeEvent } from 'react';
 import { createEmptyData, exportData, mergeData, parseImportFile } from '../../lib/storage';
 import { formatNumber } from '../../lib/format';
@@ -86,7 +86,7 @@ export const SettingsPage = () => {
     <>
       <PageHeader title="Data & Settings" description="Everything is stored only in this browser. Export a backup to move it to another device." />
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <Card title="Backup" subtitle="Export to a JSON file, import it on any device or browser">
+        <Card title="Backup" icon={<DatabaseBackup />} subtitle="Export to a JSON file, import it on any device or browser">
           <div className="flex flex-wrap gap-2">
             <Button icon={<Download size={16} />} onClick={handleExport}>
               Export data
@@ -103,25 +103,26 @@ export const SettingsPage = () => {
 
         <Card
           icon={<Database size={16} />}
+          tone="sky"
           title="Stored in this browser"
           subtitle={`About ${formatNumber(sizeKb, 1)} KB`}
         >
           <SummaryList data={data} />
         </Card>
 
-        <Card title="Appearance" subtitle="System follows your phone or computer setting. Saved on this device only.">
+        <Card title="Appearance" icon={<Palette />} tone="violet" subtitle="System follows your phone or computer setting. Saved on this device only.">
           <div className="max-w-xs">
             <ThemeSegmented />
           </div>
         </Card>
 
-        <Card title="Sample data" subtitle="Explore the app with six weeks of realistic example data">
+        <Card title="Sample data" icon={<Sparkles />} tone="amber" subtitle="Explore the app with six weeks of realistic example data">
           <Button variant="secondary" icon={<Sparkles size={16} />} onClick={loadSampleData}>
             Load sample data
           </Button>
         </Card>
 
-        <Card title="Danger zone">
+        <Card title="Danger zone" icon={<TriangleAlert />} tone="rose">
           <Button variant="danger" icon={<RotateCcw size={16} />} onClick={handleReset}>
             Delete all data
           </Button>

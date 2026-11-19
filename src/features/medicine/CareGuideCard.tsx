@@ -1,10 +1,13 @@
+import { ClipboardList } from 'lucide-react';
 import type { CareGuide, GuideTable } from '../../data/careGuides';
 import { MEDICINES, type Medicine } from '../../data/medicines';
 import { Card } from '../../shared/components/Card';
 import { Chip } from '../../shared/components/Chip';
+import type { Tone } from '../../shared/tones';
 
 interface CareGuideCardProps {
   guide: CareGuide;
+  tone?: Tone;
   onOpenMedicine: (medicine: Medicine) => void;
 }
 
@@ -36,11 +39,11 @@ const GuideTableView = ({ table }: { table: GuideTable }) => (
   </div>
 );
 
-export const CareGuideCard = ({ guide, onOpenMedicine }: CareGuideCardProps) => {
+export const CareGuideCard = ({ guide, tone, onOpenMedicine }: CareGuideCardProps) => {
   const medicines = MEDICINES.filter((medicine) => guide.relatedMedicineIds.includes(medicine.id));
 
   return (
-    <Card title={guide.title} subtitle={guide.summary}>
+    <Card title={guide.title} icon={<ClipboardList />} tone={tone} subtitle={guide.summary}>
       <div className="space-y-4">
         {guide.sections.map((section) => (
           <section key={section.heading} className="space-y-2">

@@ -17,7 +17,8 @@
   --color-brand-700: #047857;
   --color-brand-800: #065f46;
   /* Semantic surfaces: page background, cards/inputs, selected segment inside a slate-100 track. */
-  --color-page: #f6f7f9;
+  /* Light page: a faint pink-lavender tint (not grey) so white cards stand out. */
+  --color-page: #fbf6fa;
   --color-surface: #ffffff;
   --color-raised: #ffffff;
   --color-brand-ink: #047857;
@@ -125,6 +126,8 @@ input[type='number'] {
   --color-brand-ink: #047857;
   --grad-from: #10b981;
   --grad-to: #0ea5e9;
+  --grad-strong-from: #047857;
+  --grad-strong-to: #0f766e;
 }
 [data-accent='health'] {
   --color-brand-50: #fff7ed;
@@ -139,6 +142,8 @@ input[type='number'] {
   --color-brand-ink: #c2410c;
   --grad-from: #f97316;
   --grad-to: #f43f5e;
+  --grad-strong-from: #c2410c;
+  --grad-strong-to: #be123c;
 }
 [data-accent='diet'] {
   --color-brand-50: #fdf2f8;
@@ -153,6 +158,8 @@ input[type='number'] {
   --color-brand-ink: #be185d;
   --grad-from: #ec4899;
   --grad-to: #a855f7;
+  --grad-strong-from: #be185d;
+  --grad-strong-to: #7e22ce;
 }
 [data-accent='parenting'] {
   --color-brand-50: #f0f9ff;
@@ -167,6 +174,8 @@ input[type='number'] {
   --color-brand-ink: #0369a1;
   --grad-from: #0ea5e9;
   --grad-to: #6366f1;
+  --grad-strong-from: #0369a1;
+  --grad-strong-to: #4338ca;
 }
 [data-accent='spiritual'] {
   --color-brand-50: #f5f3ff;
@@ -181,6 +190,8 @@ input[type='number'] {
   --color-brand-ink: #6d28d9;
   --grad-from: #8b5cf6;
   --grad-to: #d946ef;
+  --grad-strong-from: #6d28d9;
+  --grad-strong-to: #a21caf;
 }
 .dark[data-accent='fitness'],
 .dark [data-accent='fitness'] {
@@ -223,11 +234,22 @@ input[type='number'] {
   background-image: linear-gradient(135deg, var(--grad-from, var(--color-brand-500)), var(--grad-to, var(--color-brand-600)));
 }
 
+/* Strong gradient for filled buttons and active pills: both ends are -700 shades, so white text on it is ≥ 4.5:1. */
+@utility bg-accent-strong {
+  background-image: linear-gradient(135deg, var(--grad-strong-from, var(--color-brand-700)), var(--grad-strong-to, var(--color-brand-800)));
+}
+
+/* Thin multi-color line (header bottom, bottom-nav top). Decorative. */
+@utility bg-rainbow {
+  background-image: linear-gradient(90deg, #f472b6, #a78bfa, #38bdf8, #34d399, #fbbf24);
+}
+
 /* Soft accent glow behind the top of the page. Decorative; sits under the content. */
 @utility bg-accent-glow {
   background-image:
-    radial-gradient(60% 100% at 0% 0%, color-mix(in srgb, var(--grad-from, var(--color-brand-500)) 16%, transparent), transparent),
-    radial-gradient(50% 90% at 100% 0%, color-mix(in srgb, var(--grad-to, var(--color-brand-500)) 12%, transparent), transparent);
+    radial-gradient(55% 90% at 0% 0%, color-mix(in srgb, var(--grad-from, var(--color-brand-500)) 24%, transparent), transparent),
+    radial-gradient(45% 80% at 100% 0%, color-mix(in srgb, var(--grad-to, var(--color-brand-500)) 20%, transparent), transparent),
+    radial-gradient(40% 70% at 55% 10%, color-mix(in srgb, #f472b6 12%, transparent), transparent);
 }
 
 /* Horizontal chip/tab scrollers: keep swipe scrolling, hide the scrollbar. */
