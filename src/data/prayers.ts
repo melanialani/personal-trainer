@@ -1,4 +1,4 @@
-export type PrayerCategory = 'core' | 'marian' | 'rosary' | 'daily' | 'saints' | 'chaplet';
+export type PrayerCategory = 'core' | 'marian' | 'rosary' | 'daily' | 'saints' | 'chaplet' | 'personal';
 
 export const PRAYER_CATEGORY_LABELS: Record<PrayerCategory, string> = {
   core: 'Doa Pokok',
@@ -7,6 +7,7 @@ export const PRAYER_CATEGORY_LABELS: Record<PrayerCategory, string> = {
   daily: 'Doa Harian',
   saints: 'Santo-Santa',
   chaplet: 'Koronka',
+  personal: 'Doa Pribadi',
 };
 
 export interface Prayer {
@@ -18,13 +19,15 @@ export interface Prayer {
   /** Lines separated by "\n"; leader / response markers kept as in the source. */
   text: string;
   note?: string;
-  /** Catholic sources the wording was checked against. */
+  /** Catholic sources the wording was checked against (empty for `personal` prayers). */
   sources: string[];
 }
 
 /**
  * Indonesian Catholic prayers in the wording of Puji Syukur (KWI), each checked against Catholic sources
  * (imankatolik.or.id, parish and diocesan sites, Majalah HIDUP, Komkat KWI). Notes record variants between sources.
+ * Exception: the `personal` category holds personal prayers written on request; they are not official texts, carry no
+ * sources and say so in their note. "……" marks a spot the reader answers in their own words (shown as an empty box).
  */
 export const PRAYERS: Prayer[] = [
   {
@@ -309,5 +312,14 @@ export const PRAYERS: Prayer[] = [
     text: "(Pembuka, dapat didoakan terutama pada Jam Kerahiman, pukul 15.00:)\nYa Yesus, Engkau telah wafat, namun sumber kehidupan telah memancar bagi jiwa-jiwa,\ndan terbukalah lautan kerahiman bagi segenap dunia.\nO Sumber Kehidupan, Kerahiman Ilahi yang tak terselami,\nnaungilah segenap dunia dan curahkanlah diri-Mu pada kami.\nO Darah dan Air, yang telah memancar dari Hati Yesus\nsebagai sumber kerahiman bagi kami,\nEngkaulah andalanku!\n\n1. Tanda Salib.\n2. Bapa Kami, Salam Maria, Aku Percaya.\n3. Pada manik besar, sebelum tiap sepuluhan:\nBapa yang kekal, kupersembahkan kepada-Mu\nTubuh dan Darah, Jiwa dan ke-Allah-an\nPutra-Mu terkasih, Tuhan kami Yesus Kristus,\nsebagai pemulihan dosa-dosa kami dan dosa seluruh dunia.\n4. Pada tiap manik kecil (10 kali):\nDemi sengsara Yesus yang pedih,\ntunjukkanlah belas kasih-Mu kepada kami dan seluruh dunia.\n5. Ulangi langkah 3 dan 4 untuk kelima sepuluhan.\n6. Penutup (3 kali):\nAllah yang kudus, kudus dan berkuasa, kudus dan kekal,\nkasihanilah kami dan seluruh dunia.\n7. Dapat ditambahkan:\nYesus, Raja Kerahiman Ilahi, Engkaulah andalanku.\nAmin.",
     note: "Chaplet of Divine Mercy taught to St. Faustina Kowalska (1935), prayed on ordinary rosary beads, especially at 15.00 and in the novena from Good Friday to Divine Mercy Sunday (2nd Sunday of Easter). Main prayers follow Majalah HIDUP. Katolisitas reads \"Putra-Mu yang terkasih\" and \"sebagai pendamaian untuk dosa-dosa kami dan dosa seluruh dunia\". The 15.00 opening prayer and closing invocation follow Katolisitas and Katedral Purwokerto. Step 5 is an added instruction, not prayer text.",
     sources: ["https://www.majalahhidup.com/aneka-doa-katolik/6120/rosario-kerahiman-koronka/", "https://katolisitas.org/persiapan-hati-menjelang-tahun-kerahiman-allah-koronka-kerahiman-ilahi/", "https://katolisitas.org/doa-pada-jam-3-siang-jam-kerahiman-ilahi/", "https://www.katedral-pwt.or.id/doa-kerahiman-ilahi/"],
+  },
+  {
+    id: "doa-malam-bicara-dengan-tuhan",
+    category: "personal",
+    title: "Doa Malam: Bicara dengan Tuhan",
+    aliases: ["memaafkan", "refleksi", "anak"],
+    text: "Tuhan, aku datang lagi malam ini,\napa adanya.\n\nHari ini aku merasa ……\nYang paling kuingat dari hari ini adalah ……\n\nKalau ada yang mengganjal di hatiku, itu ……\nAku tidak perlu mencari jawabannya malam ini.\nKuletakkan di hadapan-Mu.\nBiarlah Engkau yang menjadi hakim, bukan aku.\n\nTentang memaafkan, Tuhan, Engkau tahu aku masih berproses.\nAku tidak mau berpura-pura.\nAjari aku melepas pelan-pelan,\nbukan demi dia, tetapi supaya aku bebas.\nMalam ini aku serahkan kepada-Mu ……\n\nTerima kasih, Tuhan, untuk ……\ndan karena Engkau selalu menemaniku.\n\nTuhan, aku titipkan anakku.\nIa tidur di sampingku malam ini.\nEngkau tahu betapa aku mengasihinya.\n\nJagalah dia, Tuhan, setiap hari dan setiap malam.\nLindungi dia dari kecelakaan, penyakit, musibah,\ndan segala malapetaka.\nLindungi dia saat ia jauh dari pandanganku,\ndi jalan, di sekolah, di mana pun ia berada.\nAku mohon, biarlah aku diberi waktu yang panjang\nuntuk melihatnya tumbuh besar, sehat, dan bahagia.\n\nLindungi juga hatinya yang masih kecil\ndari kata-kata yang tidak seharusnya ia dengar.\nBiarlah ia tahu bahwa ia dicintai sepenuhnya,\ndan bahwa masalah orang tuanya bukan salahnya.\nJadikan ia anak yang tangguh, lembut, dan jujur.\n\nTuhan, kadang aku cemas ketika ia lepas dari pandanganku,\natau ketika aku teringat ia satu-satunya bagiku.\nTenangkan hatiku.\nAjari aku menjaganya dengan bijak, bukan dengan takut.\nDan isilah juga hidupku dengan tujuan dan sukacita,\nsupaya aku utuh, untuk diriku sendiri dan untuknya.\n\nUntuk besok, aku butuh ……\nBeri aku kesabaran dan hikmat\nuntuk tetap menjadi tempat pulang yang aman baginya.\n\nAku tidak perlu menyelesaikan semuanya malam ini.\nAku titipkan hatiku, anakku, dan hari esok ke dalam tangan-Mu.\nBeri kami tidur yang tenang.\nAmin.",
+    note: "Personal prayer and reflection, written on request. Not an official Church text. Fill each empty box in your own words (aloud or in your heart), or skip it.",
+    sources: [],
   },
 ];

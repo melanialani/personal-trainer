@@ -78,7 +78,7 @@ export const PrayersPage = () => {
 
       <p className="mt-6 text-xs text-slate-500">
         Texts follow the wording used in Indonesian parishes, checked against Catholic sources. If a word differs from your Puji Syukur book, follow
-        the book.
+        the book. Prayers under Doa Pribadi are personal prayers, not official Church texts.
       </p>
 
       <PrayerModal prayer={selected} onClose={() => setSelected(null)} />
