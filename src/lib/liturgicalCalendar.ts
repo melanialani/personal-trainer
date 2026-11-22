@@ -231,7 +231,7 @@ const temporalDay = (date: string): Temporal => {
     const week = Math.floor(diffDays(easter, date) / 7) + 1;
     if (date === pentecost) return make('easter', 8, 'pentecost', 'Hari Raya Pentakosta', 'solemnity', 'red', 2);
     if (date === addDays(easter, 39)) return make('easter', 6, 'ascension', 'Hari Raya Kenaikan Tuhan', 'solemnity', 'white', 2);
-    if (week === 1) return make('easter', 1, `easter-1-${day + 1}`, `${dayName} dalam Oktaf Paskah`, 'weekday', 'white', 2);
+    if (week === 1) return make('easter', 1, `easter-1-${day + 1}`, `${dayName} dalam Oktaf Paskah`, 'solemnity', 'white', 2);
     if (day === 6) return make('easter', week, `easter${week}`, `Hari Minggu Paskah ${toRoman(week)}`, 'sunday', 'white', 2);
     return make('easter', week, `easter-${week}-${day + 1}`, `${dayName} Pekan Paskah ${toRoman(week)}`, 'weekday', 'white', 13);
   }
