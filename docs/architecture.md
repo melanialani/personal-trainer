@@ -17,7 +17,8 @@
 | `/development` | `features/parenting` | Stage picker 0–18 years: CDC milestones checklist (ticked per child), red flags, parenting guide (focus, daily life, tips, do & don't + why, sleep/screen/food) |
 | `/immunization` | `features/parenting` | IDAI 2024 vaccine schedule 0–18 years with per-dose status and dates; vitamin K, vitamin A rounds, deworming, iron, vitamin D, routine checks |
 | `/growth` | `features/parenting` | Measurements log, WHO chart with SD curves, z-score + Permenkes 2/2020 category, normal ranges table by age/sex |
-| `/bible` | `features/bible` | Bible reader (AYT · WEB-C · BSB), version switch keeps the verse, highlights in 5 colors, comments, notes list |
+| `/bible` | `features/bible` | Bible reader (AYT · WEB-C · BSB), version switch keeps the verse, highlights in 5 colors, comments, notes list; "By topic" tab: verses per life situation (`data/verseTopics.ts`), searchable |
+| `/readings` | `features/readings` | Daily Mass readings for any date: liturgical day (Indonesian calendar), season, color, Year A/B/C + I/II, readings with text from the bundled Bibles (alternatives as chips, several Masses on Christmas/Easter/…), short reflection, next 7 days |
 | `/prayers` | `features/prayers` | Catholic prayers in Indonesian, searchable, by category (rosary-only prayers have no chip; they are opened from the Rosary page). `personal` (Doa Pribadi) holds non-official personal prayers; `……` in their text renders as an empty answer box, and blank lines split stanzas |
 | `/rosary` | `features/rosary` | Rosary: today's mysteries by weekday, how to pray, painting + Bible link per mystery |
 | `/bmi` | `features/bmi` | Stand-alone BMI calculator (no profile needed): adult Asia-Pacific + WHO class, healthy weight range; child mode uses WHO BMI-for-age (`lib/growth.ts`) |
@@ -154,3 +155,18 @@ Food names and serving labels are Indonesian; ids are stable English slugs (sear
 - Prayers (`data/prayers.ts`) and rosary (`data/rosary.ts`) are Indonesian; search ignores case/accents
   (`lib/prayers.ts`). Rosary paintings are public-domain works (via Wikimedia Commons or the Web Gallery of Art), stored as WebP in `public/rosary/<mystery id>.webp`; credits live in `data/rosary.ts`.
 - Not included on purpose: Puji Syukur / Madah Bakti hymn lyrics (copyrighted).
+- Verse topics (`data/verseTopics.ts`): ~100 situations in 6 groups, refs only (text loaded at runtime), English/AYT verse
+  numbering. Search in `lib/verseTopics.ts` (title, keywords, intro).
+- Daily readings: `lib/liturgicalCalendar.ts` computes the day (Easter computus; Advent 1 = Sunday 27 Nov–3 Dec; Indonesia:
+  Epiphany on the Sunday 2–8 Jan, Baptism on the next Sunday or Monday after 7/8 Jan, Ascension Thursday, Corpus Christi
+  Sunday; Ordinary Time week after Pentecost counted back from week 34; precedence table of the General Norms; solemnities
+  moved off Sundays of Advent/Lent/Easter, St Joseph before Holy Week, Annunciation after Divine Mercy Sunday; Sacred Heart
+  clash anticipates the saint). Optional and most obligatory memorials are not tracked (weekday readings shown).
+  Keys: Sundays and temporal solemnities (`adv1`, `ot-23`, `easter3`, `christmas`, …) → `LECTIONARY_CYCLE[A|B|C]`; seasonal weekdays (`adv-1-2`, `lent-0-3` = Ash Wednesday,
+  `easter-2-5`, `chr-jan3`, `epi-1`, `san-MMDD` feasts) → `LECTIONARY_WEEKDAY`; `ord-W-D` → `LECTIONARY_ORDINARY[I|II]`.
+  Liturgical year Y = civil year in which it ends: cycle = C/A/B for Y mod 3 = 0/1/2; Year I when Y is odd.
+- `data/lectionary.ts` (generated, citations only, US Lectionary numbering) and `data/reflections.ts` load lazily
+  (`import()` in `lib/lectionary.ts`) as separate chunks. `lib/scripture.ts` parses refs (`ISA 63:16b-17, 19b; 64:2-7`,
+  `MAT 9:35-10:1`, Greek Esther `EST C:12`), converts Hebrew numbering (psalm titles, Joel 3–4, Malachi 3:19–24, Hosea,
+  1 Kings 5, …) to the bundled English numbering, and falls back to WEB-C for books/parts AYT lacks (Deuterocanon,
+  Greek Daniel 3:24–90). Reflections are keyed like the lectionary; cycle days get a prefix (`A:ot2`).

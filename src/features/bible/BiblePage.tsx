@@ -6,11 +6,13 @@ import { Tabs } from '../../shared/components/Tabs';
 import { useAppData } from '../../store/AppDataContext';
 import { BibleReader } from './BibleReader';
 import { NotesList } from './NotesList';
+import { VerseTopicsList } from './VerseTopicsList';
 
-type BibleTab = 'read' | 'notes';
+type BibleTab = 'read' | 'topics' | 'notes';
 
 const TABS: { value: BibleTab; label: string }[] = [
   { value: 'read', label: 'Read' },
+  { value: 'topics', label: 'By topic' },
   { value: 'notes', label: 'Highlights & notes' },
 ];
 
@@ -18,7 +20,8 @@ const TABS: { value: BibleTab; label: string }[] = [
 export const BiblePage = () => {
   const { update } = useAppData();
   const [params, setParams] = useSearchParams();
-  const tab: BibleTab = params.get('tab') === 'notes' ? 'notes' : 'read';
+  const tabParam = params.get('tab');
+  const tab: BibleTab = tabParam === 'notes' || tabParam === 'topics' ? tabParam : 'read';
   const refParam = params.get('ref');
 
   useEffect(() => {
@@ -31,9 +34,9 @@ export const BiblePage = () => {
   return (
     <>
       <PageHeader title="Bible" actions={<Tabs tabs={TABS} value={tab} onChange={(value) => setParams(value === 'read' ? {} : { tab: value }, { replace: true })} />} />
-      {tab === 'read' ? (
-        <BibleReader />
-      ) : (
+      {tab === 'read' && <BibleReader />}
+      {tab === 'topics' && <VerseTopicsList />}
+      {tab === 'notes' && (
         <NotesList
           onOpen={(entry) => {
             update((current) => ({ ...current, bible: { ...current.bible, ...entry.ref } }));

@@ -2,6 +2,7 @@ import {
   Apple,
   Baby,
   BookHeart,
+  BookMarked,
   BookOpenText,
   Calculator,
   CalendarHeart,
@@ -103,6 +104,7 @@ export const NAV_GROUPS: NavGroup[] = [
     icon: Church,
     items: [
       { path: '/bible', label: 'Bible', shortLabel: 'Bible', icon: BookOpenText },
+      { path: '/readings', label: 'Daily Readings', shortLabel: 'Readings', icon: BookMarked },
       { path: '/prayers', label: 'Prayers', shortLabel: 'Prayers', icon: HandHeart },
       { path: '/rosary', label: 'Rosary', shortLabel: 'Rosary', icon: Flower2 },
     ],

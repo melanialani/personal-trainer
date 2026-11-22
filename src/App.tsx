@@ -13,6 +13,7 @@ import { DiaryPage } from './features/diary/DiaryPage';
 import { LookupPage } from './features/lookup/LookupPage';
 import { MedicinePage } from './features/medicine/MedicinePage';
 import { MealPlanPage } from './features/meal-plan/MealPlanPage';
+import { DailyReadingsPage } from './features/readings/DailyReadingsPage';
 import { PrayersPage } from './features/prayers/PrayersPage';
 import { ProfilePage } from './features/profile/ProfilePage';
 import { RosaryPage } from './features/rosary/RosaryPage';
@@ -47,6 +48,7 @@ export const App = () => (
               <Route path="immunization" element={<ImmunizationPage />} />
               <Route path="growth" element={<GrowthPage />} />
               <Route path="bible" element={<BiblePage />} />
+              <Route path="readings" element={<DailyReadingsPage />} />
               <Route path="prayers" element={<PrayersPage />} />
               <Route path="rosary" element={<RosaryPage />} />
               <Route path="bmi" element={<BmiPage />} />
