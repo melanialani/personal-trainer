@@ -254,7 +254,7 @@ const temporalDay = (date: string): Temporal => {
     const week = Math.floor(diffDays(advent, date) / 7) + 1;
     if (day === 6) return make('advent', week, `adv${week}`, `Hari Minggu Adven ${toRoman(week)}`, 'sunday', week === 3 ? 'rose' : 'violet', 2);
     const dom = Number(date.slice(8));
-    if (dom >= 17) return make('advent', week, `adv-dec${dom}`, `Hari Biasa Adven (${dom} Desember)`, 'weekday', 'violet', 9);
+    if (date.slice(5, 7) === '12' && dom >= 17) return make('advent', week, `adv-dec${dom}`, `Hari Biasa Adven (${dom} Desember)`, 'weekday', 'violet', 9);
     return make('advent', week, `adv-${week}-${day + 1}`, `${dayName} Pekan Adven ${toRoman(week)}`, 'weekday', 'violet', 13);
   }
 
