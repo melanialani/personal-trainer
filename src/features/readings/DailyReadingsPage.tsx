@@ -1,4 +1,4 @@
-import { BookOpenText, CalendarDays, ExternalLink, Lightbulb, RotateCw } from 'lucide-react';
+import { BookOpenText, CalendarDays, ChevronRight, ExternalLink, Lightbulb, RotateCw, Sparkles } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { BIBLE_VERSIONS } from '../../data/bibleBooks';
@@ -15,7 +15,9 @@ import {
   type LiturgicalColor,
   type LiturgicalDay,
 } from '../../lib/liturgicalCalendar';
+import { displayColor, SAINT_STATUS_LABELS, saintsForDay } from '../../lib/saints';
 import { formatScriptureRef, parseRef, toBundledNumbering } from '../../lib/scripture';
+import type { Saint } from '../../data/saints';
 import { Badge } from '../../shared/components/Badge';
 import { Button } from '../../shared/components/Button';
 import { Card } from '../../shared/components/Card';
@@ -23,9 +25,19 @@ import { Chip } from '../../shared/components/Chip';
 import { DateNav } from '../../shared/components/DateNav';
 import { Segmented } from '../../shared/components/FormFields';
 import { PageHeader } from '../../shared/components/PageHeader';
+import { Tabs } from '../../shared/components/Tabs';
 import type { Tone } from '../../shared/tones';
 import { useAppData } from '../../store/AppDataContext';
 import { PassageText } from '../bible/PassageText';
+import { SaintModal } from '../saints/SaintModal';
+import { SaintsList } from '../saints/SaintsList';
+import { useSaints } from '../saints/useSaints';
+
+type ReadingsTab = 'day' | 'saints';
+const TABS: { value: ReadingsTab; label: string }[] = [
+  { value: 'day', label: 'Readings' },
+  { value: 'saints', label: 'Saints' },
+];
 
 /** Swatch per liturgical color (white gets a ring so it shows on light cards). */
 const COLOR_SWATCH: Record<LiturgicalColor, string> = {
@@ -113,7 +125,7 @@ const ReadingCard = ({ reading, label, tone, versionId }: ReadingCardProps) => {
   );
 };
 
-export const DailyReadingsPage = () => {
+const DayReadings = () => {
   const { data, update } = useAppData();
   const [params, setParams] = useSearchParams();
   const dateParam = params.get('date');
@@ -134,11 +146,13 @@ export const DailyReadingsPage = () => {
   const mass = masses[Math.min(massIndex, masses.length - 1)];
   const labels = mass ? readingLabels(mass.readings.map((reading) => reading.kind)) : [];
   const reflection = state.status === 'ready' ? state.readings.reflection : null;
+  const saints = useSaints();
+  const daySaints = useMemo(() => (saints ? saintsForDay(saints, day) : []), [saints, day]);
+  const color = displayColor(day, daySaints);
+  const [openSaint, setOpenSaint] = useState<Saint | null>(null);
 
   return (
     <>
-      <PageHeader title="Daily Readings" description="Catholic Mass readings for every day (Years A/B/C and I/II), with a short reflection." />
-
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <DateNav date={date} onChange={setDate} />
         <div className="w-full sm:w-56">
@@ -155,13 +169,29 @@ export const DailyReadingsPage = () => {
         <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
           <Badge tone="brand">{RANK_LABELS[day.rank]}</Badge>
           <span className="inline-flex items-center gap-1.5 text-slate-600">
-            <span className={`inline-block h-3 w-3 rounded-full ${COLOR_SWATCH[day.color]}`} aria-hidden="true" />
-            Warna liturgi: {COLOR_LABELS[day.color]}
+            <span className={`inline-block h-3 w-3 rounded-full ${COLOR_SWATCH[color]}`} aria-hidden="true" />
+            Warna liturgi: {COLOR_LABELS[color]}
           </span>
           <span className="text-slate-600">
             Tahun {day.sundayCycle} · Tahun {day.weekdayCycle}
           </span>
         </div>
+        {daySaints.length > 0 && (
+          <ul className="mt-3 space-y-1.5 border-t border-slate-100 pt-3">
+            {daySaints.map(({ saint, status }) => (
+              <li key={saint.id}>
+                <button type="button" onClick={() => setOpenSaint(saint)} className="flex w-full items-center gap-2 rounded-lg text-left hover:bg-slate-50">
+                  <Sparkles size={16} className="shrink-0 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-semibold text-slate-900">{saint.name}</span>
+                    <span className="block text-xs text-slate-500">{SAINT_STATUS_LABELS[status]} · kisah hidup & teladan</span>
+                  </span>
+                  <ChevronRight size={16} className="shrink-0 text-slate-400" aria-hidden="true" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </Card>
 
       {masses.length > 1 && (
@@ -214,24 +244,44 @@ export const DailyReadingsPage = () => {
 
       <Card tone="indigo" icon={<CalendarDays />} title="Next 7 days" className="mt-4">
         <ul className="divide-y divide-slate-100">
-          {week.map((next) => (
+          {week.map((next) => {
+            const nextSaints = saints ? saintsForDay(saints, next).filter((item) => item.status === 'memorial') : [];
+            const nextColor = displayColor(next, nextSaints);
+            return (
             <li key={next.date}>
               <button type="button" onClick={() => setDate(next.date)} className="flex w-full items-center gap-3 py-2 text-left hover:bg-slate-50">
-                <span className={`inline-block h-3 w-3 shrink-0 rounded-full ${COLOR_SWATCH[next.color]}`} aria-hidden="true" />
+                <span className={`inline-block h-3 w-3 shrink-0 rounded-full ${COLOR_SWATCH[nextColor]}`} aria-hidden="true" />
                 <span className="w-28 shrink-0 text-xs text-slate-500">{formatIndonesianDate(next.date).replace(/ \d{4}$/, '')}</span>
-                <span className="min-w-0 flex-1 truncate text-sm text-slate-800">{next.name}</span>
+                <span className="min-w-0 flex-1 truncate text-sm text-slate-800">{nextSaints[0] ? `PW ${nextSaints[0].saint.name}` : next.name}</span>
               </button>
             </li>
-          ))}
+            );
+          })}
         </ul>
       </Card>
 
       <p className="mt-6 text-xs text-slate-500">
-        Readings follow the Roman Lectionary (three-year Sunday cycle A/B/C, two-year weekday cycle I/II) and the Indonesian calendar (Epiphany and
+        Saints follow the General Roman Calendar; on their memorials the weekday readings are shown. Readings follow the Roman Lectionary (three-year Sunday cycle A/B/C, two-year weekday cycle I/II) and the Indonesian calendar (Epiphany and
         Corpus Christi on Sunday, Ascension on Thursday). Citations come from the Lectionary tables of Felix Just, S.J. (catholic-resources.org); verse
-        splits in the Indonesian Lectionary can differ slightly. On memorials of saints the weekday readings are shown. Texts are from the bundled
+        splits in the Indonesian Lectionary can differ slightly. Texts are from the bundled
         Bibles; the official Catholic Indonesian text (TB) is linked.
       </p>
+      <SaintModal saint={openSaint} onClose={() => setOpenSaint(null)} />
+    </>
+  );
+};
+
+export const DailyReadingsPage = () => {
+  const [params, setParams] = useSearchParams();
+  const tab: ReadingsTab = params.get('tab') === 'saints' ? 'saints' : 'day';
+  return (
+    <>
+      <PageHeader
+        title="Daily Readings"
+        description="Catholic Mass readings for every day (Years A/B/C and I/II), saints of the day, and a short reflection."
+        actions={<Tabs tabs={TABS} value={tab} onChange={(value) => setParams(value === 'day' ? {} : { tab: value }, { replace: true })} />}
+      />
+      {tab === 'day' ? <DayReadings /> : <SaintsList />}
     </>
   );
 };

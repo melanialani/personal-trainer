@@ -62,7 +62,7 @@ export const toRoman = (value: number): string => {
   return `${tens[Math.floor(value / 10)]}${ROMAN[value % 10]}`;
 };
 
-const MONTHS_ID = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+export const MONTHS_ID = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
 /** Easter Sunday (Gregorian computus, anonymous algorithm). */
 export const easterDate = (year: number): string => {
@@ -320,3 +320,6 @@ export const formatIndonesianDate = (date: string): string => {
   const parsed = parseDateKey(date);
   return `${DAY_NAMES[weekdayIndex(date)]}, ${parsed.getDate()} ${MONTHS_ID[parsed.getMonth()]} ${parsed.getFullYear()}`;
 };
+
+/** "03-12" → "12 Maret". */
+export const formatDayMonth = (monthDay: string): string => `${Number(monthDay.slice(3, 5))} ${MONTHS_ID[Number(monthDay.slice(0, 2)) - 1]}`;

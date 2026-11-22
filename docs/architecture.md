@@ -18,7 +18,7 @@
 | `/immunization` | `features/parenting` | IDAI 2024 vaccine schedule 0–18 years with per-dose status and dates; vitamin K, vitamin A rounds, deworming, iron, vitamin D, routine checks |
 | `/growth` | `features/parenting` | Measurements log, WHO chart with SD curves, z-score + Permenkes 2/2020 category, normal ranges table by age/sex |
 | `/bible` | `features/bible` | Bible reader (AYT · WEB-C · BSB), version switch keeps the verse, highlights in 5 colors, comments, notes list; "By topic" tab: verses per life situation (`data/verseTopics.ts`), searchable |
-| `/readings` | `features/readings` | Daily Mass readings for any date: liturgical day (Indonesian calendar), season, color, Year A/B/C + I/II, readings with text from the bundled Bibles (alternatives as chips, several Masses on Christmas/Easter/…), short reflection, next 7 days |
+| `/readings` | `features/readings` | Daily Mass readings for any date: liturgical day (Indonesian calendar), season, color, Year A/B/C + I/II, readings with text from the bundled Bibles (alternatives as chips, several Masses on Christmas/Easter/…), short reflection, next 7 days; saints of the day (memorials) with life story and what to imitate; "Saints" tab: all saints, searchable, by month |
 | `/prayers` | `features/prayers` | Catholic prayers in Indonesian, searchable, by category (rosary-only prayers have no chip; they are opened from the Rosary page). `personal` (Doa Pribadi) holds non-official personal prayers; `……` in their text renders as an empty answer box, and blank lines split stanzas |
 | `/rosary` | `features/rosary` | Rosary: today's mysteries by weekday, how to pray, painting + Bible link per mystery |
 | `/bmi` | `features/bmi` | Stand-alone BMI calculator (no profile needed): adult Asia-Pacific + WHO class, healthy weight range; child mode uses WHO BMI-for-age (`lib/growth.ts`) |
@@ -170,3 +170,9 @@ Food names and serving labels are Indonesian; ids are stable English slugs (sear
   `MAT 9:35-10:1`, Greek Esther `EST C:12`), converts Hebrew numbering (psalm titles, Joel 3–4, Malachi 3:19–24, Hosea,
   1 Kings 5, …) to the bundled English numbering, and falls back to WEB-C for books/parts AYT lacks (Deuterocanon,
   Greek Daniel 3:24–90). Reflections are keyed like the lectionary; cycle days get a prefix (`A:ot2`).
+- Saints (`data/saints.ts`, lazy-loaded via `lib/saints.ts`): memorials, optional memorials and saints' feasts of the
+  General Roman Calendar (incl. decrees to 2026; Immaculate Heart = Saturday after the Sacred Heart), each with Indonesian
+  story, "Yang bisa diteladani", patronages, keywords and sources. `saintsForDay` gives the status: celebrated (feast day,
+  also when transferred), memorial / optional on ordinary weekdays, commemoration on Lent / 17–24 Dec / Christmas-octave
+  weekdays, impeded on Sundays, solemnities, feasts and Holy Week. An obligatory memorial sets the displayed color.
+  Memorials keep the weekday readings.
