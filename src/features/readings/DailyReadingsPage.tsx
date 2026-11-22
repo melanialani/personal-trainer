@@ -81,12 +81,12 @@ const ReadingCard = ({ reading, label, tone, versionId }: ReadingCardProps) => {
   const book = parsed ? getBook(parsed.bookId) : undefined;
   const link = bibleLink(ref);
   return (
-    <Card tone={tone} title={label} subtitle={formatScriptureRef(ref)} icon={<BookOpenText />}>
+    <Card tone={tone} title={label} subtitle={formatScriptureRef(ref, 'id', true)} icon={<BookOpenText />}>
       {reading.refs.length > 1 && (
         <div className="mb-3 flex flex-wrap gap-1.5">
           {reading.refs.map((option, index) => (
             <Chip key={option} isActive={index === choice} onClick={() => setChoice(index)}>
-              {index === 0 ? formatScriptureRef(option) : `atau ${formatScriptureRef(option)}`}
+              {index === 0 ? formatScriptureRef(option, 'id', true) : `atau ${formatScriptureRef(option, 'id', true)}`}
             </Chip>
           ))}
         </div>

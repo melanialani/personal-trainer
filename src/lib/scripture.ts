@@ -52,11 +52,37 @@ export const parseRef = (ref: string): ParsedRef | null => {
   return ranges.length ? { bookId, ranges, verses: verses.trim(), isGreekAddition } : null;
 };
 
-/** "Yes 63:16b-17, 19b; 64:2-7" (book abbreviation in the reader's language, verses as in the source). */
-export const formatScriptureRef = (ref: string, language: BibleLanguage = 'id'): string => {
+/**
+ * "Yes 63:16b-17, 19b; 64:2-7" (book abbreviation in the reader's language, verses as in the source). With
+ * `lectionaryNumbering`, books whose Hebrew numbering differs from the Indonesian TB / English Bibles (Joel, Malachi,
+ * 1 Kings 5, …) are shown in TB numbering ("Yl 2:28-32", not "Yl 3:1-5"); psalms keep the Hebrew numbering, as in TB.
+ */
+export const formatScriptureRef = (ref: string, language: BibleLanguage = 'id', lectionaryNumbering = false): string => {
   const parsed = parseRef(ref);
   const book = parsed && getBook(parsed.bookId);
-  return parsed && book ? `${bookAbbr(book, language)} ${parsed.verses.replace(/-/g, '–')}` : ref;
+  if (!parsed || !book) return ref;
+  const abbr = bookAbbr(book, language);
+  if (lectionaryNumbering && parsed.bookId !== 'PSA' && !parsed.isGreekAddition) {
+    const mapped = parsed.ranges.map((range) => ({
+      start: toBundledNumbering(parsed.bookId, range.chapter, range.verse),
+      end: toBundledNumbering(parsed.bookId, range.endChapter, range.endVerse),
+    }));
+    const changed = mapped.some(
+      ({ start, end }, index) =>
+        start.chapter !== parsed.ranges[index].chapter || start.verse !== parsed.ranges[index].verse || end.verse !== parsed.ranges[index].endVerse,
+    );
+    if (changed) {
+      let chapter = 0;
+      const parts = mapped.map(({ start, end }) => {
+        const head = start.chapter !== chapter ? `${chapter ? '; ' : ''}${start.chapter}:` : ', ';
+        chapter = end.chapter;
+        const tail = end.chapter !== start.chapter ? `–${end.chapter}:${end.verse}` : end.verse !== start.verse ? `–${end.verse}` : '';
+        return `${head}${start.verse}${tail}`;
+      });
+      return `${abbr} ${parts.join('')}`;
+    }
+  }
+  return `${abbr} ${parsed.verses.replace(/-/g, '–')}`;
 };
 
 /** Psalms whose Hebrew numbering counts the title as verse 1 (or 1–2): Hebrew verse − offset = English verse. */
@@ -149,7 +175,11 @@ export const versionForBook = (preferredVersionId: string, bookId: string): stri
 export const loadPassage = async (ref: string, preferredVersionId: string, lectionaryNumbering: boolean): Promise<Passage> => {
   const parsed = parseRef(ref);
   if (!parsed) throw new Error(`Bad reference: ${ref}`);
-  const versionId = parsed.isGreekAddition ? 'webc' : versionForBook(preferredVersionId, parsed.bookId);
+  // Greek parts (Esther additions, Daniel 3:24–90) are only in WEB-C, which numbers Daniel 3 like the Lectionary.
+  const needsGreek =
+    parsed.isGreekAddition ||
+    (parsed.bookId === 'DAN' && parsed.ranges.some((range) => range.chapter === 3 && range.endVerse >= 24 && range.verse <= 90));
+  const versionId = needsGreek ? 'webc' : versionForBook(preferredVersionId, parsed.bookId);
   const book = await loadBook(versionId, parsed.bookId);
   const greekDaniel = (book['3']?.length ?? 0) > 90;
   const seen = new Set<string>();
