@@ -1,7 +1,8 @@
-import { BookOpen, Pill, ShieldAlert, SlidersHorizontal } from 'lucide-react';
+import { BookOpen, Pill, ShieldAlert, SlidersHorizontal, Stethoscope } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { CARE_GUIDES } from '../../data/careGuides';
+import { SYMPTOM_GUIDES } from '../../data/symptomGuides';
 import {
   AVAILABILITY_LABELS,
   CHILD_USE_LABELS,
@@ -20,6 +21,7 @@ import {
   EMPTY_MEDICINE_FILTERS,
   filterGuides,
   filterMedicines,
+  filterSymptomGuides,
   listIngredients,
   listSymptoms,
   type MedicineFilters,
@@ -38,14 +40,16 @@ import type { Tone } from '../../shared/tones';
 import { CareGuideCard } from './CareGuideCard';
 import { MedicineCard } from './MedicineCard';
 import { MedicineDetailModal } from './MedicineDetailModal';
+import { SymptomGuideCard } from './SymptomGuideCard';
 
-type MedicineTab = 'medicines' | 'guides';
+type MedicineTab = 'medicines' | 'symptoms' | 'guides';
 
 /** Care guide cards cycle through these so neighbouring cards differ. */
 const GUIDE_TONES: Tone[] = ['brand', 'sky', 'violet', 'teal', 'pink', 'indigo'];
 
 const TABS: { value: MedicineTab; label: string }[] = [
   { value: 'medicines', label: 'Medicines' },
+  { value: 'symptoms', label: 'By symptom' },
   { value: 'guides', label: 'Care guides' },
 ];
 
@@ -68,6 +72,7 @@ export const MedicinePage = () => {
 
   const medicines = useMemo(() => filterMedicines(MEDICINES, filters, query), [filters, query]);
   const guides = useMemo(() => filterGuides(CARE_GUIDES, filters.symptom, query), [filters.symptom, query]);
+  const symptomGuides = useMemo(() => filterSymptomGuides(SYMPTOM_GUIDES, filters.symptom, query), [filters.symptom, query]);
   const activeCount = countActiveFilters(filters);
 
   const set = <K extends keyof MedicineFilters>(key: K, value: MedicineFilters[K]) => setFilters((current) => ({ ...current, [key]: value }));
@@ -94,7 +99,7 @@ export const MedicinePage = () => {
           className="flex-1"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search name, brand, ingredient or symptom (e.g. maag, Narfoz, luka bakar)"
+          placeholder="Search name, brand, ingredient or symptom (e.g. batuk berdahak, CTM, maag)"
           aria-label="Search medicines and guides"
         />
         {tab === 'medicines' && (
@@ -156,7 +161,13 @@ export const MedicinePage = () => {
       )}
 
       <ResultSummary
-        count={tab === 'medicines' ? pluralize(medicines.length, 'medicine') : pluralize(guides.length, 'guide')}
+        count={
+          tab === 'medicines'
+            ? pluralize(medicines.length, 'medicine')
+            : tab === 'symptoms'
+              ? pluralize(symptomGuides.length, 'symptom')
+              : pluralize(guides.length, 'guide')
+        }
         canClear={activeCount > 0 || Boolean(query)}
         clearLabel="Clear search & filters"
         onClear={clearAll}
@@ -171,6 +182,19 @@ export const MedicinePage = () => {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
             {medicines.map((medicine) => (
               <MedicineCard key={medicine.id} medicine={medicine} onOpen={() => setSelected(medicine)} />
+            ))}
+          </div>
+        ))}
+
+      {tab === 'symptoms' &&
+        (symptomGuides.length === 0 ? (
+          <Card>
+            <EmptyState icon={<Stethoscope size={20} />} title="No symptoms match" description="Try another word or pick another symptom." />
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            {symptomGuides.map((guide, index) => (
+              <SymptomGuideCard key={guide.id} guide={guide} tone={GUIDE_TONES[index % GUIDE_TONES.length]} onOpenMedicine={setSelected} />
             ))}
           </div>
         ))}

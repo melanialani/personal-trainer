@@ -16,7 +16,17 @@ export type MedicineGroup =
   | 'diarrhea'
   | 'fiber-supplement'
   | 'herbal'
-  | 'allergy';
+  | 'allergy'
+  | 'cough'
+  | 'nasal'
+  | 'mouth-throat'
+  | 'laxative'
+  | 'gas-cramps'
+  | 'antifungal'
+  | 'skin-treatment'
+  | 'acne'
+  | 'eye-care'
+  | 'antiparasitic';
 
 export type Symptom =
   | 'burn'
@@ -37,7 +47,20 @@ export type Symptom =
   | 'constipation'
   | 'high-cholesterol'
   | 'weight-loss'
-  | 'allergy';
+  | 'allergy'
+  | 'cough-wet'
+  | 'cough-dry'
+  | 'cold'
+  | 'sore-throat'
+  | 'mouth-ulcer'
+  | 'cramps'
+  | 'fungal'
+  | 'skin-infection'
+  | 'cold-sore'
+  | 'acne'
+  | 'eye'
+  | 'worms'
+  | 'scabies-lice';
 
 export type MedicineForm =
   | 'tablet'
@@ -55,9 +78,13 @@ export type MedicineForm =
   | 'solution'
   | 'dressing'
   | 'sheet'
-  | 'injection';
+  | 'injection'
+  | 'spray'
+  | 'lozenge'
+  | 'shampoo'
+  | 'suppository';
 
-/** When to take it relative to meals. `external` = applied on the skin, not swallowed. */
+/** When to take it relative to meals. `external` = applied (skin, nose, eye, mouth rinse), not swallowed. */
 export type MealTiming = 'before-meal' | 'after-meal' | 'any-time' | 'external';
 
 export type Availability = 'otc' | 'prescription' | 'medical-device' | 'cosmetic' | 'withdrawn';
@@ -109,6 +136,16 @@ export const GROUP_LABELS: Record<MedicineGroup, string> = {
   'fiber-supplement': 'Fiber supplement',
   herbal: 'Herbal ingredient (jamu)',
   allergy: 'Allergy & itch',
+  cough: 'Cough (phlegm & dry)',
+  nasal: 'Nose & cold',
+  'mouth-throat': 'Mouth & throat',
+  laxative: 'Laxative',
+  'gas-cramps': 'Gas & cramps',
+  antifungal: 'Antifungal',
+  'skin-treatment': 'Skin inflammation & infection',
+  acne: 'Acne',
+  'eye-care': 'Eye care',
+  antiparasitic: 'Worms, lice & scabies',
 };
 
 export const SYMPTOM_LABELS: Record<Symptom, string> = {
@@ -131,6 +168,19 @@ export const SYMPTOM_LABELS: Record<Symptom, string> = {
   'high-cholesterol': 'High cholesterol',
   'weight-loss': 'Weight loss / slimming',
   allergy: 'Allergy',
+  'cough-wet': 'Wet cough (phlegm)',
+  'cough-dry': 'Dry cough',
+  cold: 'Cold / blocked nose',
+  'sore-throat': 'Sore throat',
+  'mouth-ulcer': 'Mouth ulcer',
+  cramps: 'Stomach cramps',
+  fungal: 'Fungal skin infection',
+  'skin-infection': 'Infected skin (impetigo)',
+  'cold-sore': 'Cold sore (herpes)',
+  acne: 'Acne',
+  eye: 'Red / dry eyes',
+  worms: 'Worms',
+  'scabies-lice': 'Scabies / lice',
 };
 
 /** Indonesian everyday words so searches like "maag" or "mual" find the right symptom. */
@@ -146,14 +196,27 @@ export const SYMPTOM_KEYWORDS: Record<Symptom, string[]> = {
   bloating: ['kembung', 'begah', 'gas', 'penuh'],
   ulcer: ['tukak', 'luka lambung', 'ulkus', 'usus 12 jari'],
   'h-pylori': ['helicobacter', 'bakteri lambung'],
-  'nausea-vomiting': ['mual', 'muntah', 'eneg', 'mabuk'],
+  'nausea-vomiting': ['mual', 'muntah', 'eneg', 'mabuk', 'mabuk perjalanan', 'mabuk laut', 'mabuk darat'],
   fever: ['demam', 'panas', 'meriang'],
-  pain: ['nyeri', 'sakit', 'pusing', 'sakit kepala', 'sakit gigi', 'nyeri haid'],
+  pain: ['nyeri', 'sakit', 'pusing', 'sakit kepala', 'sakit gigi', 'nyeri haid', 'nyeri otot', 'pegal', 'keseleo', 'nyeri sendi'],
   diarrhea: ['diare', 'mencret', 'bab cair', 'dehidrasi'],
   constipation: ['sembelit', 'konstipasi', 'susah bab', 'sulit bab', 'bab keras', 'serat'],
   'high-cholesterol': ['kolesterol', 'ldl', 'lemak darah'],
   'weight-loss': ['pelangsing', 'langsing', 'diet', 'turun berat badan', 'berat badan', 'gemuk', 'obesitas', 'lemak', 'nafsu makan', 'jamu'],
   allergy: ['alergi', 'bersin', 'pilek alergi', 'biduran', 'kaligata', 'bentol'],
+  'cough-wet': ['batuk berdahak', 'dahak', 'riak', 'lendir', 'pengencer dahak', 'ekspektoran', 'mukolitik'],
+  'cough-dry': ['batuk kering', 'batuk gatal', 'tenggorokan gatal', 'penekan batuk', 'antitusif'],
+  cold: ['pilek', 'flu', 'hidung tersumbat', 'hidung mampet', 'ingus', 'meler', 'selesma', 'dekongestan', 'sinus'],
+  'sore-throat': ['sakit tenggorokan', 'radang tenggorokan', 'nyeri menelan', 'amandel', 'tonsil', 'faringitis'],
+  'mouth-ulcer': ['sariawan', 'luka mulut', 'stomatitis', 'gusi'],
+  cramps: ['kram perut', 'mulas', 'melilit', 'kolik', 'kejang perut'],
+  fungal: ['jamur', 'panu', 'kurap', 'kadas', 'kutu air', 'tinea', 'ketombe', 'gatal selangkangan'],
+  'skin-infection': ['impetigo', 'koreng', 'bisul', 'nanah', 'infeksi kulit', 'luka bernanah'],
+  'cold-sore': ['herpes', 'herpes bibir', 'lepuh bibir', 'lepuh di bibir'],
+  acne: ['jerawat', 'komedo', 'beruntusan'],
+  eye: ['mata merah', 'mata kering', 'mata lelah', 'kelilipan', 'tetes mata', 'mata perih'],
+  worms: ['cacing', 'cacingan', 'kremi', 'gatal anus', 'obat cacing'],
+  'scabies-lice': ['kudis', 'skabies', 'gudik', 'kutu rambut', 'tungau'],
 };
 
 export const FORM_LABELS: Record<MedicineForm, string> = {
@@ -173,13 +236,17 @@ export const FORM_LABELS: Record<MedicineForm, string> = {
   dressing: 'Dressing',
   sheet: 'Sheet / patch',
   injection: 'Injection',
+  spray: 'Spray',
+  lozenge: 'Lozenge',
+  shampoo: 'Shampoo',
+  suppository: 'Suppository',
 };
 
 export const TIMING_LABELS: Record<MealTiming, string> = {
   'before-meal': 'Before meals',
   'after-meal': 'After meals',
   'any-time': 'With or without food',
-  external: 'On the skin (not swallowed)',
+  external: 'Applied, not swallowed',
 };
 
 export const AVAILABILITY_LABELS: Record<Availability, string> = {
@@ -203,19 +270,19 @@ export const PREGNANCY_LABELS: Record<PregnancyUse, string> = {
 };
 
 // Shared warning lists, reused across entries.
-const WOUND_RED_FLAGS = [
+export const WOUND_RED_FLAGS = [
   'Luka bakar melepuh lebih besar dari telapak tangan korban, atau di wajah, tangan, kaki, kelamin, atau sendi.',
   'Tanda infeksi: kemerahan makin melebar, bengkak, bernanah, berbau, atau demam.',
   'Luka belum tertutup setelah 2–3 minggu (risiko bekas luka tebal lebih tinggi).',
 ];
 
-const SCAR_RED_FLAGS = [
+export const SCAR_RED_FLAGS = [
   'Bekas luka makin tebal, menonjol, keras, atau melebar keluar batas luka awal (tanda keloid / bekas luka hipertrofik).',
   'Bekas luka di sendi membuat gerakan terasa kaku atau terbatas.',
   'Gatal hebat yang mengganggu tidur.',
 ];
 
-const STOMACH_RED_FLAGS = [
+export const STOMACH_RED_FLAGS = [
   'Muntah darah atau muntahan seperti kopi, BAB hitam seperti aspal.',
   'Sulit atau sakit saat menelan, makanan terasa tersangkut.',
   'Berat badan turun tanpa sebab, cepat kenyang terus-menerus.',
@@ -223,26 +290,26 @@ const STOMACH_RED_FLAGS = [
   'Nyeri dada menjalar ke lengan/rahang, keringat dingin, sesak — bisa serangan jantung, segera ke IGD.',
 ];
 
-const VOMITING_RED_FLAGS = [
+export const VOMITING_RED_FLAGS = [
   'Tanda dehidrasi: jarang pipis, sangat lemas, mulut kering, menangis tanpa air mata, mata cekung.',
   'Muntah darah atau muntah hijau.',
   'Perut sangat sakit atau keras, atau muntah setelah kepala terbentur.',
   'Muntah > 24 jam (anak) atau > 48 jam (dewasa), atau tidak bisa minum sama sekali.',
 ];
 
-const DIARRHEA_RED_FLAGS = [
+export const DIARRHEA_RED_FLAGS = [
   'Tanda dehidrasi: sangat lemas/rewel, mata cekung, tidak mau minum atau minum rakus sekali, jarang pipis (> 6–8 jam pada anak), menangis tanpa air mata.',
   'Ada darah di tinja, demam tinggi, atau muntah terus sehingga tidak bisa minum.',
   'Diare > 3 hari (anak) atau > 1 minggu (dewasa); bayi < 6 bulan dengan diare.',
 ];
 
-const FEVER_RED_FLAGS = [
+export const FEVER_RED_FLAGS = [
   'Bayi < 3 bulan dengan suhu ≥ 38 °C.',
   'Demam > 3 hari, kejang, sesak, kaku leher, atau ruam yang tidak memudar saat ditekan gelas.',
   'Sangat lemas, sulit dibangunkan, atau tanda dehidrasi.',
 ];
 
-const BOWEL_RED_FLAGS = [
+export const BOWEL_RED_FLAGS = [
   'Sembelit > 7 hari walau sudah minum serat, atau BAB berdarah.',
   'Perubahan pola BAB yang menetap > 2 minggu, terutama di usia > 50 tahun.',
   'Perut sangat sakit, kembung keras, muntah, dan tidak bisa kentut (curiga sumbatan usus) — segera ke IGD.',
@@ -288,9 +355,105 @@ const herbal = (entry: Pick<Medicine, 'id' | 'name' | 'ingredients' | 'summary' 
   ...entry,
 });
 
-const ALLERGY_RED_FLAGS = [
+export const ALLERGY_RED_FLAGS = [
   'Bengkak bibir/mata/lidah, sesak, suara serak, atau pusing mau pingsan = reaksi alergi berat (anafilaksis), segera ke IGD.',
   'Ruam melepuh, mengelupas, atau mengenai mulut/mata.',
+];
+
+export const COUGH_RED_FLAGS = [
+  'Sesak, napas cepat atau berbunyi (mengi), atau dada anak tertarik ke dalam saat bernapas — segera ke dokter/IGD.',
+  'Batuk > 3 minggu, batuk darah, berat badan turun, atau keringat malam (perlu dicek TBC).',
+  'Demam tinggi > 3 hari, atau nyeri dada saat bernapas/batuk.',
+  'Bayi < 3 bulan yang batuk, atau batuk beruntun diakhiri tarikan napas berbunyi "whoop" (batuk rejan).',
+];
+
+export const NOSE_RED_FLAGS = [
+  'Pilek > 10 hari tanpa membaik, atau sempat membaik lalu memburuk lagi (curiga sinusitis bakteri).',
+  'Nyeri wajah/dahi hebat, bengkak di sekitar mata, atau demam tinggi.',
+  'Ingus hanya dari satu lubang hidung, berbau, atau berdarah (pada anak: curiga benda asing).',
+];
+
+export const THROAT_RED_FLAGS = [
+  'Sulit menelan ludah, ngiler, sulit membuka mulut, atau suara seperti ada kentang panas di mulut — segera ke IGD.',
+  'Sesak napas atau napas berbunyi.',
+  'Demam tinggi tanpa batuk, amandel bernanah, kelenjar leher bengkak nyeri (curiga radang bakteri — perlu dokter).',
+  'Tidak membaik setelah 1 minggu, atau suara serak > 3 minggu.',
+];
+
+export const PAIN_RED_FLAGS = [
+  'Sakit kepala mendadak yang paling hebat seumur hidup, disertai kaku leher, lemah separuh badan, bicara pelo, atau setelah benturan kepala — segera ke IGD.',
+  'Nyeri dada, nyeri perut hebat, atau nyeri disertai demam tinggi.',
+  'Butuh obat nyeri > 10 hari dalam sebulan (risiko sakit kepala karena obat).',
+  'Nyeri haid makin berat dari tahun ke tahun atau tetap mengganggu aktivitas walau sudah minum obat.',
+];
+
+export const CRAMP_RED_FLAGS = [
+  'Nyeri perut kanan bawah yang makin hebat, nyeri saat berjalan atau batuk (curiga usus buntu) — jangan diobati sendiri, segera ke dokter.',
+  'Perut keras, demam, muntah terus, atau BAB berdarah/hitam.',
+  'Nyeri perut saat hamil.',
+];
+
+export const SKIN_INFECTION_RED_FLAGS = [
+  'Kemerahan menyebar cepat, bengkak terasa hangat, nanah banyak, atau demam.',
+  'Infeksi di wajah dekat mata, atau pada bayi baru lahir.',
+  'Tidak membaik setelah 5–7 hari pengobatan.',
+];
+
+export const FUNGAL_RED_FLAGS = [
+  'Tidak membaik setelah 2–4 minggu pemakaian yang benar.',
+  'Mengenai kulit kepala, kuku, atau area luas — biasanya perlu obat minum dari dokter.',
+  'Diabetes atau daya tahan tubuh lemah dengan luka di kaki.',
+  'Ruam makin merah/melebar setelah memakai krim steroid (jamur memburuk dengan steroid).',
+];
+
+export const RASH_RED_FLAGS = ['Ruam tidak membaik setelah 7 hari, meluas, atau bernanah.', ...ALLERGY_RED_FLAGS];
+
+export const EYE_RED_FLAGS = [
+  'Mata nyeri, penglihatan kabur, silau, atau pupil tidak sama besar — segera ke dokter mata.',
+  'Kena bahan kimia: bilas air mengalir 15 menit, lalu ke IGD.',
+  'Belekan kental kuning/hijau yang banyak, atau bayi baru lahir dengan mata merah.',
+  'Pengguna lensa kontak dengan mata merah (risiko infeksi kornea).',
+];
+
+export const MOUTH_RED_FLAGS = [
+  'Sariawan > 2–3 minggu tidak sembuh, sangat besar, atau justru tidak nyeri (perlu dicek dokter/dokter gigi).',
+  'Sariawan sering kambuh disertai diare, berat badan turun, atau luka di kelamin.',
+  'Sulit makan/minum sampai lemas atau dehidrasi (terutama anak).',
+];
+
+export const WORM_RED_FLAGS = [
+  'Anak kurus, pucat, lemas, atau perut buncit — periksa ke dokter/Puskesmas (cacingan berat, anemia).',
+  'Cacing keluar dari mulut/hidung, nyeri perut hebat, atau muntah terus (curiga sumbatan usus) — segera ke IGD.',
+  'Gatal anus menetap setelah 2 dosis yang berjarak 2 minggu.',
+];
+
+export const SCABIES_RED_FLAGS = [
+  'Gatal tidak membaik 4 minggu setelah pengobatan lengkap.',
+  'Kulit bernanah atau bengkak (infeksi bakteri tambahan).',
+  'Bayi < 2 bulan, ibu hamil/menyusui: obat dipilih dokter.',
+];
+
+export const COLD_SORE_RED_FLAGS = [
+  'Lepuh dekat mata, sangat luas, atau belum sembuh dalam 10 hari.',
+  'Bayi baru lahir, eksim luas, atau daya tahan tubuh lemah.',
+  'Kambuh sangat sering (> 6x setahun) — dokter bisa memberi obat minum.',
+];
+
+export const ACNE_RED_FLAGS = [
+  'Jerawat batu (benjolan besar nyeri), meninggalkan bekas, atau tidak membaik setelah 2–3 bulan.',
+  'Jerawat muncul bersama haid tidak teratur dan rambut berlebihan (perlu cek hormon, mis. PCOS).',
+];
+
+/** Shared text for NSAIDs taken by mouth (ibuprofen has its own entry). */
+const NSAID_INTERACTIONS = [
+  'Jangan digabung dengan NSAID lain (ibuprofen, asam mefenamat, diklofenak, aspirin dosis nyeri).',
+  'Pengencer darah (warfarin, klopidogrel), kortikosteroid, antidepresan SSRI: risiko perdarahan lambung naik.',
+  'Obat darah tinggi (ACE inhibitor/ARB) dan diuretik: efeknya berkurang dan ginjal terbebani.',
+];
+
+const ANTIFUNGAL_WARNINGS = [
+  'Jangan dicampur dengan krim steroid kecuali diresepkan — steroid membuat jamur makin luas.',
+  'Jaga area tetap kering; jamur tumbuh di kulit lembap. Handuk dan alas kaki jangan dipakai bersama.',
 ];
 
 // ---------- Proton pump inhibitors share most of their text ----------
@@ -1297,12 +1460,12 @@ export const MEDICINES: Medicine[] = [
     sideEffects: ['Perih atau nyeri lambung, mual.', 'Jarang: perdarahan lambung (BAB hitam), gangguan ginjal, sesak pada penderita asma tertentu.'],
     warnings: [
       'Jangan saat dehidrasi (diare/muntah berat, kurang minum) — risiko gangguan ginjal.',
-      'Hindari saat cacar air (risiko infeksi kulit berat).',
+      'Hindari saat cacar air (risiko infeksi kulit berat) dan bila curiga demam berdarah/DBD (risiko perdarahan).',
       'Maag/tukak aktif, gagal ginjal/jantung, atau asma yang kambuh karena NSAID: hindari.',
       'Hamil ≥ 20 minggu: hindari.',
     ],
     seeDoctor: FEVER_RED_FLAGS,
-    relatedIds: ['paracetamol', 'lansoprazole'],
+    relatedIds: ['paracetamol', 'mefenamic-acid', 'diclofenac', 'lansoprazole'],
   },
 
   // ---------- Diarrhea ----------
@@ -1610,21 +1773,22 @@ export const MEDICINES: Medicine[] = [
     sideEffects: ['Mengantuk ringan, mulut kering, sakit kepala, lelah.'],
     warnings: ['Gangguan ginjal: dosis dikurangi setengah.', 'Jangan menyetir bila terasa ngantuk.'],
     seeDoctor: ALLERGY_RED_FLAGS,
-    relatedIds: ['chlorpheniramine', 'calamine-lotion'],
+    relatedIds: ['chlorpheniramine', 'loratadine', 'calamine-lotion'],
   },
   {
     id: 'chlorpheniramine',
     name: 'Chlorpheniramine (CTM)',
-    brands: ['CTM (generik)'],
+    brands: ['CTM (generik)', 'Banyak obat flu & batuk kombinasi — cek label "klorfeniramin maleat"'],
     ingredients: ['Chlorpheniramine'],
     group: 'allergy',
-    symptoms: ['allergy', 'itch-rash'],
+    symptoms: ['allergy', 'itch-rash', 'cold'],
     forms: ['tablet', 'syrup'],
     timing: 'any-time',
     availability: 'otc',
     childUse: 'doctor',
     pregnancy: 'ask-doctor',
-    summary: 'Antihistamin generasi lama yang murah. Efektif untuk gatal dan alergi, tapi sering bikin ngantuk. Banyak terdapat di obat flu.',
+    summary:
+      'Antihistamin generasi lama yang murah. CTM = chlorpheniramine maleate (zat yang sama). Efektif untuk gatal, alergi, dan mengeringkan pilek, tapi sering bikin ngantuk. Banyak terdapat di obat flu.',
     howItWorks: 'Menghambat histamin seperti cetirizine, tapi lebih banyak masuk ke otak sehingga lebih sering menimbulkan kantuk.',
     bestTime: ['Saat gejala, atau malam hari bila gatal mengganggu tidur.'],
     howToUse: ['Telan dengan air.'],
@@ -1641,6 +1805,1252 @@ export const MEDICINES: Medicine[] = [
     sideEffects: ['Mengantuk, mulut kering, sembelit, sulit buang air kecil.', 'Pada anak kadang malah gelisah/hiperaktif.'],
     warnings: ['Glaukoma, pembesaran prostat: hindari.', 'Jangan menyetir atau mengoperasikan mesin.'],
     seeDoctor: ALLERGY_RED_FLAGS,
+    relatedIds: ['cetirizine', 'loratadine', 'diphenhydramine'],
+  },
+  {
+    id: 'loratadine',
+    name: 'Loratadine',
+    brands: ['Claritin', 'Loratadine (generik)'],
+    ingredients: ['Loratadine'],
+    group: 'allergy',
+    symptoms: ['allergy', 'itch-rash'],
+    forms: ['tablet', 'syrup'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'ask-doctor',
+    summary: 'Antihistamin generasi kedua, 1x sehari, hampir tidak bikin ngantuk. Untuk bersin, pilek alergi, gatal, dan biduran.',
+    howItWorks:
+      'Menghambat histamin seperti cetirizine, dengan efek kantuk paling kecil di antara keduanya. Tidak membantu pilek karena virus (flu) — hanya pilek karena alergi.',
+    bestTime: ['1x sehari di jam yang sama.', 'Boleh sebelum atau sesudah makan.'],
+    howToUse: ['Telan dengan air. Sirup diukur dengan sendok takar dari kemasan.'],
+    dose: {
+      adult: ['≥ 12 tahun: 10 mg 1x sehari.'],
+      child: ['2–12 tahun, berat > 30 kg: 10 mg 1x sehari.', '2–12 tahun, berat ≤ 30 kg: 5 mg 1x sehari.', '< 2 tahun: dengan anjuran dokter.'],
+    },
+    duration: 'Saat gejala. Alergi musiman bisa rutin beberapa minggu.',
+    interactions: ['Jangan digabung dengan antihistamin lain (CTM, cetirizine, difenhidramin di obat flu/batuk).', 'Alkohol: sebagian orang tetap merasa ngantuk.'],
+    sideEffects: ['Sakit kepala, lelah, mulut kering — jarang.'],
+    warnings: ['Gangguan hati berat: dosis dijarangkan (dokter).'],
+    seeDoctor: ALLERGY_RED_FLAGS,
+    relatedIds: ['cetirizine', 'chlorpheniramine', 'pseudoephedrine'],
+  },
+  {
+    id: 'diphenhydramine',
+    name: 'Diphenhydramine (difenhidramin)',
+    brands: ['Benadryl', 'Banyak sirup batuk & obat flu "malam" — cek label'],
+    ingredients: ['Diphenhydramine'],
+    group: 'allergy',
+    symptoms: ['allergy', 'itch-rash', 'cold', 'cough-dry'],
+    forms: ['tablet', 'capsule', 'syrup'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary:
+      'Antihistamin generasi lama yang sangat bikin ngantuk. Ada di banyak obat batuk/flu malam: mengeringkan ingus, meredakan bersin dan gatal, sedikit menekan batuk.',
+    howItWorks: 'Menghambat histamin dan juga sinyal saraf yang membuat lendir (efek antikolinergik). Mudah masuk ke otak, sehingga kantuknya kuat.',
+    bestTime: ['Malam hari, karena kantuknya.'],
+    howToUse: ['Telan dengan air. Sirup diukur dengan sendok takar dari kemasan.'],
+    dose: {
+      adult: ['≥ 12 tahun: 25–50 mg tiap 4–6 jam, maks 300 mg/hari.'],
+      child: ['6–11 tahun: 12,5–25 mg tiap 4–6 jam, maks 150 mg/hari.', '2–5 tahun: hanya dengan anjuran dokter.', '< 2 tahun: jangan (bisa fatal).'],
+    },
+    duration: 'Beberapa hari, saat gejala.',
+    interactions: [
+      'Jangan digabung dengan antihistamin lain (CTM, cetirizine, loratadin, dimenhidrinat).',
+      'Alkohol, obat tidur, penenang, dekstrometorfan: kantuk berlipat.',
+    ],
+    sideEffects: ['Sangat mengantuk, mulut kering, pandangan kabur, sembelit, sulit buang air kecil.', 'Pada anak kadang malah gelisah.'],
+    warnings: [
+      'Lansia: risiko bingung, jatuh, dan sulit pipis — pilih antihistamin generasi kedua.',
+      'Glaukoma, prostat membesar, asma berat: hindari.',
+      'Jangan dipakai untuk "menidurkan" anak.',
+      'Jangan menyetir atau mengoperasikan mesin.',
+    ],
+    seeDoctor: ALLERGY_RED_FLAGS,
+    relatedIds: ['chlorpheniramine', 'loratadine', 'dextromethorphan'],
+  },
+
+  // ---------- Cough ----------
+  {
+    id: 'guaifenesin',
+    name: 'Guaifenesin (gliseril guaiakolat / GG)',
+    brands: ['Gliseril guaiakolat / GG (generik)', 'Banyak sirup batuk berdahak & obat flu kombinasi — cek label'],
+    ingredients: ['Guaifenesin'],
+    group: 'cough',
+    symptoms: ['cough-wet'],
+    forms: ['tablet', 'syrup'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary: 'Pengencer dahak (ekspektoran) untuk batuk berdahak yang dahaknya kental dan sulit keluar. Di label Indonesia sering tertulis "gliseril guaiakolat".',
+    howItWorks:
+      'Menambah cairan di saluran napas sehingga dahak lebih encer dan mudah dibatukkan keluar. Bukti manfaatnya pada batuk pilek biasa terbatas — minum air yang cukup sama pentingnya.',
+    analogy: 'Seperti menambahkan air ke lem yang mengental supaya mudah dibersihkan.',
+    bestTime: ['Saat batuk berdahak, tiap 4 jam bila perlu.', 'Minum segelas air setiap kali minum obat.'],
+    howToUse: ['Tablet ditelan dengan air. Sirup diukur dengan sendok takar dari kemasan.', 'Banyak minum air hangat sepanjang hari.'],
+    dose: {
+      adult: ['≥ 12 tahun: 200–400 mg tiap 4 jam bila perlu, maks 2.400 mg/hari.'],
+      child: ['6–11 tahun: 100–200 mg tiap 4 jam, maks 1.200 mg/hari.', '2–5 tahun: 50–100 mg tiap 4 jam (maks 600 mg/hari), hanya dengan anjuran dokter.', '< 2 tahun: jangan.'],
+    },
+    duration: 'Maks 7 hari tanpa dokter.',
+    interactions: [
+      'Banyak obat flu kombinasi sudah berisi GG — jangan dobel.',
+      'Kombinasi dengan penekan batuk (dekstrometorfan) kurang logis untuk batuk berdahak: dahak diencerkan, tapi batuk untuk mengeluarkannya ditekan.',
+    ],
+    sideEffects: ['Jarang: mual, muntah, pusing, sakit kepala, ruam.'],
+    warnings: ['Batuk kronis (perokok, asma, PPOK) atau dahak sangat banyak: tanya dokter dulu.'],
+    seeDoctor: COUGH_RED_FLAGS,
+    relatedIds: ['ambroxol', 'bromhexine', 'acetylcysteine', 'dextromethorphan'],
+  },
+  {
+    id: 'ambroxol',
+    name: 'Ambroxol',
+    brands: ['Mucopect', 'Ambroxol (generik)'],
+    ingredients: ['Ambroxol'],
+    group: 'cough',
+    symptoms: ['cough-wet'],
+    forms: ['tablet', 'syrup', 'drops'],
+    timing: 'after-meal',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'ask-doctor',
+    summary: 'Pengencer dahak (mukolitik) yang memecah dahak kental supaya mudah dikeluarkan. Banyak dipakai untuk anak.',
+    howItWorks:
+      'Mengubah struktur dahak menjadi lebih encer dan membantu rambut getar saluran napas (silia) menyapu dahak keluar. Ambroxol adalah hasil olahan tubuh dari bromheksin, jadi kerjanya mirip.',
+    analogy: 'Seperti sabun cuci piring untuk lemak: gumpalan kental dipecah jadi mudah dibilas.',
+    bestTime: ['Sesudah makan.'],
+    howToUse: ['Telan dengan air. Sirup/drops diukur dengan takaran dari kemasan.', 'Banyak minum air.'],
+    dose: {
+      adult: ['≥ 12 tahun: 30 mg 3x sehari selama 2–3 hari pertama, lalu 30 mg 2x sehari.'],
+      child: ['6–12 tahun: 15 mg 2–3x sehari.', '2–5 tahun: 7,5 mg 3x sehari.', '< 2 tahun: 7,5 mg 2x sehari, dengan anjuran dokter.'],
+    },
+    duration: 'Bila tidak membaik dalam 4–5 hari, periksa ke dokter.',
+    interactions: [
+      'Jangan digabung dengan bromheksin atau pengencer dahak lain (zat yang mirip — dobel).',
+      'Jangan bersamaan dengan penekan batuk (dekstrometorfan): dahak yang sudah encer bisa menumpuk.',
+    ],
+    sideEffects: ['Mual, gangguan rasa, mulut/tenggorokan sedikit kebas.', 'Sangat jarang: reaksi alergi berat atau ruam kulit melepuh — hentikan dan ke dokter.'],
+    warnings: ['Hamil trimester 1: hindari; setelahnya tanya dokter.', 'Gangguan ginjal atau hati berat: tanya dokter.'],
+    seeDoctor: COUGH_RED_FLAGS,
+    relatedIds: ['bromhexine', 'guaifenesin', 'acetylcysteine'],
+  },
+  {
+    id: 'bromhexine',
+    name: 'Bromhexine',
+    brands: ['Bisolvon', 'Bromhexine (generik)'],
+    ingredients: ['Bromhexine'],
+    group: 'cough',
+    symptoms: ['cough-wet'],
+    forms: ['tablet', 'syrup'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'ask-doctor',
+    summary: 'Pengencer dahak (mukolitik), "induk" dari ambroxol. Untuk batuk berdahak kental.',
+    howItWorks: 'Di dalam tubuh diubah menjadi ambroxol. Memecah serat dahak supaya lebih encer dan mudah dibatukkan.',
+    bestTime: ['Boleh sebelum atau sesudah makan; sesudah makan bila lambung sensitif.'],
+    howToUse: ['Telan dengan air. Sirup diukur dengan sendok takar dari kemasan.', 'Banyak minum air.'],
+    dose: {
+      adult: ['≥ 12 tahun: 8–16 mg 3x sehari.'],
+      child: ['6–12 tahun: 4 mg 3x sehari.', '2–5 tahun: 4 mg 2x sehari, dengan anjuran dokter.', '< 2 tahun: dengan anjuran dokter.'],
+    },
+    duration: 'Bila tidak membaik dalam 5–7 hari, periksa ke dokter.',
+    interactions: ['Jangan digabung dengan ambroxol atau pengencer dahak lain.', 'Jangan bersamaan dengan penekan batuk (dekstrometorfan).'],
+    sideEffects: ['Mual, perut tidak nyaman, diare ringan.', 'Sangat jarang: reaksi alergi berat atau ruam kulit melepuh — hentikan.'],
+    warnings: ['Riwayat tukak lambung: tanya dokter (bisa mengiritasi lambung).'],
+    seeDoctor: COUGH_RED_FLAGS,
+    relatedIds: ['ambroxol', 'guaifenesin', 'acetylcysteine'],
+  },
+  {
+    id: 'acetylcysteine',
+    name: 'Acetylcysteine (N-asetilsistein / NAC)',
+    brands: ['Fluimucil', 'Acetylcysteine (generik)'],
+    ingredients: ['Acetylcysteine'],
+    group: 'cough',
+    symptoms: ['cough-wet'],
+    forms: ['capsule', 'sachet', 'dispersible-tablet'],
+    timing: 'any-time',
+    availability: 'prescription',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary: 'Pengencer dahak kuat (mukolitik) untuk dahak yang sangat kental. Lewat infus, NAC juga penawar keracunan parasetamol (di rumah sakit).',
+    howItWorks: 'Memutus "jembatan" kimia (ikatan disulfida) yang membuat dahak kental dan lengket.',
+    analogy: 'Seperti menggunting jaring-jaring sehingga gumpalan lendir terurai.',
+    bestTime: ['Sachet/tablet larut dilarutkan dalam segelas air dan langsung diminum.'],
+    howToUse: ['Bau belerang ringan itu normal.', 'Banyak minum air.'],
+    dose: {
+      adult: ['200 mg 2–3x sehari, atau 600 mg 1x sehari.'],
+      child: ['6–14 tahun: 100 mg 3x sehari atau 200 mg 2x sehari.', '2–5 tahun: 100 mg 2–3x sehari, dengan anjuran dokter.', '< 2 tahun: jangan (dahak bisa menumpuk dan menyumbat napas bayi).'],
+    },
+    duration: 'Batuk akut: 5–10 hari.',
+    interactions: [
+      'Jangan bersamaan dengan penekan batuk (dekstrometorfan): dahak bisa menumpuk.',
+      'Antibiotik yang diminum: beri jarak 2 jam.',
+      'Nitrogliserin (obat jantung): sakit kepala dan tekanan darah turun bisa bertambah.',
+    ],
+    sideEffects: ['Mual, muntah, diare.', 'Jarang: sesak (bronkospasme) pada penderita asma, reaksi alergi.'],
+    warnings: ['Asma: hati-hati, hentikan bila sesak.', 'Riwayat tukak lambung: hati-hati.'],
+    seeDoctor: COUGH_RED_FLAGS,
+    relatedIds: ['ambroxol', 'bromhexine', 'guaifenesin'],
+  },
+  {
+    id: 'dextromethorphan',
+    name: 'Dextromethorphan (DMP / DXM)',
+    brands: ['Hanya dalam obat batuk/flu kombinasi — cek label "dekstrometorfan HBr"'],
+    ingredients: ['Dextromethorphan'],
+    group: 'cough',
+    symptoms: ['cough-dry'],
+    forms: ['tablet', 'syrup'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary:
+      'Penekan batuk (antitusif) untuk batuk kering yang mengganggu, terutama malam hari. Bukan untuk batuk berdahak. Sering disalahgunakan, sehingga sediaan tunggalnya sudah ditarik BPOM.',
+    howItWorks:
+      'Menaikkan ambang "pusat batuk" di otak sehingga refleks batuk berkurang. Pada dosis sangat tinggi bekerja seperti obat bius disosiatif — itu sebabnya disalahgunakan.',
+    analogy: 'Seperti mengecilkan volume alarm: penyebab batuknya tetap ada, hanya batuknya diredam.',
+    bestTime: ['Saat batuk kering mengganggu tidur atau aktivitas.'],
+    howToUse: ['Ikuti takaran pada label obat kombinasi. Cek kandungan lain di dalamnya (parasetamol, antihistamin).'],
+    dose: {
+      adult: ['≥ 12 tahun: 10–20 mg tiap 4 jam atau 30 mg tiap 6–8 jam, maks 120 mg/hari.'],
+      child: ['6–11 tahun: 5–10 mg tiap 4 jam atau 15 mg tiap 6–8 jam, maks 60 mg/hari.', '2–5 tahun: hanya dengan anjuran dokter.', '< 2 tahun: jangan.'],
+    },
+    duration: 'Maks 7 hari tanpa dokter.',
+    interactions: [
+      'Antidepresan MAOI (termasuk 14 hari setelah berhenti), SSRI/SNRI (fluoksetin, paroksetin, sertralin), tramadol: risiko sindrom serotonin — jangan digabung tanpa dokter.',
+      'Alkohol, obat tidur, antihistamin (CTM, difenhidramin): kantuk bertambah.',
+      'Jangan dobel dengan obat flu lain yang juga berisi DMP.',
+    ],
+    sideEffects: ['Mengantuk, pusing, mual.', 'Dosis berlebih: bingung, halusinasi, jantung berdebar, kejang.'],
+    warnings: [
+      'Bukan untuk batuk berdahak, asma, atau batuk perokok — di sini batuk justru membersihkan saluran napas.',
+      'BPOM membatalkan izin edar sediaan tunggal dekstrometorfan (2013) karena penyalahgunaan; kini hanya ada dalam kombinasi.',
+      'Jangan menyetir bila mengantuk.',
+    ],
+    seeDoctor: COUGH_RED_FLAGS,
+    relatedIds: ['diphenhydramine', 'guaifenesin'],
+  },
+
+  // ---------- Nose & cold ----------
+  {
+    id: 'pseudoephedrine',
+    name: 'Pseudoephedrine',
+    brands: ['Rhinos SR (+ loratadin)', 'Tremenza (+ triprolidin)'],
+    ingredients: ['Pseudoephedrine'],
+    group: 'nasal',
+    symptoms: ['cold'],
+    forms: ['tablet', 'capsule', 'syrup'],
+    timing: 'any-time',
+    availability: 'prescription',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary: 'Pelega hidung tersumbat (dekongestan) yang diminum. Efektif, tapi bisa menaikkan tekanan darah dan detak jantung.',
+    howItWorks:
+      'Menyempitkan pembuluh darah yang bengkak di dalam hidung sehingga saluran napas lebih lega. Efek ini juga terjadi di pembuluh darah lain, makanya tekanan darah bisa naik.',
+    analogy: 'Seperti mengempiskan ban dalam yang terlalu menggembung di lorong sempit.',
+    bestTime: ['Pagi/siang. Hindari menjelang tidur — bisa bikin susah tidur dan berdebar.'],
+    howToUse: ['Tablet/kapsul lepas lambat (SR) ditelan utuh, jangan dibelah atau dikunyah.'],
+    dose: {
+      adult: ['Lepas cepat: 60 mg tiap 4–6 jam, maks 240 mg/hari.', 'Lepas lambat: 120 mg tiap 12 jam.'],
+      child: ['6–11 tahun: 30 mg tiap 4–6 jam (maks 120 mg/hari), dengan anjuran dokter.', '< 6 tahun: jangan tanpa dokter.'],
+    },
+    duration: 'Maks 7 hari.',
+    interactions: [
+      'Antidepresan MAOI (termasuk 14 hari setelah berhenti): lonjakan tekanan darah — jangan.',
+      'Jangan digabung dengan dekongestan minum lain (fenilefrin) atau obat flu lain yang berisi pseudoefedrin.',
+      'Kafein, minuman energi, pil pelangsing: berdebar dan gelisah bertambah.',
+      'Obat darah tinggi: efeknya bisa berkurang.',
+    ],
+    sideEffects: ['Susah tidur, gelisah, jantung berdebar, mulut kering.', 'Tekanan darah naik. Sulit buang air kecil pada pria dengan prostat membesar.'],
+    warnings: [
+      'Hindari bila: darah tinggi tidak terkontrol, penyakit jantung, hipertiroid, glaukoma, prostat membesar. Diabetes: tanya dokter.',
+      'Hamil trimester 1: hindari.',
+      'Diawasi ketat sebagai bahan baku (prekursor) narkotika; umumnya perlu resep.',
+    ],
+    seeDoctor: NOSE_RED_FLAGS,
+    relatedIds: ['phenylephrine', 'oxymetazoline', 'saline-nasal', 'loratadine'],
+  },
+  {
+    id: 'phenylephrine',
+    name: 'Phenylephrine (fenilefrin)',
+    brands: ['Banyak obat flu tablet & sirup kombinasi — cek label "fenilefrin HCl"'],
+    ingredients: ['Phenylephrine'],
+    group: 'nasal',
+    symptoms: ['cold'],
+    forms: ['tablet', 'syrup'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary:
+      'Dekongestan paling umum di obat flu. Versi yang diminum hampir tidak melegakan hidung: panel ahli FDA (2023) menyimpulkan tidak efektif, dan FDA mengusulkan menghapusnya (2024).',
+    howItWorks:
+      'Menyempitkan pembuluh darah hidung seperti pseudoefedrin. Bila diminum, sebagian besar sudah dihancurkan usus dan hati sebelum sampai ke darah, sehingga efek ke hidung sangat kecil. Sebagai tetes/semprot hidung tetap bekerja.',
+    bestTime: ['Ikuti label obat kombinasi; hindari menjelang tidur.'],
+    howToUse: ['Cek kandungan lain di obat kombinasi (parasetamol, antihistamin) supaya tidak dobel.'],
+    dose: {
+      adult: ['≥ 12 tahun: 10 mg tiap 4 jam, maks 60 mg/hari.'],
+      child: ['6–11 tahun: 5 mg tiap 4 jam, maks 30 mg/hari.', '< 6 tahun: jangan tanpa dokter.'],
+    },
+    duration: 'Maks 7 hari.',
+    interactions: [
+      'Antidepresan MAOI: jangan.',
+      'Jangan dobel dengan obat flu lain yang berisi fenilefrin atau pseudoefedrin.',
+      'Obat darah tinggi: tanya apoteker.',
+    ],
+    sideEffects: ['Gelisah, sakit kepala, berdebar, tekanan darah naik.'],
+    warnings: [
+      'Darah tinggi, penyakit jantung, hipertiroid, diabetes, prostat membesar: tanya dokter.',
+      'Bila hidung tersumbat jadi keluhan utama, cuci hidung NaCl atau semprot oksimetazolin (maks 3 hari) lebih berguna daripada fenilefrin minum.',
+    ],
+    seeDoctor: NOSE_RED_FLAGS,
+    relatedIds: ['pseudoephedrine', 'oxymetazoline', 'saline-nasal'],
+  },
+  {
+    id: 'oxymetazoline',
+    name: 'Oxymetazoline (semprot/tetes hidung)',
+    brands: ['Afrin', 'Iliadin'],
+    ingredients: ['Oxymetazoline'],
+    group: 'nasal',
+    symptoms: ['cold'],
+    forms: ['spray', 'drops'],
+    timing: 'external',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary: 'Semprot/tetes pelega hidung tersumbat. Bekerja dalam beberapa menit dan tahan ± 12 jam, tapi maksimal 3 hari berturut-turut.',
+    howItWorks:
+      'Menyempitkan pembuluh darah di lapisan hidung langsung di tempat. Bila dipakai > 3 hari, hidung "ketagihan": begitu efek habis, hidung justru makin tersumbat (rhinitis medikamentosa).',
+    analogy: 'Seperti pinjaman berbunga tinggi: lega sekarang, tapi kalau diperpanjang terus, utangnya (hidung tersumbat) makin besar.',
+    bestTime: ['Saat hidung tersumbat berat, mis. sebelum tidur atau sebelum naik pesawat.'],
+    howToUse: [
+      'Buang ingus dulu. Kepala sedikit menunduk, arahkan semprotan ke sisi luar lubang hidung (menjauhi sekat tengah).',
+      'Satu botol untuk satu orang.',
+    ],
+    dose: {
+      adult: ['≥ 6 tahun (kadar 0,05%): 2–3 semprot tiap lubang hidung tiap 10–12 jam, maks 2x dalam 24 jam.'],
+      child: ['1–5 tahun: hanya kadar anak (0,025%), dengan anjuran dokter.', 'Bayi: hanya kadar bayi (0,01%), dengan anjuran dokter.'],
+    },
+    duration: 'Maks 3 hari berturut-turut.',
+    interactions: ['Antidepresan MAOI: tanya dokter.', 'Jangan bersamaan dengan semprot dekongestan lain.'],
+    sideEffects: ['Perih atau kering di hidung, bersin.', 'Lebih dari 3 hari: hidung tersumbat balik (rebound).'],
+    warnings: [
+      'Darah tinggi, penyakit jantung, glaukoma sudut sempit, hipertiroid: tanya dokter.',
+      'Sudah tergantung semprot hidung: konsultasikan — dokter bisa memberi semprot steroid sambil menghentikannya.',
+    ],
+    seeDoctor: NOSE_RED_FLAGS,
+    relatedIds: ['saline-nasal', 'pseudoephedrine'],
+  },
+  {
+    id: 'saline-nasal',
+    name: 'Cairan garam hidung (NaCl / air laut)',
+    brands: ['Sterimar', 'NaCl 0,9% (generik)'],
+    ingredients: ['Sodium chloride'],
+    group: 'nasal',
+    symptoms: ['cold', 'allergy'],
+    forms: ['spray', 'drops', 'solution'],
+    timing: 'external',
+    availability: 'medical-device',
+    childUse: 'yes',
+    pregnancy: 'generally-ok',
+    summary: 'Membilas ingus, kuman, dan alergen dari hidung. Aman untuk segala usia, termasuk bayi dan ibu hamil, dan boleh dipakai sesering perlu.',
+    howItWorks: 'Mengencerkan dan membilas ingus serta debu/serbuk sari, sekaligus melembapkan hidung. Tidak ada zat obat, jadi tidak ada efek ketergantungan.',
+    analogy: 'Seperti membilas piring sebelum dicuci: kotoran yang lepas ikut terbuang.',
+    bestTime: ['Bayi: sebelum menyusu dan sebelum tidur.', 'Sebelum memakai semprot hidung lain.'],
+    howToUse: [
+      'Bayi: teteskan 2–3 tetes tiap lubang hidung, tunggu sebentar, lalu sedot dengan penyedot ingus.',
+      'Cuci hidung (irigasi) dewasa: pakai cairan siap pakai atau air matang/steril yang sudah dingin.',
+    ],
+    dose: {
+      adult: ['1–2 semprot tiap lubang hidung, sesering perlu.'],
+      child: ['2–3 tetes atau 1 semprot (sediaan anak) tiap lubang hidung, sesering perlu.'],
+    },
+    duration: 'Selama pilek; boleh rutin.',
+    interactions: [],
+    sideEffects: ['Perih ringan sementara.'],
+    warnings: ['Jangan pakai air keran mentah untuk cuci hidung — ada risiko amuba yang langka tapi fatal.'],
+    seeDoctor: NOSE_RED_FLAGS,
+    relatedIds: ['oxymetazoline'],
+  },
+
+  // ---------- Mouth & throat ----------
+  {
+    id: 'antiseptic-lozenge',
+    name: 'Tablet hisap antiseptik (amylmetacresol + DCBA)',
+    brands: ['Strepsils'],
+    ingredients: ['Amylmetacresol', 'Dichlorobenzyl alcohol'],
+    group: 'mouth-throat',
+    symptoms: ['sore-throat'],
+    forms: ['lozenge'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'ask-doctor',
+    summary: 'Tablet hisap untuk meredakan sakit tenggorokan ringan. Melegakan sementara; tidak mengobati penyebabnya.',
+    howItWorks: 'Dua antiseptik ringan membunuh sebagian kuman di permukaan tenggorokan. Menghisapnya merangsang ludah yang melembapkan tenggorokan.',
+    bestTime: ['Saat tenggorokan terasa sakit.'],
+    howToUse: ['Hisap perlahan sampai habis di mulut; jangan dikunyah atau ditelan utuh.'],
+    dose: {
+      adult: ['1 tablet hisap tiap 2–3 jam, maks 12 tablet/24 jam.'],
+      child: ['≥ 6 tahun: sama dengan dewasa.', '< 6 tahun: jangan (risiko tersedak).'],
+    },
+    duration: 'Maks 3 hari; bila belum membaik, periksa.',
+    interactions: [],
+    sideEffects: ['Rasa tidak nyaman di lidah/mulut; jarang alergi.'],
+    warnings: ['Varian dengan gula: perhatikan bila diabetes.'],
+    seeDoctor: THROAT_RED_FLAGS,
+    relatedIds: ['benzydamine', 'povidone-iodine-gargle', 'paracetamol'],
+  },
+  {
+    id: 'benzydamine',
+    name: 'Benzydamine (obat kumur/semprot tenggorokan)',
+    brands: ['Tantum Verde'],
+    ingredients: ['Benzydamine'],
+    group: 'mouth-throat',
+    symptoms: ['sore-throat', 'mouth-ulcer'],
+    forms: ['solution', 'spray', 'lozenge'],
+    timing: 'external',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary: 'Antiradang dan pereda nyeri lokal untuk sakit tenggorokan, sariawan, dan setelah cabut gigi.',
+    howItWorks: 'NSAID yang bekerja di permukaan: mengurangi radang dan sedikit membius lapisan mulut-tenggorokan.',
+    bestTime: ['Saat nyeri, mis. sebelum makan supaya menelan lebih nyaman.'],
+    howToUse: ['Obat kumur: kumur-kumur atau berkumur di tenggorokan ± 30 detik, lalu buang. Jangan ditelan.'],
+    dose: {
+      adult: ['Obat kumur 0,15%: 15 ml tiap 1,5–3 jam bila perlu.', 'Semprot: 4–8 semprot, 2–6x sehari.'],
+      child: ['6–12 tahun: semprot 4 semprot, 2–6x sehari.', 'Obat kumur: hanya untuk yang bisa berkumur tanpa menelan (umumnya ≥ 12 tahun).', '< 6 tahun: dengan anjuran dokter.'],
+    },
+    duration: 'Maks 7 hari.',
+    interactions: [],
+    sideEffects: ['Mulut kebas atau perih sementara.'],
+    warnings: ['Alergi aspirin/NSAID, atau asma yang kambuh karena NSAID: hindari.'],
+    seeDoctor: THROAT_RED_FLAGS,
+    relatedIds: ['antiseptic-lozenge', 'povidone-iodine-gargle'],
+  },
+  {
+    id: 'povidone-iodine-gargle',
+    name: 'Povidone-iodine obat kumur',
+    brands: ['Betadine Obat Kumur'],
+    ingredients: ['Povidone-iodine'],
+    group: 'mouth-throat',
+    symptoms: ['sore-throat', 'mouth-ulcer'],
+    forms: ['solution'],
+    timing: 'external',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary: 'Obat kumur antiseptik untuk sakit tenggorokan dan sariawan. Membunuh kuman di permukaan mulut — tidak menyembuhkan radang yang lebih dalam.',
+    howItWorks: 'Yodium dilepas perlahan dan membunuh bakteri, jamur, dan virus yang menempel di permukaan mulut-tenggorokan.',
+    bestTime: ['Setelah sikat gigi atau makan, hingga 4x sehari.'],
+    howToUse: ['Kumur 10 ml selama 30 detik, lalu buang. Jangan ditelan.', 'Jangan makan/minum 30 menit setelahnya.'],
+    dose: {
+      adult: ['10 ml, kumur 30 detik, hingga 4x sehari.'],
+      child: ['≥ 6 tahun yang sudah bisa berkumur tanpa menelan: sama dengan dewasa.', '< 6 tahun: jangan.'],
+    },
+    duration: 'Maks 14 hari.',
+    interactions: ['Obat kumur lain (mis. klorheksidin): beri jarak, jangan bersamaan.'],
+    sideEffects: ['Rasa tidak enak, iritasi ringan, noda kecokelatan sementara.'],
+    warnings: ['Gangguan tiroid atau alergi yodium: hindari.', 'Hamil & menyusui: hindari pemakaian rutin (yodium bisa memengaruhi tiroid bayi).'],
+    seeDoctor: THROAT_RED_FLAGS,
+    relatedIds: ['benzydamine', 'antiseptic-lozenge', 'povidone-iodine'],
+  },
+
+  // ---------- Pain (more) ----------
+  {
+    id: 'mefenamic-acid',
+    name: 'Asam mefenamat (mefenamic acid)',
+    brands: ['Ponstan', 'Asam mefenamat (generik)'],
+    ingredients: ['Mefenamic acid'],
+    group: 'pain-fever',
+    symptoms: ['pain'],
+    forms: ['tablet', 'capsule'],
+    timing: 'after-meal',
+    availability: 'prescription',
+    childUse: 'doctor',
+    pregnancy: 'avoid',
+    summary: 'NSAID yang sering diresepkan untuk nyeri haid dan sakit gigi. Efek samping lambung dan diare lebih sering dibanding ibuprofen.',
+    howItWorks: 'Menghambat enzim COX pembuat prostaglandin, termasuk prostaglandin di rahim yang memicu kram haid.',
+    bestTime: ['Sesudah makan.', 'Nyeri haid: mulai saat nyeri atau haid pertama muncul, hanya selama hari-hari nyeri.'],
+    howToUse: ['Telan dengan segelas air.'],
+    dose: {
+      adult: ['500 mg 3x sehari sesudah makan.'],
+      child: ['≥ 12 tahun: 500 mg 3x sehari.', '< 12 tahun: hanya dengan resep dokter.'],
+    },
+    duration: 'Maks 7 hari.',
+    interactions: NSAID_INTERACTIONS,
+    sideEffects: ['Nyeri lambung, mual, diare (hentikan bila diare).', 'Jarang: perdarahan lambung, gangguan ginjal, anemia, ruam.'],
+    warnings: [
+      'Maag/tukak aktif, penyakit ginjal, radang usus, atau asma yang kambuh karena NSAID: hindari.',
+      'Curiga demam berdarah (DBD) atau sedang dehidrasi: jangan.',
+      'Hamil ≥ 20 minggu: hindari.',
+    ],
+    seeDoctor: PAIN_RED_FLAGS,
+    relatedIds: ['ibuprofen', 'paracetamol', 'hyoscine-butylbromide'],
+  },
+  {
+    id: 'diclofenac',
+    name: 'Diclofenac (natrium / kalium, tablet & gel)',
+    brands: ['Voltaren (natrium)', 'Cataflam (kalium)', 'Voltaren Emulgel (gel)'],
+    ingredients: ['Diclofenac'],
+    group: 'pain-fever',
+    symptoms: ['pain'],
+    forms: ['tablet', 'gel'],
+    timing: 'after-meal',
+    availability: 'prescription',
+    childUse: 'doctor',
+    pregnancy: 'avoid',
+    summary: 'NSAID kuat untuk nyeri otot, sendi, keseleo, sakit gigi, dan asam urat. Versi gel dioles untuk nyeri lokal dan jauh lebih ramah lambung.',
+    howItWorks: 'Menghambat enzim COX sehingga nyeri, bengkak, dan radang berkurang. Gel bekerja di jaringan bawah kulit dengan kadar di darah yang jauh lebih kecil.',
+    bestTime: ['Tablet: sesudah makan.', 'Gel: 3–4x sehari di area nyeri.'],
+    howToUse: [
+      'Tablet salut: telan utuh.',
+      'Gel: oles dan pijat ringan, cuci tangan setelahnya. Jangan di kulit luka, jangan dibalut rapat, hindari sinar matahari langsung di area oles.',
+    ],
+    dose: {
+      adult: ['Tablet: 50 mg 2–3x sehari, maks 150 mg/hari.', 'Gel 1%: oles 3–4x sehari.'],
+      child: ['Tablet: hanya dengan resep dokter.', 'Gel: ≥ 14 tahun.'],
+    },
+    duration: 'Tablet: sependek mungkin. Gel: bila belum membaik dalam 7 hari, periksa.',
+    interactions: NSAID_INTERACTIONS,
+    sideEffects: ['Tablet: nyeri lambung, mual, pusing.', 'Gel: kemerahan atau gatal di kulit.'],
+    warnings: [
+      'Risiko serangan jantung/stroke sedikit lebih tinggi dibanding NSAID lain — hindari bila ada penyakit jantung, stroke, atau sumbatan pembuluh darah.',
+      'Maag/tukak, gangguan ginjal, asma yang kambuh karena NSAID, curiga DBD: hindari tablet.',
+      'Hamil ≥ 20 minggu: hindari (termasuk gel).',
+    ],
+    seeDoctor: PAIN_RED_FLAGS,
+    relatedIds: ['ibuprofen', 'paracetamol'],
+  },
+  {
+    id: 'aspirin',
+    name: 'Aspirin (asam asetilsalisilat)',
+    brands: ['Aspilets (80 mg, untuk jantung)', 'Aspirin (generik)'],
+    ingredients: ['Aspirin'],
+    group: 'pain-fever',
+    symptoms: ['pain', 'fever'],
+    forms: ['tablet', 'chewable-tablet'],
+    timing: 'after-meal',
+    availability: 'otc',
+    childUse: 'not-recommended',
+    pregnancy: 'avoid',
+    summary:
+      'NSAID tertua. Dosis rendah (80–100 mg) dipakai untuk jantung atas resep. Untuk nyeri/demam jarang jadi pilihan karena risiko lambung dan perdarahan. Jangan untuk anak dan demam berdarah.',
+    howItWorks:
+      'Menghambat COX secara permanen: meredakan nyeri, demam, dan radang, serta membuat keping darah kurang lengket (manfaat untuk jantung, sekaligus risiko perdarahan).',
+    bestTime: ['Sesudah makan.'],
+    howToUse: ['Telan dengan segelas air.'],
+    dose: {
+      adult: ['Nyeri/demam: 300–1.000 mg tiap 4–6 jam, maks 4.000 mg/hari.', 'Dosis jantung (80–100 mg 1x sehari) hanya atas resep — jangan berhenti mendadak tanpa dokter.'],
+      child: ['< 16 tahun: jangan (risiko sindrom Reye — kerusakan otak dan hati yang bisa fatal), kecuali diresepkan dokter untuk penyakit tertentu.'],
+    },
+    duration: 'Nyeri/demam: maks 3 hari tanpa dokter.',
+    interactions: [
+      'Ibuprofen: minum aspirin dosis jantung ≥ 30 menit sebelum ibuprofen.',
+      'Pengencer darah, NSAID lain, SSRI, kortikosteroid: risiko perdarahan naik.',
+      'Metotreksat: kadarnya naik — berbahaya.',
+    ],
+    sideEffects: ['Nyeri lambung, perdarahan lambung, mudah memar.', 'Dosis tinggi: telinga berdenging.'],
+    warnings: [
+      'Curiga demam berdarah (DBD): jangan — risiko perdarahan.',
+      'Maag/tukak, gangguan perdarahan, asma yang kambuh karena NSAID, asam urat: hindari dosis nyeri.',
+      'Sebelum operasi/cabut gigi, tanya dokter apakah perlu dihentikan.',
+    ],
+    seeDoctor: PAIN_RED_FLAGS,
+    relatedIds: ['paracetamol', 'ibuprofen'],
+  },
+  {
+    id: 'caffeine',
+    name: 'Kafein (dalam obat sakit kepala)',
+    brands: ['Panadol Extra (+ parasetamol)', 'Banyak obat sakit kepala kombinasi — cek label'],
+    ingredients: ['Caffeine'],
+    group: 'pain-fever',
+    symptoms: ['pain'],
+    forms: ['tablet'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'not-recommended',
+    pregnancy: 'ask-doctor',
+    summary: 'Penambah efek pereda nyeri pada obat sakit kepala (sedikit lebih kuat dibanding pereda nyeri saja). Bukan pereda nyeri bila diminum sendiri.',
+    howItWorks: 'Cara pastinya belum jelas: diduga mempercepat penyerapan dan memperkuat efek pereda nyeri, serta menyempitkan pembuluh darah di kepala.',
+    bestTime: ['Pagi/siang; hindari sore-malam karena bisa mengganggu tidur.'],
+    howToUse: ['Hitung juga kafein dari kopi, teh, dan minuman energi hari itu.'],
+    dose: {
+      adult: ['Umumnya 50–65 mg per tablet kombinasi. Total kafein dari semua sumber maks ± 400 mg/hari (± 4 cangkir kopi).'],
+      child: ['Tidak untuk anak < 12 tahun.'],
+    },
+    duration: 'Bila perlu, jangan rutin.',
+    interactions: [
+      'Kopi, teh, minuman energi, pil pelangsing, pseudoefedrin: berdebar dan gelisah bertambah.',
+      'Antibiotik siprofloksasin dan obat asma teofilin: efek kafein naik.',
+    ],
+    sideEffects: ['Susah tidur, berdebar, gelisah, perut perih.'],
+    warnings: [
+      'Minum obat sakit kepala > 10 hari per bulan bisa memicu sakit kepala karena obat (medication overuse headache).',
+      'Hamil: total kafein maks 200 mg/hari.',
+      'Darah tinggi, gangguan irama jantung, mudah cemas: batasi.',
+    ],
+    seeDoctor: PAIN_RED_FLAGS,
+    relatedIds: ['paracetamol'],
+  },
+
+  // ---------- Laxatives ----------
+  {
+    id: 'bisacodyl',
+    name: 'Bisacodyl',
+    brands: ['Dulcolax', 'Bisacodyl (generik)'],
+    ingredients: ['Bisacodyl'],
+    group: 'laxative',
+    symptoms: ['constipation'],
+    forms: ['tablet', 'suppository'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary: 'Pencahar perangsang (stimulan). Tablet bekerja 6–12 jam (diminum malam, BAB pagi); supositoria 15–60 menit.',
+    howItWorks: 'Merangsang saraf dinding usus besar supaya bergerak mendorong tinja, dan menarik air ke dalam usus.',
+    analogy: 'Seperti mendorong antrean dari belakang supaya cepat bergerak.',
+    bestTime: ['Tablet: malam sebelum tidur.', 'Supositoria: saat ingin BAB dalam waktu dekat.'],
+    howToUse: [
+      'Tablet salut: telan utuh, jangan dikunyah atau dibelah.',
+      'Jangan minum dalam 1 jam bersama susu, antasida, atau obat maag (PPI/H2) — lapisannya larut terlalu cepat dan perut bisa kram.',
+      'Supositoria: masukkan ke anus, bagian runcing lebih dulu.',
+    ],
+    dose: {
+      adult: ['≥ 10 tahun: tablet 5–10 mg malam hari; supositoria 10 mg 1x sehari.'],
+      child: ['4–9 tahun: tablet 5 mg malam hari, dengan anjuran dokter.', '< 4 tahun: dengan anjuran dokter.'],
+    },
+    duration: 'Maks 5 hari tanpa dokter. Jangan jadi kebiasaan rutin.',
+    interactions: ['Susu, antasida, PPI/H2: beri jarak 1 jam.', 'Diuretik dan kortikosteroid: risiko kalium rendah bila dipakai lama.'],
+    sideEffects: ['Kram atau mulas, diare.', 'Supositoria: perih di anus.'],
+    warnings: ['Jangan bila nyeri perut hebat yang belum jelas penyebabnya, mual-muntah, atau curiga sumbatan usus.', 'Sedang dehidrasi: hindari.'],
+    seeDoctor: BOWEL_RED_FLAGS,
+    relatedIds: ['lactulose', 'psyllium-husk'],
+  },
+  {
+    id: 'lactulose',
+    name: 'Lactulose (laktulosa)',
+    brands: ['Duphalac', 'Laktulosa (generik)'],
+    ingredients: ['Lactulose'],
+    group: 'laxative',
+    symptoms: ['constipation'],
+    forms: ['syrup'],
+    timing: 'any-time',
+    availability: 'prescription',
+    childUse: 'yes',
+    pregnancy: 'generally-ok',
+    summary: 'Pencahar osmotik (gula yang tidak dicerna). Lembut, aman untuk anak, ibu hamil, dan pemakaian lebih lama. Butuh 1–2 hari sampai bekerja.',
+    howItWorks: 'Laktulosa tidak diserap usus halus. Di usus besar ia menarik air ke dalam tinja sehingga tinja lunak dan lebih mudah keluar.',
+    analogy: 'Seperti spons yang membawa air ke tinja yang kering.',
+    bestTime: ['Waktu yang sama tiap hari, mis. pagi bersama sarapan.'],
+    howToUse: ['Boleh dicampur air atau jus.', 'Minum air yang cukup sepanjang hari.'],
+    dose: {
+      adult: ['Mulai 15–45 ml/hari (1x atau dibagi 2), lalu sesuaikan menjadi 15–30 ml/hari.'],
+      child: ['7–14 tahun: mulai 15 ml/hari, lanjut 10–15 ml/hari.', '1–6 tahun: 5–10 ml/hari.', '< 1 tahun: sampai 5 ml/hari, dengan anjuran dokter.'],
+    },
+    duration: 'Sampai pola BAB normal. Lebih dari beberapa minggu sebaiknya dievaluasi dokter.',
+    interactions: [],
+    sideEffects: ['Kembung, kentut, kram di hari-hari awal — biasanya berkurang.', 'Dosis berlebih: diare.'],
+    warnings: ['Galaktosemia: jangan.', 'Diabetes: dosis besar mengandung sedikit gula — tanya dokter.'],
+    seeDoctor: BOWEL_RED_FLAGS,
+    relatedIds: ['bisacodyl', 'psyllium-husk'],
+  },
+
+  // ---------- Gas & cramps ----------
+  {
+    id: 'simethicone',
+    name: 'Simethicone (dimetikon)',
+    brands: ['Disflatyl', 'Ada di beberapa antasida (mis. Polysilane)'],
+    ingredients: ['Simethicone'],
+    group: 'gas-cramps',
+    symptoms: ['bloating'],
+    forms: ['chewable-tablet', 'drops'],
+    timing: 'after-meal',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'generally-ok',
+    summary: 'Pemecah gelembung gas untuk kembung dan begah. Tidak diserap tubuh, sangat aman.',
+    howItWorks: 'Menurunkan tegangan permukaan gelembung gas kecil sehingga bergabung menjadi gelembung besar yang lebih mudah keluar lewat sendawa atau kentut.',
+    analogy: 'Seperti meneteskan sabun ke busa: busa kecil-kecil pecah menjadi satu.',
+    bestTime: ['Sesudah makan dan sebelum tidur, bila perlu.'],
+    howToUse: ['Tablet kunyah dikunyah sampai halus. Tetes bayi dicampur sedikit ASI/air atau diteteskan ke mulut.'],
+    dose: {
+      adult: ['40–125 mg sesudah makan dan sebelum tidur bila perlu, maks 500 mg/hari.'],
+      child: ['Sesuai label sediaan anak.', 'Bayi (kolik): tetes 20 mg hingga 4x sehari — bukti manfaatnya untuk kolik lemah.'],
+    },
+    duration: 'Bila perlu.',
+    interactions: ['Levotiroksin (obat tiroid): beri jarak 4 jam.'],
+    sideEffects: ['Sangat jarang.'],
+    warnings: ['Kembung yang disertai berat badan turun, BAB berdarah, atau nyeri hebat bukan kembung biasa — periksa.'],
+    seeDoctor: STOMACH_RED_FLAGS,
+    relatedIds: ['antacid', 'hyoscine-butylbromide'],
+  },
+  {
+    id: 'hyoscine-butylbromide',
+    name: 'Hyoscine butylbromide (butilskopolamin)',
+    brands: ['Buscopan', 'Buscopan Plus (+ parasetamol)'],
+    ingredients: ['Hyoscine butylbromide'],
+    group: 'gas-cramps',
+    symptoms: ['cramps', 'pain'],
+    forms: ['tablet'],
+    timing: 'any-time',
+    availability: 'prescription',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary: 'Pereda kram/mulas perut (antispasmodik), juga kram saat haid. Tidak bikin ngantuk karena tidak masuk otak.',
+    howItWorks:
+      'Melemaskan otot polos saluran cerna yang sedang kejang dengan memblok sinyal saraf (antikolinergik). Sangat sedikit diserap ke darah, sehingga efek samping umumnya ringan.',
+    analogy: 'Seperti melepas genggaman tangan yang mengepal terlalu kuat.',
+    bestTime: ['Saat kram.'],
+    howToUse: ['Telan utuh dengan air.'],
+    dose: {
+      adult: ['10–20 mg 3–4x sehari, maks 80 mg/hari.'],
+      child: ['6–11 tahun: 10 mg 3x sehari, dengan anjuran dokter.', '< 6 tahun: dengan anjuran dokter.'],
+    },
+    duration: 'Bila perlu. Kram menetap > 2 minggu atau sering kambuh: periksa ke dokter.',
+    interactions: [
+      'Antihistamin generasi lama, antidepresan trisiklik, obat antikolinergik lain: mulut kering dan sembelit bertambah.',
+      'Metoklopramid dan domperidon: saling melemahkan.',
+    ],
+    sideEffects: ['Mulut kering, jantung berdebar, sulit buang air kecil, pandangan kabur.'],
+    warnings: [
+      'Glaukoma sudut sempit, prostat membesar dengan sulit pipis, miastenia gravis, detak jantung cepat, sumbatan usus: jangan.',
+      'Nyeri perut yang makin hebat, disertai demam, atau di kanan bawah: jangan ditutupi obat — periksa (usus buntu).',
+    ],
+    seeDoctor: CRAMP_RED_FLAGS,
+    relatedIds: ['simethicone', 'mefenamic-acid', 'paracetamol'],
+  },
+
+  // ---------- Diarrhea (more) ----------
+  {
+    id: 'attapulgite',
+    name: 'Attapulgite (+ pektin)',
+    brands: ['Neo Entrostop', 'New Diatabs'],
+    ingredients: ['Attapulgite'],
+    group: 'diarrhea',
+    symptoms: ['diarrhea'],
+    forms: ['tablet'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'not-recommended',
+    pregnancy: 'ask-doctor',
+    summary: 'Tanah liat penyerap untuk diare. Membuat tinja lebih padat, tapi tidak terbukti memperpendek diare atau mengurangi kehilangan cairan. Oralit tetap yang utama.',
+    howItWorks:
+      'Menyerap air dan sebagian racun di usus sehingga tinja tampak lebih padat. Cairan tubuh yang hilang tidak berkurang — dehidrasi tetap bisa terjadi walau tinja tampak membaik.',
+    analogy: 'Seperti menaburkan serbuk gergaji ke tumpahan air: lantai tampak kering, tapi airnya tetap sudah tumpah.',
+    bestTime: ['Setelah BAB cair.'],
+    howToUse: ['Telan dengan air; tetap minum oralit.'],
+    dose: {
+      adult: ['Ikuti label; umumnya 2 tablet setiap habis BAB cair, maks 12 tablet/hari.'],
+      child: ['Tidak dianjurkan. Panduan WHO dan IDAI: diare anak cukup oralit + zinc.'],
+    },
+    duration: 'Maks 2 hari.',
+    interactions: ['Menyerap obat lain: beri jarak 2–3 jam.'],
+    sideEffects: ['Sembelit, kembung.'],
+    warnings: [
+      'FDA (AS) menghapus attapulgite dari daftar obat diare bebas (2003) karena manfaatnya tidak terbukti.',
+      'Diare berdarah atau disertai demam tinggi: jangan, periksa ke dokter.',
+    ],
+    seeDoctor: DIARRHEA_RED_FLAGS,
+    relatedIds: ['oral-rehydration-salts', 'zinc', 'loperamide'],
+  },
+  {
+    id: 'probiotics',
+    name: 'Probiotik',
+    brands: ['Lacto-B', 'Interlac', 'L-Bio'],
+    ingredients: ['Lactobacillus', 'Bifidobacterium'],
+    group: 'diarrhea',
+    symptoms: ['diarrhea'],
+    forms: ['sachet', 'drops', 'capsule'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'generally-ok',
+    summary:
+      'Bakteri baik. Strain tertentu bisa memperpendek diare akut sekitar 1 hari dan mencegah diare karena antibiotik — tapi buktinya campuran dan sangat tergantung strain.',
+    howItWorks: 'Menempati usus sementara, bersaing dengan kuman jahat, dan membantu memulihkan keseimbangan bakteri usus.',
+    bestTime: ['Bersama antibiotik: beri jarak ± 2 jam.'],
+    howToUse: ['Sachet dicampur ke air, susu, atau makanan dingin/suhu ruang — air panas mematikan bakterinya.'],
+    dose: {
+      adult: ['Sesuai label produk.'],
+      child: ['Sesuai label produk; bayi < 6 bulan dengan anjuran dokter.'],
+    },
+    duration: 'Diare: 5–7 hari. Bersama antibiotik: selama antibiotik dan beberapa hari setelahnya.',
+    interactions: ['Antibiotik: beri jarak 2 jam.'],
+    sideEffects: ['Kembung ringan di hari-hari awal.'],
+    warnings: [
+      'Daya tahan tubuh sangat lemah (kemoterapi, bayi prematur, pasien ICU): jangan tanpa dokter — risiko infeksi.',
+      'Panduan ahli tidak sepakat: ESPGHAN (Eropa) menyarankan strain tertentu (L. rhamnosus GG, S. boulardii, L. reuteri) untuk diare anak; AGA (AS) tidak menyarankan. Oralit + zinc tetap yang utama.',
+    ],
+    seeDoctor: DIARRHEA_RED_FLAGS,
+    relatedIds: ['oral-rehydration-salts', 'zinc'],
+  },
+
+  // ---------- Skin: inflammation, infection, fungus, acne ----------
+  {
+    id: 'hydrocortisone-cream',
+    name: 'Hydrocortisone krim',
+    brands: ['Hydrocortisone 1% / 2,5% (generik)'],
+    ingredients: ['Hydrocortisone'],
+    group: 'skin-treatment',
+    symptoms: ['itch-rash'],
+    forms: ['cream', 'ointment'],
+    timing: 'external',
+    availability: 'prescription',
+    childUse: 'doctor',
+    pregnancy: 'generally-ok',
+    summary: 'Krim kortikosteroid paling ringan untuk eksim, ruam gatal, dan gigitan serangga yang meradang. Bukan untuk jamur, jerawat, atau infeksi.',
+    howItWorks: 'Meredam reaksi radang di kulit sehingga kemerahan, bengkak, dan gatal berkurang.',
+    analogy: 'Seperti pemadam api untuk "kebakaran" radang — tapi kalau penyebabnya jamur atau kuman, apinya justru bisa menyebar.',
+    bestTime: ['1–2x sehari, setelah mandi.'],
+    howToUse: [
+      'Oles tipis hanya di area yang meradang. Takaran: 1 ruas ujung jari (± 0,5 g) cukup untuk area seluas 2 telapak tangan dewasa.',
+      'Cuci tangan setelahnya. Jangan dibalut rapat.',
+    ],
+    dose: {
+      adult: ['Oles tipis 1–2x sehari.'],
+      child: ['Oles tipis 1–2x sehari, maks 7 hari.', '< 2 tahun dan area popok: dengan anjuran dokter.'],
+    },
+    duration: 'Maks 7 hari tanpa dokter. Wajah: sesingkat mungkin.',
+    interactions: ['Krim kombinasi steroid + antijamur/antibiotik hanya bila diresepkan.'],
+    sideEffects: ['Pemakaian lama atau berlebihan: kulit menipis, guratan (striae), jerawat, pembuluh darah halus melebar.'],
+    warnings: [
+      'Jangan untuk jamur kulit (panu, kurap, kutu air), jerawat, atau luka terbuka/bernanah.',
+      'Waspadai krim racikan atau pemutih tanpa izin BPOM yang diam-diam berisi steroid kuat.',
+    ],
+    seeDoctor: RASH_RED_FLAGS,
+    relatedIds: ['calamine-lotion', 'cetirizine', 'miconazole'],
+  },
+  {
+    id: 'miconazole',
+    name: 'Miconazole krim',
+    brands: ['Daktarin', 'Mikonazol (generik)'],
+    ingredients: ['Miconazole'],
+    group: 'antifungal',
+    symptoms: ['fungal'],
+    forms: ['cream', 'gel'],
+    timing: 'external',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'generally-ok',
+    summary:
+      'Antijamur untuk kurap, kutu air, panu, ruam jamur di lipatan kulit, dan ruam popok berjamur. Ada juga gel oral untuk sariawan jamur di mulut bayi — atas saran dokter.',
+    howItWorks: 'Merusak dinding sel jamur (golongan azol) sehingga jamur berhenti tumbuh dan mati.',
+    bestTime: ['2x sehari (pagi dan malam) setelah mandi dan kulit dikeringkan.'],
+    howToUse: [
+      'Oles tipis sampai 1–2 cm melewati batas ruam.',
+      'Lanjutkan 1–2 minggu setelah kulit tampak sembuh, supaya tidak kambuh.',
+      'Cuci tangan setelahnya.',
+    ],
+    dose: {
+      adult: ['Krim 2%: oles 2x sehari.'],
+      child: ['Krim: sama dengan dewasa.', 'Gel oral: bayi ≥ 4 bulan, dengan anjuran dokter (risiko tersedak).'],
+    },
+    duration: 'Umumnya 2–6 minggu, termasuk 1–2 minggu setelah tampak sembuh.',
+    interactions: [
+      'Gel oral (yang ditelan) dengan warfarin: risiko perdarahan serius — jangan tanpa dokter. Krim di kulit umumnya aman.',
+      'Gel oral juga berinteraksi dengan beberapa obat kolesterol (simvastatin) — beri tahu dokter obat yang sedang diminum.',
+    ],
+    sideEffects: ['Perih/panas ringan, kemerahan.'],
+    warnings: ANTIFUNGAL_WARNINGS,
+    seeDoctor: FUNGAL_RED_FLAGS,
+    relatedIds: ['clotrimazole', 'ketoconazole', 'terbinafine'],
+  },
+  {
+    id: 'clotrimazole',
+    name: 'Clotrimazole krim',
+    brands: ['Canesten', 'Klotrimazol (generik)'],
+    ingredients: ['Clotrimazole'],
+    group: 'antifungal',
+    symptoms: ['fungal'],
+    forms: ['cream'],
+    timing: 'external',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'generally-ok',
+    summary: 'Antijamur golongan azol untuk kurap, kutu air, panu, dan jamur di lipatan kulit. Mirip miconazole.',
+    howItWorks: 'Merusak dinding sel jamur sehingga jamur berhenti tumbuh dan mati.',
+    bestTime: ['2–3x sehari setelah kulit dibersihkan dan dikeringkan.'],
+    howToUse: ['Oles tipis sampai sedikit melewati batas ruam.', 'Lanjutkan ± 2 minggu setelah kulit tampak sembuh.'],
+    dose: {
+      adult: ['Krim 1%: oles 2–3x sehari.'],
+      child: ['Sama dengan dewasa.'],
+    },
+    duration: 'Umumnya 2–4 minggu, lalu ± 2 minggu lagi setelah tampak sembuh.',
+    interactions: [],
+    sideEffects: ['Perih ringan, kemerahan.'],
+    warnings: [...ANTIFUNGAL_WARNINGS, 'Ada juga tablet vagina untuk keputihan karena jamur — saat hamil, gunakan atas saran dokter/bidan.'],
+    seeDoctor: FUNGAL_RED_FLAGS,
+    relatedIds: ['miconazole', 'ketoconazole', 'terbinafine'],
+  },
+  {
+    id: 'ketoconazole',
+    name: 'Ketoconazole krim & sampo',
+    brands: ['Nizoral (krim & sampo)', 'Ketokonazol krim (generik)'],
+    ingredients: ['Ketoconazole'],
+    group: 'antifungal',
+    symptoms: ['fungal'],
+    forms: ['cream', 'shampoo'],
+    timing: 'external',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'generally-ok',
+    summary: 'Antijamur krim dan sampo. Sampo sangat praktis untuk panu yang luas, serta ketombe/dermatitis seboroik.',
+    howItWorks: 'Merusak dinding sel jamur, termasuk jamur Malassezia penyebab panu dan ketombe.',
+    bestTime: ['Krim: 1–2x sehari. Sampo: saat mandi.'],
+    howToUse: [
+      'Sampo untuk panu: oles ke kulit yang terkena (dan kulit kepala), diamkan 3–5 menit, lalu bilas.',
+      'Sampo untuk ketombe: pijat di kulit kepala, diamkan 3–5 menit, lalu bilas.',
+    ],
+    dose: {
+      adult: ['Krim 2%: oles 1–2x sehari.', 'Sampo untuk panu: 1x sehari selama 5 hari.', 'Sampo untuk ketombe: 2x seminggu selama 2–4 minggu.'],
+      child: ['Dengan anjuran dokter.'],
+    },
+    duration: 'Krim: 2–4 minggu. Sampo: sesuai di atas.',
+    interactions: [],
+    sideEffects: ['Gatal atau perih ringan; rambut bisa terasa kering.'],
+    warnings: [
+      ...ANTIFUNGAL_WARNINGS,
+      'Ketokonazol tablet (diminum) bukan untuk jamur kulit: izinnya dibatasi karena risiko kerusakan hati (EMA 2013).',
+      'Panu sering kambuh di iklim lembap; bercak putih bisa butuh berbulan-bulan sampai warna kulit kembali walau jamurnya sudah mati.',
+    ],
+    seeDoctor: FUNGAL_RED_FLAGS,
+    relatedIds: ['miconazole', 'clotrimazole'],
+  },
+  {
+    id: 'terbinafine',
+    name: 'Terbinafine krim',
+    brands: ['Lamisil', 'Terbinafin krim (generik)'],
+    ingredients: ['Terbinafine'],
+    group: 'antifungal',
+    symptoms: ['fungal'],
+    forms: ['cream'],
+    timing: 'external',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary: 'Antijamur yang membunuh jamur kulit (bukan hanya menghentikan pertumbuhan), sehingga pengobatan kutu air dan kurap lebih singkat dibanding azol.',
+    howItWorks: 'Menghambat pembentukan dinding sel jamur sehingga zat beracun menumpuk dan jamur mati.',
+    bestTime: ['1–2x sehari setelah kulit dibersihkan dan dikeringkan.'],
+    howToUse: ['Oles tipis sampai sedikit melewati batas ruam.'],
+    dose: {
+      adult: ['Krim 1%: oles 1–2x sehari. Kutu air: 1 minggu. Kurap badan/selangkangan: 1–2 minggu.'],
+      child: ['< 12 tahun: dengan anjuran dokter.'],
+    },
+    duration: '1–2 minggu (lebih singkat dari azol).',
+    interactions: [],
+    sideEffects: ['Kemerahan, gatal, atau perih ringan.'],
+    warnings: ANTIFUNGAL_WARNINGS,
+    seeDoctor: FUNGAL_RED_FLAGS,
+    relatedIds: ['miconazole', 'clotrimazole'],
+  },
+  {
+    id: 'fusidic-acid',
+    name: 'Asam fusidat krim',
+    brands: ['Fucidin', 'Asam fusidat (generik)'],
+    ingredients: ['Fusidic acid'],
+    group: 'skin-treatment',
+    symptoms: ['skin-infection'],
+    forms: ['cream', 'ointment'],
+    timing: 'external',
+    availability: 'prescription',
+    childUse: 'yes',
+    pregnancy: 'ask-doctor',
+    summary: 'Antibiotik oles untuk infeksi kulit bakteri yang kecil dan terbatas, mis. impetigo (koreng bernanah dengan kerak kuning madu) atau luka kecil terinfeksi.',
+    howItWorks: 'Menghentikan pembuatan protein bakteri (terutama Staphylococcus) sehingga bakteri berhenti berkembang.',
+    bestTime: ['3x sehari.'],
+    howToUse: ['Bersihkan kerak dengan air sabun hangat, keringkan, lalu oles tipis.', 'Cuci tangan; jangan berbagi handuk.'],
+    dose: {
+      adult: ['Oles tipis 3x sehari.'],
+      child: ['Sama dengan dewasa.'],
+    },
+    duration: '5–7 hari. Jangan > 10 hari dan jangan dipakai berulang-ulang — bakteri cepat kebal.',
+    interactions: [],
+    sideEffects: ['Iritasi ringan; jarang alergi.'],
+    warnings: [
+      'Bukan untuk jerawat jangka panjang atau oles "jaga-jaga" di setiap luka — memicu kuman kebal.',
+      'Infeksi luas atau disertai demam butuh antibiotik minum dari dokter.',
+    ],
+    seeDoctor: SKIN_INFECTION_RED_FLAGS,
+    relatedIds: ['mupirocin', 'povidone-iodine'],
+  },
+  {
+    id: 'mupirocin',
+    name: 'Mupirocin salep',
+    brands: ['Bactroban', 'Mupirocin (generik)'],
+    ingredients: ['Mupirocin'],
+    group: 'skin-treatment',
+    symptoms: ['skin-infection'],
+    forms: ['ointment', 'cream'],
+    timing: 'external',
+    availability: 'prescription',
+    childUse: 'yes',
+    pregnancy: 'ask-doctor',
+    summary: 'Antibiotik oles untuk impetigo dan infeksi kulit kecil, termasuk yang tidak mempan asam fusidat.',
+    howItWorks: 'Menghambat enzim yang dipakai bakteri untuk membuat protein, sehingga bakteri berhenti berkembang.',
+    bestTime: ['3x sehari.'],
+    howToUse: ['Bersihkan kerak dengan air sabun hangat, keringkan, lalu oles tipis. Boleh ditutup kasa.', 'Cuci tangan; jangan berbagi handuk.'],
+    dose: {
+      adult: ['Oles tipis 3x sehari.'],
+      child: ['Sama dengan dewasa.'],
+    },
+    duration: 'Maks 10 hari.',
+    interactions: [],
+    sideEffects: ['Perih, gatal, atau kemerahan ringan.'],
+    warnings: ['Jangan dipakai berulang tanpa dokter — kuman bisa kebal.', 'Salep berbahan dasar PEG: hindari di luka bakar luas atau bila ada gangguan ginjal.'],
+    seeDoctor: SKIN_INFECTION_RED_FLAGS,
+    relatedIds: ['fusidic-acid'],
+  },
+  {
+    id: 'acyclovir-cream',
+    name: 'Acyclovir krim',
+    brands: ['Zovirax', 'Asiklovir krim (generik)'],
+    ingredients: ['Acyclovir'],
+    group: 'skin-treatment',
+    symptoms: ['cold-sore'],
+    forms: ['cream'],
+    timing: 'external',
+    availability: 'prescription',
+    childUse: 'yes',
+    pregnancy: 'generally-ok',
+    summary: 'Krim antivirus untuk herpes bibir (lepuh kecil berkelompok di bibir). Paling berguna bila dioles sejak awal terasa kesemutan.',
+    howItWorks: 'Menghambat virus herpes memperbanyak diri. Tidak membunuh virus yang "tidur" di saraf, sehingga bisa kambuh lagi.',
+    bestTime: ['Mulai sedini mungkin — saat terasa kesemutan/gatal sebelum lepuh muncul.'],
+    howToUse: [
+      'Oles tipis 5x sehari (± tiap 4 jam saat bangun).',
+      'Cuci tangan sebelum dan sesudah; jangan memencet lepuh; jangan berbagi gelas/handuk dan jangan mencium (terutama bayi) selama ada lepuh.',
+    ],
+    dose: {
+      adult: ['Oles 5x sehari selama 5 hari; bila belum sembuh, lanjut sampai 10 hari.'],
+      child: ['Sama dengan dewasa.'],
+    },
+    duration: '5–10 hari.',
+    interactions: [],
+    sideEffects: ['Perih atau kering sementara.'],
+    warnings: ['Bukan untuk mata, herpes kelamin, atau cacar ular (herpes zoster) — itu perlu obat minum dari dokter.'],
+    seeDoctor: COLD_SORE_RED_FLAGS,
+    relatedIds: [],
+  },
+  {
+    id: 'benzoyl-peroxide',
+    name: 'Benzoyl peroxide (gel jerawat)',
+    brands: ['Benzolac', 'Benzoil peroksida (generik)'],
+    ingredients: ['Benzoyl peroxide'],
+    group: 'acne',
+    symptoms: ['acne'],
+    forms: ['gel', 'cream'],
+    timing: 'external',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'generally-ok',
+    summary: 'Obat jerawat oles lini pertama: membunuh bakteri jerawat tanpa membuatnya kebal, dan membantu membuka pori.',
+    howItWorks: 'Melepas oksigen yang membunuh bakteri jerawat (C. acnes) dan mengelupaskan sel kulit mati penyumbat pori.',
+    bestTime: ['Mulai 1x sehari (malam), naik jadi 2x sehari bila kulit sudah terbiasa.'],
+    howToUse: [
+      'Cuci muka, keringkan, oles tipis ke seluruh area yang berjerawat (bukan hanya titik jerawat).',
+      'Mulai dari kadar 2,5% — hampir sama efektif dengan 5–10% tapi lebih jarang iritasi.',
+      'Bisa memudarkan warna handuk, sarung bantal, dan rambut.',
+    ],
+    dose: {
+      adult: ['Oles tipis 1–2x sehari.'],
+      child: ['Remaja: sama dengan dewasa.', '< 12 tahun: dengan anjuran dokter.'],
+    },
+    duration: 'Hasil mulai terlihat setelah 6–8 minggu; lanjutkan selama masih berjerawat.',
+    interactions: [
+      'Tretinoin: jangan dioles bersamaan — pakai di waktu berbeda.',
+      'Antibiotik oles (klindamisin) sebaiknya selalu dipakai bersama benzoil peroksida untuk mencegah kuman kebal — atas saran dokter.',
+    ],
+    sideEffects: ['Kering, mengelupas, kemerahan, perih di minggu-minggu awal.'],
+    warnings: ['Hindari mata, bibir, dan kulit luka.', 'Pakai tabir surya di siang hari.'],
+    seeDoctor: ACNE_RED_FLAGS,
+    relatedIds: ['mineral-sunscreen'],
+  },
+  {
+    id: 'permethrin',
+    name: 'Permethrin 5% krim (kudis)',
+    brands: ['Scabimite', 'Permethrin 5% (generik)'],
+    ingredients: ['Permethrin'],
+    group: 'antiparasitic',
+    symptoms: ['scabies-lice'],
+    forms: ['cream'],
+    timing: 'external',
+    availability: 'prescription',
+    childUse: 'yes',
+    pregnancy: 'generally-ok',
+    summary:
+      'Krim untuk kudis (skabies): gatal hebat terutama malam hari di sela jari, pergelangan tangan, pinggang, ketiak, dan kelamin. Semua orang serumah diobati bersamaan.',
+    howItWorks: 'Melumpuhkan saraf tungau kudis sehingga tungau mati.',
+    bestTime: ['Malam hari sebelum tidur.'],
+    howToUse: [
+      'Oles ke seluruh tubuh dari leher sampai telapak kaki, termasuk sela jari, bawah kuku, lipatan, dan kelamin. Bayi/lansia: juga kulit kepala dan wajah (hindari mata dan mulut).',
+      'Biarkan 8–14 jam, lalu mandi. Oles ulang tangan bila dicuci sebelum waktunya.',
+      'Ulangi 7 hari kemudian.',
+      'Cuci sprei, handuk, dan baju dengan air panas, atau simpan dalam kantong plastik tertutup ≥ 3 hari.',
+    ],
+    dose: {
+      adult: ['± 30 g krim per pengolesan untuk satu orang dewasa.'],
+      child: ['≥ 2 bulan: dioles seperti dewasa dengan jumlah lebih sedikit.', '< 2 bulan: dengan anjuran dokter.'],
+    },
+    duration: '2 kali oles, berjarak 7 hari. Gatal bisa bertahan 2–4 minggu setelah tungau mati — bukan berarti gagal.',
+    interactions: [],
+    sideEffects: ['Rasa panas, perih, atau gatal sementara.'],
+    warnings: ['Semua orang serumah dan pasangan diobati di hari yang sama, walau belum gatal.'],
+    seeDoctor: SCABIES_RED_FLAGS,
     relatedIds: ['cetirizine'],
+  },
+
+  // ---------- Eyes ----------
+  {
+    id: 'artificial-tears',
+    name: 'Air mata buatan (tetes mata pelumas)',
+    brands: ['Cendo Lyteers', 'Insto Dry Eyes'],
+    ingredients: ['Artificial tears'],
+    group: 'eye-care',
+    symptoms: ['eye'],
+    forms: ['drops'],
+    timing: 'external',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'generally-ok',
+    summary: 'Tetes pelumas untuk mata kering, mata lelah karena layar, atau kelilipan ringan. Boleh dipakai sesering perlu.',
+    howItWorks: 'Menambah lapisan air mata sehingga permukaan mata lembap dan licin kembali. Tidak berisi zat penyempit pembuluh darah.',
+    bestTime: ['Saat mata terasa kering atau perih, dan selama lama di depan layar.'],
+    howToUse: [
+      'Cuci tangan, tarik kelopak bawah, teteskan 1 tetes tanpa ujung botol menyentuh mata.',
+      'Kemasan sekali pakai (minidose) bebas pengawet — lebih baik bila dipakai > 4–6x sehari atau memakai lensa kontak.',
+      'Botol yang sudah dibuka umumnya dibuang setelah 1 bulan (lihat label).',
+    ],
+    dose: {
+      adult: ['1–2 tetes tiap mata, sesering perlu.'],
+      child: ['Sama dengan dewasa.'],
+    },
+    duration: 'Boleh rutin.',
+    interactions: ['Tetes mata lain: beri jarak 5 menit.'],
+    sideEffects: ['Pandangan buram sesaat.'],
+    warnings: ['Mata merah disertai nyeri atau pandangan kabur bukan mata kering biasa — periksa.'],
+    seeDoctor: EYE_RED_FLAGS,
+    relatedIds: ['tetrahydrozoline'],
+  },
+  {
+    id: 'tetrahydrozoline',
+    name: 'Tetrahydrozoline (tetes mata merah)',
+    brands: ['Insto Regular', 'Visine'],
+    ingredients: ['Tetrahydrozoline'],
+    group: 'eye-care',
+    symptoms: ['eye'],
+    forms: ['drops'],
+    timing: 'external',
+    availability: 'otc',
+    childUse: 'doctor',
+    pregnancy: 'ask-doctor',
+    summary: 'Tetes mata "penghilang merah". Mata putih lagi dalam beberapa menit, tapi itu hanya kosmetik sementara dan tidak mengobati penyebab. Maks 3 hari.',
+    howItWorks: 'Menyempitkan pembuluh darah kecil di bagian putih mata. Bila dipakai terus-menerus, mata justru makin merah begitu efeknya habis (rebound).',
+    analogy: 'Seperti bedak untuk menutupi jerawat: tampilan membaik, masalahnya tetap ada.',
+    bestTime: ['Bila perlu, mis. mata merah karena debu atau asap.'],
+    howToUse: ['Lepas lensa kontak dulu; pasang lagi setelah 15 menit.', 'Jangan sampai ujung botol menyentuh mata.'],
+    dose: {
+      adult: ['1–2 tetes tiap mata, maks 4x sehari.'],
+      child: ['6–12 tahun: dengan anjuran dokter.', '< 6 tahun: jangan.'],
+    },
+    duration: 'Maks 3 hari.',
+    interactions: ['Antidepresan MAOI: tanya dokter.'],
+    sideEffects: ['Perih sementara, pupil sedikit melebar, mata merah balik bila dipakai lama.'],
+    warnings: [
+      'Glaukoma sudut sempit: jangan.',
+      'Simpan jauh dari anak — bila tertelan bisa berbahaya (lemas, napas lambat, penurunan kesadaran).',
+      'Mata kering: pilih air mata buatan, bukan tetes ini.',
+    ],
+    seeDoctor: EYE_RED_FLAGS,
+    relatedIds: ['artificial-tears'],
+  },
+
+  // ---------- Motion sickness ----------
+  {
+    id: 'dimenhydrinate',
+    name: 'Dimenhydrinate (antimabuk)',
+    brands: ['Antimo', 'Antimo Anak'],
+    ingredients: ['Dimenhydrinate'],
+    group: 'anti-nausea',
+    symptoms: ['nausea-vomiting'],
+    forms: ['tablet', 'syrup'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'ask-doctor',
+    summary: 'Antihistamin untuk mencegah mabuk perjalanan (darat, laut, udara). Bikin ngantuk.',
+    howItWorks: 'Menghambat sinyal dari organ keseimbangan di telinga dalam ke pusat muntah di otak.',
+    analogy: 'Seperti memutus kabel antara sensor guncangan dan alarm muntah.',
+    bestTime: ['30–60 menit sebelum berangkat.'],
+    howToUse: ['Telan dengan air. Selama perjalanan, duduk di depan dan lihat ke kejauhan, jangan membaca/main ponsel.'],
+    dose: {
+      adult: ['50–100 mg tiap 4–6 jam, maks 400 mg/hari.'],
+      child: ['6–12 tahun: 25–50 mg tiap 6–8 jam, maks 150 mg/hari.', '2–5 tahun: 12,5–25 mg tiap 6–8 jam (maks 75 mg/hari), dengan anjuran dokter.', '< 2 tahun: jangan tanpa dokter.'],
+    },
+    duration: 'Selama perjalanan.',
+    interactions: ['Antihistamin lain (CTM, difenhidramin di obat flu), alkohol, obat tidur: kantuk berlipat.'],
+    sideEffects: ['Mengantuk, mulut kering, pandangan kabur.'],
+    warnings: ['Jangan menyetir.', 'Glaukoma, prostat membesar, asma: tanya dokter.', 'Bukan untuk muntah karena sakit (mis. muntaber pada anak).'],
+    seeDoctor: VOMITING_RED_FLAGS,
+    relatedIds: ['ginger', 'domperidone'],
+  },
+
+  // ---------- Worms ----------
+  {
+    id: 'pyrantel',
+    name: 'Pyrantel pamoate (obat cacing)',
+    brands: ['Combantrin', 'Pirantel pamoat (generik)'],
+    ingredients: ['Pyrantel'],
+    group: 'antiparasitic',
+    symptoms: ['worms'],
+    forms: ['tablet', 'suspension'],
+    timing: 'any-time',
+    availability: 'otc',
+    childUse: 'yes',
+    pregnancy: 'ask-doctor',
+    summary: 'Obat cacing dosis tunggal untuk cacing kremi (gatal anus terutama malam), cacing gelang, dan cacing tambang.',
+    howItWorks: 'Melumpuhkan cacing sehingga terlepas dari dinding usus dan keluar bersama tinja.',
+    bestTime: ['Kapan saja; tidak perlu puasa atau pencahar.'],
+    howToUse: ['Tablet bisa dikunyah atau ditelan. Suspensi dikocok dulu.'],
+    dose: {
+      adult: ['10 mg/kg dosis tunggal, maks 1.000 mg.'],
+      child: ['≥ 2 tahun: 10 mg/kg dosis tunggal (maks 1.000 mg). Contoh anak 16 kg: 160 mg.', '< 2 tahun: dengan anjuran dokter.'],
+    },
+    duration: 'Sekali minum. Cacing kremi: ulangi 2 minggu kemudian dan obati seluruh anggota rumah.',
+    interactions: ['Piperazin: jangan bersamaan (saling melemahkan).'],
+    sideEffects: ['Mual, sakit perut, diare, pusing — ringan.'],
+    warnings: ['Cacing kremi mudah menular ulang: potong kuku pendek, cuci tangan setelah BAB dan sebelum makan, cuci sprei dan celana dalam.'],
+    seeDoctor: WORM_RED_FLAGS,
+    relatedIds: ['albendazole'],
+  },
+  {
+    id: 'albendazole',
+    name: 'Albendazole (obat cacing)',
+    brands: ['Albendazol (generik; juga dibagikan di program Puskesmas/sekolah)'],
+    ingredients: ['Albendazole'],
+    group: 'antiparasitic',
+    symptoms: ['worms'],
+    forms: ['tablet', 'chewable-tablet', 'suspension'],
+    timing: 'any-time',
+    availability: 'prescription',
+    childUse: 'yes',
+    pregnancy: 'avoid',
+    summary: 'Obat cacing spektrum luas dosis tunggal. Dipakai di program pemberian obat cacing massal untuk anak.',
+    howItWorks: 'Menghalangi cacing menyerap gula sehingga cacing kehabisan energi dan mati.',
+    bestTime: ['Kapan saja; tidak perlu puasa.'],
+    howToUse: ['Tablet kunyah boleh dikunyah, atau digerus dan dicampur sedikit air untuk anak kecil.'],
+    dose: {
+      adult: ['400 mg dosis tunggal.'],
+      child: ['≥ 2 tahun: 400 mg dosis tunggal.', '1–2 tahun: 200 mg dosis tunggal.', '< 1 tahun: jangan.'],
+    },
+    duration: 'Sekali minum. Pencegahan: 1–2x setahun sesuai program Puskesmas.',
+    interactions: ['Dosis tunggal umumnya tanpa masalah. Pemakaian lama (resep dokter) perlu pemantauan fungsi hati.'],
+    sideEffects: ['Sakit perut, mual, pusing ringan.'],
+    warnings: ['Hamil trimester 1: jangan (trimester 2–3 hanya bila dianjurkan petugas kesehatan).'],
+    seeDoctor: WORM_RED_FLAGS,
+    relatedIds: ['pyrantel'],
   },
 ];

@@ -1,4 +1,5 @@
 import type { CareGuide, CareGuideSection } from '../data/careGuides';
+import type { SymptomGuide } from '../data/symptomGuides';
 import {
   AVAILABILITY_LABELS,
   GROUP_LABELS,
@@ -91,6 +92,26 @@ export const filterGuides = (guides: CareGuide[], symptom: OrAny<Symptom>, query
       (symptom === ANY || guide.symptoms.includes(symptom)) &&
       matchesQuery(
         foldAccents([guide.title, guide.summary, ...symptomText(guide.symptoms), ...guide.sections.flatMap(guideSectionText)].join(' ')),
+        query,
+      ),
+  );
+
+/** "By symptom" guides: matches the symptom chip and every query word across title, ingredients and advice. */
+export const filterSymptomGuides = (guides: SymptomGuide[], symptom: OrAny<Symptom>, query: string): SymptomGuide[] =>
+  guides.filter(
+    (guide) =>
+      (symptom === ANY || guide.symptoms.includes(symptom)) &&
+      matchesQuery(
+        foldAccents(
+          [
+            guide.title,
+            guide.summary,
+            ...symptomText(guide.symptoms),
+            ...guide.lookFor.flatMap((pick) => [pick.ingredient, pick.note]),
+            ...guide.avoid,
+            ...guide.withoutMedicine,
+          ].join(' '),
+        ),
         query,
       ),
   );

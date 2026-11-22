@@ -9,7 +9,7 @@
 | `/meal-plan` | `features/meal-plan` | 7-day plan generated from `data/mealTemplates.ts`, swap meal, log to diary, shopping list |
 | `/workouts` | `features/workouts` | Weekly plan from `lib/workoutGenerator.ts`, activity log + chart, exercise library |
 | `/weight` | `features/weight` | Weigh-ins, 7-day moving average chart, trend, goal progress, weekly averages (weeks with a period start are tagged) |
-| `/medicine` | `features/medicine` | Medicine guide: search + filters (symptom, group, ingredient, form, meal timing, availability, children, pregnancy), detail modal with dose/interactions, care guides |
+| `/medicine` | `features/medicine` | Medicine guide: search + filters (symptom, group, ingredient, form, meal timing, availability, children, pregnancy), detail modal with dose/interactions, symptom → ingredient guides, care guides |
 | `/fasting` | `features/fasting` | Intermittent fasting timer (presets 12:12 … OMAD), past-fast log, 7-day summary (count, average, on target, streak, binge flags), OMAD / binge / late-period notices |
 | `/cycle` | `features/cycle` | Period log, month calendar (logged, estimated end, predicted), cycle day, next period, average cycle/period, ACOG/FIGO flags |
 | `/diet-guide` | `features/diet` | Diet guides from `data/dietGuides.ts` (water vs fat, plateau, IF, OMAD, water before meals, drinks, psyllium, protein milk, slimming herbs, late period) with topic chips and search |
@@ -74,6 +74,9 @@ plus the user's excluded keywords.
   nothing is stored in `fitplan:data`.
 - Guide sections (`CareGuideSection`) may hold `text`, a `table` and `points`; `CareGuideCard` renders all three and
   search covers table cells. Herbal slimming ingredients are `herbal` group entries (one per ingredient, not per product).
+- Tabs: Medicines (one entry per active ingredient), By symptom (`data/symptomGuides.ts`: complaint → ingredients to look
+  for on the label, each linking to its medicine entry, plus avoid / self-care / red flags), Care guides. Red-flag lists
+  are exported from `medicines.ts` and reused by symptom guides. Every `medicineIds` / `relatedIds` must exist in `MEDICINES`.
 
 ## Diet & Cycle
 - Fasting: `AppData.fasting` = `{ targetHours, sessions }`. A session stores local `startAt` / `endAt` strings
