@@ -19,11 +19,133 @@ export interface CareGuide {
   title: string;
   summary: string;
   symptoms: Symptom[];
+  /** Prominent warning shown at the top, before the sections. */
+  alert?: string;
+  /** Shown above and below the article (education articles). */
+  disclaimer?: string;
   sections: CareGuideSection[];
   relatedMedicineIds: string[];
 }
 
+const EDUCATION_DISCLAIMER =
+  'Informasi ini untuk edukasi umum, bukan pengganti konsultasi dokter atau apoteker. Penggunaan obat harus sesuai label, resep, dan arahan tenaga kesehatan.';
+
 export const CARE_GUIDES: CareGuide[] = [
+  // Education articles: no dose numbers (mg/ml) — readers are sent to the label, doctor or pharmacist.
+  {
+    id: 'gerd-medicine-and-diet',
+    title: 'Asam Lambung (GERD): Kenali Obat dan Pola Makan yang Membantu',
+    summary: 'Beda sukralfat dan lansoprazol, cara minum yang umum, makanan pemicu, dan tanda bahaya.',
+    disclaimer: EDUCATION_DISCLAIMER,
+    symptoms: ['heartburn', 'stomach-pain', 'ulcer'],
+    sections: [
+      {
+        heading: 'Apa itu GERD?',
+        text: 'GERD (gastroesophageal reflux disease) = asam lambung sering naik ke kerongkongan (saluran dari mulut ke lambung). Gejalanya rasa panas/perih di dada atau ulu hati, sendawa asam, dan rasa asam atau pahit di mulut.',
+      },
+      {
+        heading: 'Beda dua jenis obat',
+        points: [
+          'Sukralfat: melapisi luka di lambung seperti "plester", sehingga luka terlindung dari asam. Tidak mengurangi produksi asam.',
+          'Lansoprazol (golongan PPI, proton pump inhibitor = penghambat "pompa" asam di lambung): mengurangi produksi asam dari sumbernya, seperti "mengecilkan keran". Termasuk obat keras, wajib resep dokter.',
+        ],
+      },
+      {
+        heading: 'Info umum lansoprazol',
+        points: [
+          'Biasanya diminum sekali sehari, sekitar 30 menit sebelum sarapan (saat perut masih kosong).',
+          'Untuk GERD, dokter umumnya meresepkan beberapa minggu (sering 4–8 minggu). Lama pemakaian ditentukan dokter.',
+          'Jangan berhenti mendadak tanpa konsultasi, karena gejala bisa kambuh.',
+          'Pemakaian jangka panjang perlu dipantau dokter, karena bisa mengganggu penyerapan magnesium dan vitamin B12.',
+          'Jika memakai sukralfat dan lansoprazol bersamaan, beri jarak waktu minum. Tanyakan jaraknya ke apoteker.',
+        ],
+      },
+      {
+        heading: 'Makanan dan kebiasaan yang sebaiknya dihindari',
+        points: [
+          'Kopi, teh kental, minuman bersoda.',
+          'Makanan pedas, asam, berlemak, gorengan.',
+          'Cokelat, mint.',
+          'Alkohol, rokok.',
+          'Makan terlalu kenyang. Lebih baik porsi kecil tapi sering.',
+          'Rebahan atau tidur kurang dari 2–3 jam setelah makan.',
+          'Olahraga: hindari latihan berat tepat setelah makan. Beri jeda dulu, terutama untuk gerakan membungkuk, sit-up, atau lari.',
+        ],
+      },
+      {
+        heading: 'Segera ke dokter jika ada',
+        points: [
+          'Sulit menelan.',
+          'Muntah darah.',
+          'BAB hitam (bisa tanda perdarahan di saluran cerna).',
+          'Berat badan turun tanpa sebab.',
+          'Keluhan berlangsung bertahun-tahun: pertimbangkan periksa ke dokter penyakit dalam. Mungkin perlu endoskopi (pemeriksaan dengan selang kecil berkamera lewat mulut untuk melihat kerongkongan dan lambung).',
+        ],
+      },
+    ],
+    relatedMedicineIds: ['lansoprazole', 'sucralfate'],
+  },
+  // Compositions checked against product listings: Kemenkes KFA (BP Berdahak), Halodoc, Alodokter, KlikDokter (Nov 2026).
+  {
+    id: 'hufagripp-variants',
+    title: 'Panduan Varian Hufagripp (Obat Batuk Pilek Anak)',
+    summary: 'Isi tiap warna Hufagripp, fungsi zat aktifnya, dan kapan harus ke dokter.',
+    disclaimer: EDUCATION_DISCLAIMER,
+    alert: 'Ada DUA varian berwarna HIJAU dengan isi berbeda. Selalu baca tulisan di kemasan, jangan hanya lihat warnanya.',
+    symptoms: ['cough-wet', 'cough-dry', 'cold', 'fever'],
+    sections: [
+      {
+        heading: 'Pilih sesuai keluhan',
+        table: {
+          columns: ['Warna & label', 'Komposisi', 'Untuk keluhan'],
+          rows: [
+            ['Hijau – "BP Berdahak"', 'Guaifenesin, Pseudoefedrin HCl', 'Batuk berdahak + hidung tersumbat'],
+            [
+              'Hijau – "BP" (tanpa kata Berdahak)',
+              'Dekstrometorfan HBr, Pseudoefedrin HCl, Klorfeniramin maleat (CTM)',
+              'Batuk kering/tidak berdahak + pilek',
+            ],
+            ['Biru – "Pilek"', 'Pseudoefedrin HCl, Klorfeniramin maleat (CTM)', 'Pilek, bersin, hidung tersumbat (tanpa batuk)'],
+            [
+              'Kuning – "Flu & Batuk"',
+              'Parasetamol, Klorfeniramin maleat (CTM), Pseudoefedrin HCl, Guaifenesin',
+              'Flu disertai demam, pilek, dan batuk berdahak',
+            ],
+          ],
+        },
+      },
+      {
+        heading: 'Fungsi tiap zat aktif',
+        points: [
+          'Guaifenesin: mengencerkan dahak supaya lebih mudah dikeluarkan (ekspektoran = pengencer dahak).',
+          'Pseudoefedrin HCl: melegakan hidung tersumbat dengan menyempitkan pembuluh darah di hidung (dekongestan = pelega hidung tersumbat). Bisa membuat anak gelisah atau susah tidur.',
+          'Klorfeniramin maleat / CTM: mengurangi pilek, bersin, dan gatal akibat alergi (antihistamin = penghambat reaksi alergi). Efek sampingnya mengantuk. Bisa membuat dahak lebih kental.',
+          'Dekstrometorfan HBr: menekan refleks batuk. Hanya untuk batuk kering. Tidak cocok untuk batuk berdahak karena dahak jadi sulit keluar.',
+          'Parasetamol: menurunkan demam dan meredakan nyeri.',
+        ],
+      },
+      {
+        heading: 'Catatan keamanan',
+        points: [
+          'Jangan memberi dua obat yang zat aktifnya sama secara bersamaan, karena berisiko overdosis. Contoh: Hufagripp kuning ditambah sirup parasetamol lain.',
+          'Keempat varian sama-sama berisi pseudoefedrin, dan tiga di antaranya berisi CTM. Jadi jangan menggabungkan dua varian Hufagripp, atau Hufagripp dengan obat pilek/alergi lain.',
+          'Anak di bawah 6 tahun: jangan beri obat batuk-pilek bebas (termasuk Hufagripp) tanpa saran dokter. Manfaatnya pada usia ini belum terbukti, dan risiko efek sampingnya lebih besar.',
+          'Anak 6 tahun ke atas: dosis mengikuti tabel usia/berat badan di label. Pakai sendok takar dari kemasan, bukan sendok makan.',
+        ],
+      },
+      {
+        heading: 'Segera ke dokter jika anak',
+        points: [
+          'Sesak napas, napas cepat, atau napas berbunyi.',
+          'Demam tinggi lebih dari 3 hari.',
+          'Tidak mau minum.',
+          'Sangat lemas.',
+          'Batuk lebih dari 2 minggu.',
+        ],
+      },
+    ],
+    relatedMedicineIds: ['guaifenesin', 'pseudoephedrine', 'chlorpheniramine', 'dextromethorphan', 'paracetamol'],
+  },
   {
     id: 'burn-first-aid',
     title: 'Luka bakar: pertolongan pertama',
