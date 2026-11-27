@@ -1,8 +1,9 @@
-import { ClipboardList } from 'lucide-react';
+import { ClipboardList, ShieldAlert, TriangleAlert } from 'lucide-react';
 import type { CareGuide, GuideTable } from '../../data/careGuides';
 import { MEDICINES, type Medicine } from '../../data/medicines';
 import { Card } from '../../shared/components/Card';
 import { Chip } from '../../shared/components/Chip';
+import { Notice } from '../../shared/components/Notice';
 import type { Tone } from '../../shared/tones';
 
 interface CareGuideCardProps {
@@ -41,10 +42,21 @@ const GuideTableView = ({ table }: { table: GuideTable }) => (
 
 export const CareGuideCard = ({ guide, tone, onOpenMedicine }: CareGuideCardProps) => {
   const medicines = MEDICINES.filter((medicine) => guide.relatedMedicineIds.includes(medicine.id));
+  const disclaimer = guide.disclaimer && (
+    <Notice size="sm" icon={<ShieldAlert size={14} />}>
+      {guide.disclaimer}
+    </Notice>
+  );
 
   return (
     <Card title={guide.title} icon={<ClipboardList />} tone={tone} subtitle={guide.summary}>
       <div className="space-y-4">
+        {disclaimer}
+        {guide.alert && (
+          <Notice tone="danger" icon={<TriangleAlert size={16} />}>
+            <strong className="font-semibold">{guide.alert}</strong>
+          </Notice>
+        )}
         {guide.sections.map((section) => (
           <section key={section.heading} className="space-y-2">
             <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-500">{section.heading}</h3>
@@ -59,6 +71,7 @@ export const CareGuideCard = ({ guide, tone, onOpenMedicine }: CareGuideCardProp
             )}
           </section>
         ))}
+        {disclaimer}
         {medicines.length > 0 && (
           <div className="flex flex-wrap gap-1.5 border-t border-slate-100 pt-3">
             {medicines.map((medicine) => (
